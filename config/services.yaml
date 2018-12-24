@@ -26,8 +26,8 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-    app.jwt_token_authenticator:
-        autowire: true      # Automatically injects dependencies in your services.
-        autoconfigure: false # Automatically registers your services as commands, event subscribers, etc.
-        class: App\Security\Guard\JWTTokenAuthenticator
-        parent: lexik_jwt_authentication.security.guard.jwt_token_authenticator
+#    app.jwt_token_authenticator:
+#        autowire: true      # Automatically injects dependencies in your services.
+#        autoconfigure: false # Automatically registers your services as commands, event subscribers, etc.
+#        class: App\Security\Guard\JWTTokenAuthenticator
+#        parent: lexik_jwt_authentication.security.guard.jwt_token_authenticator

@@ -34,13 +34,13 @@ security:
                 success_handler:          lexik_jwt_authentication.handler.authentication_success
                 failure_handler:          lexik_jwt_authentication.handler.authentication_failure
         # api main firewall
-        api:
-            pattern:   ^/api
-            stateless: true
-            guard:
-                authenticators:
+#        api:
+#            pattern:   ^/api
+#            stateless: true
+#            guard:
+#                authenticators:
 #                    - lexik_jwt_authentication.jwt_token_authenticator
-                     - app.jwt_token_authenticator
+#                     - app.jwt_token_authenticator
         main:
             anonymous: ~
 
@@ -60,4 +60,4 @@ security:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
         - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
+#        - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
