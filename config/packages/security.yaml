@@ -5,6 +5,10 @@ security:
         App\Entity\User:
             algorithm: argon2i
 
+    role_hierarchy:
+        ROLE_ADMIN:       ROLE_USER
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+
     providers:
         # internal name of the provider underneath
         app_user_provider:
@@ -12,10 +16,6 @@ security:
             entity:
                 class: App\Entity\User
                 property: username
-
-    role_hierarchy:
-        ROLE_ADMIN:       ROLE_USER
-        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
 
     firewalls:
 
@@ -33,16 +33,17 @@ security:
                 check_path:               /api/login_check
                 success_handler:          lexik_jwt_authentication.handler.authentication_success
                 failure_handler:          lexik_jwt_authentication.handler.authentication_failure
-        # api main firewall
-#        api:
-#            pattern:   ^/api
-#            stateless: true
-#            guard:
-#                authenticators:
-#                    - lexik_jwt_authentication.jwt_token_authenticator
-#                     - app.jwt_token_authenticator
+
+        api:
+            pattern:   ^/api
+            stateless: true
+            guard:
+                authenticators:
+                    - lexik_jwt_authentication.jwt_token_authenticator
+
         main:
             anonymous: ~
+
 
             # activate different ways to authenticate
 
@@ -60,4 +61,4 @@ security:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
         - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-#        - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
