@@ -85,9 +85,9 @@ class UserAssembler
     /**
      * @param User $user
      * @param string|NULL $plainTextPassWord
-     * @return UserDTO
+     * @return UserDTO|\Exception
      */
-    public function getNewUserDTOFromUser(User $user, string $plainTextPassWord = NULL): UserDTO
+    public function getUserDTOFromUser(User $user, string $plainTextPassWord = NULL): UserDTO
     {
 
         if (count($errors = $this->validator->validate($user)))

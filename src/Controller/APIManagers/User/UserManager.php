@@ -72,7 +72,7 @@ class UserManager
             //TODO envoi de mail de validation
 
             $plainTextPassword = $userDTO->password;
-            $persistedUserDTO = $this->userAssembler->getNewUserDTOFromUser($newUser, $plainTextPassword);
+            $persistedUserDTO = $this->userAssembler->getUserDTOFromUser($newUser, $plainTextPassword);
 
             return $persistedUserDTO;
         }
@@ -85,20 +85,21 @@ class UserManager
 
     /**
      * @param $id
-     * @return Exception|User
+     * @return User|Null
+     * @throws Exception
      */
-    public function getUser($id)
+    public function getUser($id) : ? User
     {
         if (is_null($id))
         {
             // TODO implement exception
-            return new Exception('User id is missing');
+            throw new Exception('User id is missing');
         }
         $user = $this->em->getRepository(User::class)->find($id);
         if (is_null($user))
         {
             // TODO implement exception
-            return new Exception('User does not exist');
+            throw new Exception('User does not exist');
         }
         return $user;
     }
@@ -107,19 +108,18 @@ class UserManager
     /**
      * @param $id
      * @return UserDTO|null
+     * @throws Exception
      */
     public function getUserDTO($id)
     {
-        try
-        {
             $user = $this->getUser($id);
-            $userDTO = $this->userAssembler->getNewUserDTOFromUser($user);
-        }
-        catch (Exception $exception)
-        {
-            return null;
-        }
-        return $userDTO;
+
+            if(is_null($user)) {
+                return null;
+            }
+
+             return $this->userAssembler->getUserDTOFromUser($user);
+
     }
 
     /**
@@ -143,7 +143,7 @@ class UserManager
             return new Exception('User already exist');
         }
 
-        $alreadyExistingUserDTO = $this->userAssembler->getNewUserDTOFromUser($alreadyExistingUser);
+        $alreadyExistingUserDTO = $this->userAssembler->getUserDTOFromUser($alreadyExistingUser);
         return $alreadyExistingUserDTO;
     }
 
