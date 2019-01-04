@@ -6,6 +6,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "api-platform/api-pack": "^1.1",
+        "doctrine/annotations": "^1.6",
         "lexik/jwt-authentication-bundle": "^2.6",
         "sensio/framework-extra-bundle": "^5.2",
         "symfony/apache-pack": "^1.0",
@@ -17,6 +18,7 @@
         "symfony/security-bundle": "4.2.*",
         "symfony/serializer": "4.2.*",
         "symfony/serializer-pack": "^1.0",
+        "symfony/validator": "4.2.*",
         "symfony/yaml": "4.2.*"
     },
     "config": {
@@ -65,6 +67,7 @@
         }
     },
     "require-dev": {
+        "api-platform/schema-generator": "^2.1",
         "doctrine/doctrine-fixtures-bundle": "^3.1",
         "symfony/maker-bundle": "^1.11",
         "symfony/profiler-pack": "^1.0",

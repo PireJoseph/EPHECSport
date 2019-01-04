@@ -1,0 +1,21 @@
+App\Entity\User\DTO\UserDTO:
+  iri: http://schema.org/Person
+#  access_control: is_granted('ROLE_USER')
+  itemOperations:
+    get:
+      method: GET
+      controller: App\Controller\APIActions\User\GetUserAction
+      path : "/user/{id}"
+  collectionOperations:
+    post:
+      method: POST
+      controller: App\Controller\APIActions\User\CreateUserAction
+      path: "/user"
+      validation_groups:
+        - createUser
+#      normalizationContext:
+#        groups:
+#         - read
+#      denormalizationContext:
+#        groups:
+#          - write

@@ -1,3 +1,57 @@
 api_platform:
+    # The title of the API.
+    title: 'API EPHEC Sport'
+
+    # The description of the API.
+    description: 'TFE - Technologies Informatiques - EPHEC 2018 - 2019 - Pire Joseph'
+
+    # The version of the API.
+    version: '0.0.0'
+
     mapping:
-        paths: ['%kernel.project_dir%/src/Entity']
+        # The list of paths with files or directories where the bundle will look for additional resource files.
+        paths:
+        - '%kernel.project_dir%/config/api_platform'
+
+    # The list of your resources class directories. Defaults to the directories of the mapping paths but might differ.
+    resource_class_directories:
+    - '%kernel.project_dir%/src/Entity'
+
+
+
+    # The list of exceptions mapped to their HTTP status code.
+    exception_to_status:
+        # With a status code.
+        Symfony\Component\Serializer\Exception\ExceptionInterface: 400
+
+        # Or with a constant defined in the 'Symfony\Component\HttpFoundation\Response' class.
+        ApiPlatform\Core\Exception\InvalidArgumentException: !php/const Symfony\Component\HttpFoundation\Response::HTTP_BAD_REQUEST
+
+        # ...
+
+    # The list of enabled formats. The first one will be the default.
+    formats:
+        jsonld:
+            mime_types: ['application/ld+json']
+
+        json:
+            mime_types: ['application/json']
+
+        html:
+            mime_types: ['text/html']
+
+        # ...
+
+    # The list of enabled error formats. The first one will be the default.
+    error_formats:
+        jsonproblem:
+            mime_types: ['application/problem+json']
+
+        jsonld:
+            mime_types: ['application/ld+json']
+
+    swagger:
+        api_keys:
+            apiKey:
+                name: Authorization
+                type: header

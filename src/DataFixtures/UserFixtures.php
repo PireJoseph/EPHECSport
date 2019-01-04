@@ -2,7 +2,6 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\User;
 use App\Security\iHasRole;
 use DateTime;
 use Doctrine\Bundle\FixturesBundle\Fixture;
