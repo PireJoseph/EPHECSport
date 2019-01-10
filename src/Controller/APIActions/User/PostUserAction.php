@@ -1,12 +1,20 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: jpire
+ * Date: 10/01/19
+ * Time: 0:54
+ */
 
 namespace App\Controller\APIActions\User;
+
 
 use App\Controller\APIActions\APIAction;
 use App\Controller\APIManagers\User\UserManager;
 use App\Entity\User\DTO\UserDTO;
+use Exception;
 
-class CreateUserAction extends APIAction
+class PostUserAction extends APIAction
 {
     private $userManager;
 
@@ -16,18 +24,19 @@ class CreateUserAction extends APIAction
         $this->userManager = $userManager;
     }
 
-
     /**
      * @param UserDTO $data
-     * @return UserDTO|\Exception
-     * @throws \Exception
+     * @return UserDTO|Exception
      */
     public function __invoke(UserDTO $data)
     {
-        $newData = $this->userManager->createUserFromDTO($data); // Warning: the __invoke() method parameter MUST be called $data, otherwise, it will not be filled correctly!
-
+        try {
+            $newData = $this->userManager->createUserFromDTO($data); // Warning: the __invoke() method parameter MUST be called $data, otherwise, it will not be filled correctly!
+        } catch (Exception $e){
+            return $e;
+        }
         return $newData;
-
     }
+
 
 }

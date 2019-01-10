@@ -21,7 +21,6 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class UserManager
 {
-
     private $userAssembler;
     private $validator;
     private $em;
@@ -39,47 +38,42 @@ class UserManager
 
     /**
      * @param UserDTO $userDTO
-     * @return UserDTO|\Exception
-     * @throws \Exception
+     * @return UserDTO
+     * @throws Exception
      */
     public function createUserFromDTO(UserDTO $userDTO)
     {
-        try
+        // request validation
+        $userDTOValidation = $this->validator->validate($userDTO);
+        if ($userDTOValidation->count() > 0)
         {
-            // request validation
-            $userDTOValidation = $this->validator->validate($userDTO);
-            if ($userDTOValidation->count() > 0)
-            {
-                throw new ValidationException($userDTOValidation);
-            }
-
-            // vérifier si un utilisateur existe déja
-            $alreadyExistingUser = $this->em->getRepository(User::class)->findOneByUsername($userDTO->username);
-            if (!is_null($alreadyExistingUser))
-            {
-                // TODO implement exception
-                throw new Exception('User already exist');
-            }
-
-            // récupération d'une entité utilisateur
-            $newUser = $this->userAssembler->getNewUserFromUserDTO($userDTO);
-
-
-            // sauvegarde du nouvel utilisateur
-            $this->em->persist($newUser);
-            $this->em->flush($newUser);
-
-            //TODO envoi de mail de validation
-
-            $plainTextPassword = $userDTO->password;
-            $persistedUserDTO = $this->userAssembler->getUserDTOFromUser($newUser, $plainTextPassword);
-
-            return $persistedUserDTO;
+            throw new ValidationException($userDTOValidation);
         }
-        catch (Exception $exception)
+
+        // vérifier si un utilisateur existe déja
+        $alreadyExistingUser = $this->em->getRepository(User::class)->findOneByUsername($userDTO->username);
+
+        if (!is_null($alreadyExistingUser))
         {
-            return $exception;
+            // TODO implement exception
+            throw new Exception('User already exist');
         }
+
+        // récupération d'une entité utilisateur
+        $newUser = $this->userAssembler->getFromUserDTO($userDTO);
+
+        // sauvegarde du nouvel utilisateur
+        $this->em->persist($newUser);
+        $this->em->flush($newUser);
+
+        //TODO envoi de mail de validation
+
+        $plainTextPassword = $userDTO->password;
+
+        $persistedUserDTO = $this->userAssembler->getUserDTOFromUser($newUser, $plainTextPassword);
+
+        return $persistedUserDTO;
+
 
     }
 
@@ -125,6 +119,7 @@ class UserManager
     /**
      * @param UserDTO $userDTO
      * @return UserDTO|Exception
+     * @throws Exception
      */
     public function getUserFromDTO(UserDTO $userDTO)
     {
@@ -132,7 +127,7 @@ class UserManager
         $userDTOValidation = $this->validator->validate($userDTO);
         if ($userDTOValidation->count() > 0)
         {
-            return new ValidationException($userDTOValidation);
+            throw new ValidationException($userDTOValidation);
         }
 
         // vérifier si un utilisateur existe déja
@@ -140,7 +135,7 @@ class UserManager
         if (!is_null($alreadyExistingUser))
         {
             // TODO implement exception
-            return new Exception('User already exist');
+            throw new Exception('User already exist');
         }
 
         $alreadyExistingUserDTO = $this->userAssembler->getUserDTOFromUser($alreadyExistingUser);

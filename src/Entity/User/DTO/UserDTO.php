@@ -19,7 +19,6 @@ use Symfony\Component\Validator\Constraints\DateTime; // serialization groups
 final class UserDTO extends DataTransferObject
 {
 
-
     /**
      *
      * @var string|null

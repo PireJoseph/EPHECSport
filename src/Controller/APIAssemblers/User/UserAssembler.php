@@ -24,8 +24,6 @@ class UserAssembler
 {
     private $passwordEncoder;
     private $validator;
-    private $encoder;
-    private $serializer;
 
     public function __construct(UserPasswordEncoderInterface $passwordEncoder, ValidatorInterface $validator, EncoderInterface $encoder, SerializerInterface $serializer)
     {
@@ -38,8 +36,9 @@ class UserAssembler
      * @return User|null
      * @throws \Exception
      */
-    public function getNewUserFromUserDTO(UserDTO $userDTO) : User
+    public function getFromUserDTO(UserDTO $userDTO) : User
     {
+        //TODO REFACTO, PAS DE BUSINEESS LOGIC GENRE PASSAGE DE ROLE
         $userDTOValidation = $this->validator->validate($userDTO);
         if ($userDTOValidation->count() > 0)
         {

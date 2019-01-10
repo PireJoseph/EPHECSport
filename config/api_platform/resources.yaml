@@ -6,16 +6,12 @@ App\Entity\User\DTO\UserDTO:
       method: GET
       controller: App\Controller\APIActions\User\GetUserAction
       path : "/user/{id}"
+
   collectionOperations:
     post:
       method: POST
-      controller: App\Controller\APIActions\User\CreateUserAction
+      controller: App\Controller\APIActions\User\PostUserAction
       path: "/user"
       validation_groups:
         - createUser
-#      normalizationContext:
-#        groups:
-#         - read
-#      denormalizationContext:
-#        groups:
-#          - write
+
