@@ -6,7 +6,7 @@
  * Time: 1:24
  */
 
-namespace App\Controller\APIAssemblers\User\DTO;
+namespace App\Controller\Assemblers\User\DTO;
 
 
 use ApiPlatform\Core\Validator\Exception\ValidationException;
@@ -51,13 +51,14 @@ class UserDTOAssembler
         $newUserDTO->username = $user->getUsername();
         $newUserDTO->email = $user->getEmail();
 
-        $newUserDTO->createdAt = $user->getCreatedAt();
+        $userCreatedAt = $user->getCreatedAt();
+        $newUserDTO->createdAt =  (!is_null($userCreatedAt)) ? $userCreatedAt->format('Y-m-d h:i:s') : null;
 
         // 'Age'
         $userBirthDate = $user->getBirthDate();
-        $newUserDTO->birthDate = (!is_null($userBirthDate)) ? $userBirthDate->format('Y-m-d H:i:s') : null;
+        $newUserDTO->birthDate = (!is_null($userBirthDate)) ? $userBirthDate->format('Y-m-d') : null;
 
-        // Password
+        // Password --> we don't give it until its specified in the method
         $newUserDTO->password = $plainTextPassWord;
 
         if (count($errors = $this->validator->validate($newUserDTO)))

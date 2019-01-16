@@ -2,21 +2,20 @@
 /**
  * Created by PhpStorm.
  * User: jpire
- * Date: 4/01/19
- * Time: 18:13
+ * Date: 10/01/19
+ * Time: 13:58
  */
 
-namespace App\DataProviders;
-
+namespace App\Controller\Providers\User;
 
 use ApiPlatform\Core\DataProvider\ItemDataProviderInterface;
-use ApiPlatform\Core\Exception\ResourceClassNotSupportedException;
-use App\Controller\APIManagers\User\UserManager;
+use App\Controller\Managers\User\UserManager;
+use App\Entity\User\User;
 use App\Entity\User\DTO\UserDTO;
+use Exception;
 
-class UserDTOItemDataProvider implements ItemDataProviderInterface
+class UserDTOItemDataProvider  implements ItemDataProviderInterface
 {
-
     private $userManager;
 
     public function __construct(UserManager $userManager)
@@ -37,12 +36,14 @@ class UserDTOItemDataProvider implements ItemDataProviderInterface
      *
      * @param string|null $operationName
      * @param array $context
-     * @return UserDTO|\Exception
+     * @return UserDTO|\null
+     * @throws Exception
      */
     public function getItem(string $resourceClass, $id, string $operationName = null, array $context = [])
     {
         // Retrieve the UserDTO item from somewhere then return it or null if not found
+        $test = 'hehe';
         return $this->userManager->getUserDTO($id);
-
     }
+
 }

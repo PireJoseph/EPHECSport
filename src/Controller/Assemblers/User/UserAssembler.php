@@ -6,7 +6,7 @@
  * Time: 21:43
  */
 
-namespace App\Controller\APIAssemblers\User;
+namespace App\Controller\Assemblers\User;
 
 
 use ApiPlatform\Core\Bridge\Symfony\Validator\Exception\ValidationException;
@@ -46,6 +46,8 @@ class UserAssembler
         }
 
 
+
+
         $newUser = new User();
         $newUser->setUsername($userDTO->username);
         $newUser->setEmail($userDTO->email);
@@ -83,10 +85,10 @@ class UserAssembler
 
     /**
      * @param User $user
-     * @param string|NULL $plainTextPassWord
+     * @param string|null $plainTextPassWord
      * @return UserDTO|\Exception
      */
-    public function getUserDTOFromUser(User $user, string $plainTextPassWord = NULL): UserDTO
+    public function getUserDTOFromUser(User $user, string $plainTextPassWord = null): UserDTO
     {
 
         if (count($errors = $this->validator->validate($user)))
@@ -100,20 +102,19 @@ class UserAssembler
             throw new ValidationException($userValidation);
         }
 
-
         $newUserDTO = new UserDTO();
         $newUserDTO->id = $user->getId();
         $newUserDTO->username = $user->getUsername();
         $newUserDTO->email = $user->getEmail();
-
         $newUserDTO->createdAt = $user->getCreatedAt();
 
         // 'Age'
         $userBirthDate = $user->getBirthDate();
-        $newUserDTO->birthDate = (!is_null($userBirthDate)) ? $userBirthDate->format('Y-m-d H:i:s') : null;
+        $newUserDTO->birthDate = (!is_null($userBirthDate)) ? $userBirthDate->getTimestamp() : null;
 
         // Password
         $newUserDTO->password = $plainTextPassWord;
+
 
         if (count($errors = $this->validator->validate($newUserDTO)))
         {

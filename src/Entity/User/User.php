@@ -4,7 +4,9 @@ namespace App\Entity\User;
 
 use App\Security\iHasRole;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints\Date;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\User\UserRepository")
@@ -19,6 +21,8 @@ class User implements UserInterface, iHasRole
     private $id;
 
     /**
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
      * @ORM\Column(type="string", length=180, unique=true)
      */
     private $username;
@@ -29,22 +33,34 @@ class User implements UserInterface, iHasRole
     private $roles = [];
 
     /**
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
      * @var string The hashed password
      * @ORM\Column(type="string")
      */
     private $password;
 
     /**
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
+     * @Assert\Email()
      * @ORM\Column(type="string", length=255)
      */
     private $email;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @var Date $birthDate
+     *
+     * @Assert\NotNull()
+     * @Assert\Date()
+     * @ORM\Column(type="date")
      */
     private $birthDate;
 
     /**
+     *
+     * @Assert\NotNull()
+     * @Assert\DateTime()
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
@@ -134,17 +150,24 @@ class User implements UserInterface, iHasRole
         return $this;
     }
 
-    public function getBirthDate(): ?\DateTimeInterface
+    /**
+     * @return mixed
+     */
+    public function getBirthDate()
     {
         return $this->birthDate;
     }
 
-    public function setBirthDate(\DateTimeInterface $birthDate): self
+    /**
+     * @param mixed $birthDate
+     * @return User
+     */
+    public function setBirthDate($birthDate)
     {
         $this->birthDate = $birthDate;
-
         return $this;
     }
+
 
     /**
      * @return mixed

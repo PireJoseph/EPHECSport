@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace App\Entity\User\DTO;
 
 use App\Entity\DataTransferObject;
+use ApiPlatform\Core\Annotation\ApiProperty;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert; // Symfony's built-in constraints
 use Symfony\Component\Validator\Constraints\DateTime; // serialization groups
 
@@ -15,36 +18,78 @@ use Symfony\Component\Validator\Constraints\DateTime; // serialization groups
  *
  * @see http://schema.org/Person Documentation on Schema.org
  *
+ * @ApiResource(
+ *     routePrefix="/user",
+ *     itemOperations={
+ *        "getUser" = {
+ *              "method"="GET",
+ *              "path"="/{id}" ,
+ *              "denormalization_context"={"groups"={"read"} },
+ *              "normalization_context"={"groups"={"read"} }
+ *          },
+ *     },
+ *     collectionOperations={
+ *         "postUser" = {
+ *              "method"="POST",
+ *              "path"="/" ,
+ *              "denormalization_context"={"groups"={"write"} },
+ *              "normalization_context"={"groups"={"write"} }
+ *          },
+ *     },
+ * )
  */
 final class UserDTO extends DataTransferObject
 {
 
     /**
+     * @var string|null
+     *
+     * @ApiProperty(identifier=true)
+     * @Groups({"read"})
+     * @Assert\NotBlank(groups={"GetUser"})
+     */
+    public $id;
+
+    /**
+     * @var string|null
+     *
+     * @Groups({"read"})
+     * @Assert\NotBlank(groups={"GetUser"})
+     */
+    public $createdAt;
+
+    /**
      *
      * @var string|null
      *
-     * @Assert\NotBlank(groups={"createUser"})
+     * @Groups({"read", "write"})
+     * @Assert\NotBlank(groups={"PostUser","GetUser"})
      */
     public $username;
 
     /**
      * @var string|null
      *
-     * @Assert\NotBlank(groups={"createUser"})
+     * @Groups({"write"})
+     * @Assert\NotBlank(groups={"PostUser","GetUser"})
      */
     public $password;
 
     /**
      * @var string|null
      *
-     * @Assert\NotBlank(groups={"createUser"})
+     * @Groups({"read", "write"})
+     * @Assert\NotBlank(groups={"PostUser","GetUser"})
      */
     public $email;
 
     /**
      * @var string|null
      *
-     * @Assert\NotBlank(groups={"createUser"})*
+     * @Groups({"read", "write"})
+     * @Assert\NotBlank(groups={"PostUser","GetUser"})
      */
     public $birthDate;
+
 }
+

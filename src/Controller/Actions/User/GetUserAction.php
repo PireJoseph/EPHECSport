@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Controller\APIActions\User;
+namespace App\Controller\Actions\User;
 
-use App\Controller\APIActions\APIAction;
-use App\Controller\APIManagers\User\UserManager;
+use App\Controller\Actions\APIAction;
+use App\Controller\Managers\User\UserManager;
 use App\Entity\User\DTO\UserDTO;
 use Exception;
 

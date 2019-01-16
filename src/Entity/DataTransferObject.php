@@ -16,18 +16,5 @@ use ApiPlatform\Core\Annotation\ApiProperty;
  */
 abstract class DataTransferObject
 {
-    /**
-     * @var string|null
-     *
-     * @ApiProperty(identifier=true)
-     * @Groups({"read"})
-     */
-    public $id;
 
-    /**
-     * @var string|null
-     *
-     * @Groups({"read"})
-     */
-    public $createdAt;
 }

@@ -6,7 +6,7 @@
  * Time: 23:18
  */
 
-namespace App\Controller\APIActions;
+namespace App\Controller\Actions;
 
 
 class APIAction
