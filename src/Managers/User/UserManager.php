@@ -6,11 +6,11 @@
  * Time: 0:56
  */
 
-namespace App\Controller\Managers\User;
+namespace App\Managers\User;
 
 use ApiPlatform\Core\Validator\Exception\ValidationException;
-use App\Controller\Assemblers\User\DTO\UserDTOAssembler;
-use App\Controller\Assemblers\User\UserAssembler;
+use App\Assemblers\User\DTO\UserDTOAssembler;
+use App\Assemblers\User\UserAssembler;
 use App\Entity\User\DTO\UserDTO;
 use App\Entity\User\User;
 use App\Security\iHasRole;

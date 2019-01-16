@@ -6,10 +6,10 @@
  * Time: 13:58
  */
 
-namespace App\Controller\Providers\User;
+namespace App\Providers\User;
 
 use ApiPlatform\Core\DataProvider\ItemDataProviderInterface;
-use App\Controller\Managers\User\UserManager;
+use App\Managers\User\UserManager;
 use App\Entity\User\User;
 use App\Entity\User\DTO\UserDTO;
 use Exception;

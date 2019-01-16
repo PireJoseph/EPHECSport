@@ -6,11 +6,11 @@
  * Time: 3:12
  */
 
-namespace App\Controller\Persisters\User;
+namespace App\Persisters\User;
 
 
 use ApiPlatform\Core\DataPersister\DataPersisterInterface;
-use App\Controller\Managers\User\UserManager;
+use App\Managers\User\UserManager;
 use App\Entity\User\DTO\UserDTO;
 
 class UserDTODataPersister implements DataPersisterInterface

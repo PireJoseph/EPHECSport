@@ -6,7 +6,7 @@
  * Time: 21:43
  */
 
-namespace App\Controller\Assemblers\User;
+namespace App\Assemblers\User;
 
 
 use ApiPlatform\Core\Bridge\Symfony\Validator\Exception\ValidationException;

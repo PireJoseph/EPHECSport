@@ -6,7 +6,7 @@
  * Time: 1:24
  */
 
-namespace App\Controller\Assemblers\User\DTO;
+namespace App\Assemblers\User\DTO;
 
 
 use ApiPlatform\Core\Validator\Exception\ValidationException;
