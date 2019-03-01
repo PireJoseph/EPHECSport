@@ -6,9 +6,12 @@
  * Time: 13:58
  */
 
-namespace App\Providers\User;
+namespace App\Api\Providers\User;
 
+use ApiPlatform\Core\Bridge\Symfony\Validator\Exception\ValidationException;
 use ApiPlatform\Core\DataProvider\ItemDataProviderInterface;
+use ApiPlatform\Core\Exception\InvalidIdentifierException;
+use ApiPlatform\Core\Exception\ItemNotFoundException;
 use App\Managers\User\UserManager;
 use App\Entity\User\User;
 use App\Entity\User\DTO\UserDTO;
@@ -37,13 +40,16 @@ class UserDTOItemDataProvider  implements ItemDataProviderInterface
      * @param string|null $operationName
      * @param array $context
      * @return UserDTO|\null
+     * @throws ItemNotFoundException
+     * @throws InvalidIdentifierException
+     * @throws ValidationException
      * @throws Exception
      */
     public function getItem(string $resourceClass, $id, string $operationName = null, array $context = [])
     {
         // Retrieve the UserDTO item from somewhere then return it or null if not found
-        $test = 'hehe';
-        return $this->userManager->getUserDTO($id);
+        $userDTO = $this->userManager->getUserDTO($id);
+        return $userDTO;
     }
 
 }

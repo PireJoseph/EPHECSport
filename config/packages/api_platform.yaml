@@ -18,16 +18,19 @@ api_platform:
     - '%kernel.project_dir%/src/Entity'
 
 
-
     # The list of exceptions mapped to their HTTP status code.
     exception_to_status:
-        # With a status code.
-        Symfony\Component\Serializer\Exception\ExceptionInterface: 400
+        # The first matching will be taken (matching with the class or with his parent (be careful with exception inheritance)
 
-        # Or with a constant defined in the 'Symfony\Component\HttpFoundation\Response' class.
+        # Custom Exceptions
+        App\Exception\ItemNotFoundException : !php/const Symfony\Component\HttpFoundation\Response::HTTP_NOT_FOUND
+        App\Exception\InvalidArgumentException: !php/const Symfony\Component\HttpFoundation\Response::HTTP_BAD_REQUEST
+        App\Exception\InvalidIdentifierException: !php/const Symfony\Component\HttpFoundation\Response::HTTP_UNPROCESSABLE_ENTITY
+        App\Exception\ValidationException : !php/const Symfony\Component\HttpFoundation\Response::HTTP_UNPROCESSABLE_ENTITY
+
+        # Vendor
         ApiPlatform\Core\Exception\InvalidArgumentException: !php/const Symfony\Component\HttpFoundation\Response::HTTP_BAD_REQUEST
-
-        # ...
+        Symfony\Component\Serializer\Exception\ExceptionInterface: 500
 
     # The list of enabled formats. The first one will be the default.
     formats:

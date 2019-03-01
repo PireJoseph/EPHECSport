@@ -6,7 +6,7 @@
  * Time: 3:12
  */
 
-namespace App\Persisters\User;
+namespace App\Api\Persisters\User;
 
 
 use ApiPlatform\Core\DataPersister\DataPersisterInterface;

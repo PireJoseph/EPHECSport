@@ -31,6 +31,7 @@ class UserDTOAssembler
      * @param User $user
      * @param string|NULL $plainTextPassWord
      * @return UserDTO
+     * @throws ValidationException
      */
     public function getFromUser(User $user, string $plainTextPassWord = NULL): UserDTO
     {

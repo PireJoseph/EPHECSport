@@ -8,7 +8,11 @@
 
 namespace App\Managers\User;
 
-use ApiPlatform\Core\Validator\Exception\ValidationException;
+use App\Exception\InvalidIdentifierException;
+use App\Exception\ItemNotFoundException;
+use App\Exception\ValidationException;
+use App\Exception\itemAlreadyExistsException;
+use Exception;
 use App\Assemblers\User\DTO\UserDTOAssembler;
 use App\Assemblers\User\UserAssembler;
 use App\Entity\User\DTO\UserDTO;
@@ -16,7 +20,6 @@ use App\Entity\User\User;
 use App\Security\iHasRole;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -59,8 +62,7 @@ class UserManager
 
         if (!is_null($alreadyExistingUser))
         {
-            // TODO implement exception
-            throw new Exception('User already exist');
+            throw new itemAlreadyExistsException('User already exist');
         }
 
         //
@@ -127,7 +129,6 @@ class UserManager
     }
 
 
-
     /**
      * @param $id
      * @return User|Null
@@ -137,15 +138,13 @@ class UserManager
     {
         if (is_null($id))
         {
-            // TODO implement exception
-            throw new Exception('User id is missing');
+            throw new InvalidIdentifierException('User id is missing');
         }
         $user = $this->em->getRepository(User::class)->find($id);
 
         if (is_null($user))
         {
-            // TODO implement exception
-            throw new Exception('User does not exist');
+            throw new ItemNotFoundException('User does not exist');
         }
         return $user;
     }
@@ -158,9 +157,6 @@ class UserManager
     public function getUserDTO($id) : ? UserDTO
     {
         $user = $this->getUser($id);
-        if (is_null($user)){
-            throw new Exception('User does not exist');
-        }
 
         $userDTO = $this->userDTOAssembler->getFromUser($user);
 
