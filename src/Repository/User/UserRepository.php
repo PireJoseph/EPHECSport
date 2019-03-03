@@ -39,6 +39,27 @@ class UserRepository extends ServiceEntityRepository
 
     }
 
+    /**
+     * @param string $email
+     * @return User|null
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findOneByEmail(string $email) : ?User
+    {
+        $query =  $this
+            ->createQueryBuilder('u')
+            ->andWhere('u.email = :emailParam')
+            ->setParameter('emailParam', $email)
+            ->setMaxResults(1)
+            ->getQuery();
+
+        $userFound = $query->getOneOrNullResult();
+
+        return $userFound;
+
+    }
+
+
     // /**
     //  * @return User[] Returns an array of User objects
     //  */

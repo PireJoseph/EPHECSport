@@ -40,9 +40,6 @@ class UserDTOItemDataProvider  implements ItemDataProviderInterface
      * @param string|null $operationName
      * @param array $context
      * @return UserDTO|\null
-     * @throws ItemNotFoundException
-     * @throws InvalidIdentifierException
-     * @throws ValidationException
      * @throws Exception
      */
     public function getItem(string $resourceClass, $id, string $operationName = null, array $context = [])

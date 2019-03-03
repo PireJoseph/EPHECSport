@@ -8,6 +8,7 @@
 
 namespace App\Managers\User;
 
+use App\Exception\EmailAddressAlreadyExistsException;
 use App\Exception\InvalidIdentifierException;
 use App\Exception\ItemNotFoundException;
 use App\Exception\ValidationException;
@@ -47,8 +48,7 @@ class UserManager
      * @return UserDTO
      * @throws Exception
      */
-    public function
-    createUserFromDTO(UserDTO $userDTO)
+    public function createUserFromDTO(UserDTO $userDTO)
     {
         // request validation
         $userDTOValidation = $this->validator->validate($userDTO,null, ['PostUser']);
@@ -59,10 +59,15 @@ class UserManager
 
         // vérifier si un utilisateur existe déja
         $alreadyExistingUser = $this->em->getRepository(User::class)->findOneByUsername($userDTO->username);
-
         if (!is_null($alreadyExistingUser))
         {
             throw new itemAlreadyExistsException('User already exist');
+        }
+
+        $alreadyExistingUser = $this->em->getRepository(User::class)->findOneByEmail($email);
+        if (!is_null($alreadyExistingUser))
+        {
+            throw new EmailAddressAlreadyExistsException('L\'adresse mail spécifiée existe déja');
         }
 
         //
@@ -163,5 +168,64 @@ class UserManager
         return $userDTO;
     }
 
+
+    /**
+     * @param $userName
+     * @param $plainPassword
+     * @param $email
+     * @param DateTime $birthDate
+     * @return User
+     * @throws ValidationException
+     * @throws itemAlreadyExistsException
+     * @throws EmailAddressAlreadyExistsException
+     */
+    public function createUser($userName, $plainPassword, $email, $birthDate)
+    {
+
+        // vérifier si un utilisateur existe déja
+        $alreadyExistingUser = $this->em->getRepository(User::class)->findOneByUsername($userName);
+        if (!is_null($alreadyExistingUser))
+        {
+            throw new itemAlreadyExistsException('Le nom d\'utilisateur spécifié existe déja');
+        }
+
+        $alreadyExistingUser = $this->em->getRepository(User::class)->findOneByEmail($email);
+        if (!is_null($alreadyExistingUser))
+        {
+            throw new EmailAddressAlreadyExistsException('L\'adresse mail spécifiée existe déja');
+        }
+
+        //
+        // Business logic -> assignation of roles and password encryption
+        $newUser = new User();
+        $newUser->setUsername($userName);
+        $newUser->setEmail($email);
+        // 'Age'
+        $newUser->setBirthDate($birthDate);
+        //  rôles
+        $newUserRoles = array(iHasRole::ROLE_USER);
+        $newUser->setRoles($newUserRoles);
+        // mot de passe
+        $newUser->setPassword($this->passwordEncoder->encodePassword(
+            $newUser,
+            $plainPassword
+        ));
+        // date de creation
+        $now = new DateTime();
+        $newUser->setCreatedAt($now);
+
+        // validate the new user
+        $newUserValidation = $this->validator->validate($newUser);
+        if ($newUserValidation->count() > 0)
+        {
+            throw new ValidationException($newUserValidation);
+        }
+
+        // sauvegarde du nouvel utilisateur
+        $this->em->persist($newUser);
+        $this->em->flush($newUser);
+
+        return $newUser;
+    }
 
 }
