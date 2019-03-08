@@ -1,42 +1,47 @@
-{% extends 'base.html.twig' %}
+{% extends 'form.html.twig' %}
 
-{% block title %}Inscription{% endblock %}
+{% set pageTitle =  'Inscription' %}
+
+{% block title %}
+    {{ pageTitle }}
+{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
+
     <link href="https://unpkg.com/gijgo@1.9.11/css/gijgo.min.css" rel="stylesheet" type="text/css" />
 
-    <style>
-        {% include 'registration/register.css.twig' %}
-    </style>
-
+    {{ encore_entry_link_tags('registerPage') }}
 {% endblock %}
 
-{% block body %}
+{% block formTitle %}
+    {{ pageTitle }}
+{% endblock %}
 
-    <h1>Inscription</h1>
+{% block form %}
 
     {{ form_start(registrationForm) }}
 
-    <div class="container">
+            <div class="custom_error">
+                {{ customError|default('') }}
+            </div>
 
-        <div class="custom_error">
-            {{ customError|default('') }}
-        </div>
+            {{ form_row(registrationForm.username) }}
 
-        {{ form_row(registrationForm.username) }}
+            {{ form_row(registrationForm.plainPassword) }}
 
-        {{ form_row(registrationForm.plainPassword) }}
+            {{ form_row(registrationForm.email) }}
 
-        {{ form_row(registrationForm.email) }}
+            {{ form_row(registrationForm.birthDate) }}
 
-        {{ form_row(registrationForm.birthDate) }}
+            <button class="btn">S'inscrire</button>
 
-        <button class="btn">S'inscrire</button>
-
-    </div>
+    <a class="w3-button btn w3-red form-cancel-btn" href="{{ path('default') }}">Retour à l'accueil</a>
 
     {{ form_end(registrationForm) }}
+
+
+
 {% endblock %}
 
 {% block javascripts %}
@@ -47,12 +52,14 @@
 
     <script>
         $(document).ready(function() {
-            $('.js-datepicker').datepicker({
+            $('.js-datepicker')
+            .datepicker({
                 locale: 'fr-fr',
                 showOtherMonths: true,
-                format: 'dd/mm/yyyy'
-            });
+                format: 'dd/mm/yyyy',
+            })
         });
     </script>
 
+    {{ encore_entry_script_tags('registerPage') }}
 {% endblock %}

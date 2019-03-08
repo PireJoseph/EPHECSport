@@ -1,0 +1,86 @@
+.background-image {
+    position: fixed;
+    left: 0;
+    right: 0;
+    z-index: 1;
+
+    min-height: 100%;
+    background-position: center;
+    background-size: cover;
+
+    /* Add the blur effect */
+    -webkit-filter: blur(5px);
+    -moz-filter: blur(5px);
+    -o-filter: blur(5px);
+    -ms-filter: blur(5px);
+    filter: blur(5px);
+}
+
+.page-content {
+    min-height: 100%;
+    position: fixed;
+    left: 0;
+    right: 0;
+    z-index: 2;
+}
+
+h1.form-title {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 35px;
+}
+
+.form-container {
+    width: 80%; /* Could be more or less, depending on screen size */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    color: white;
+    max-width: 800px;
+}
+
+.form-content {
+    background-color: #eeeeee;
+    color: #000;
+}
+
+label {
+    margin-top: 16px;
+    display: flex;
+    justify-content: center;
+}
+
+input {
+    width: 100%;
+    padding: 12px 20px;
+    margin-bottom: 16px;
+    display: inline-block;
+    border: 0;
+    box-sizing: border-box;
+    border-bottom: 1px solid #ccc!important;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+button,a {
+    margin-top: 16px;
+}
+
+button:hover {
+    /*opacity: 0.8;*/
+    background-color: rgb(204,204,204);
+    color: black;
+}
+
+.form-cancel-btn {
+    padding: 14px 20px;
+    width: 100%;
+}

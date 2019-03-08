@@ -1,0 +1,31 @@
+.background-image {
+    background-image: url('../img/BGImgRegister.jpg');
+}
+
+span.psw {
+    float: right;
+    padding-top: 16px;
+}
+
+#registration_form_birthDate {
+    padding: 12px 20px!important;
+    height: 48px;
+    margin: 0 0 16px 0!important;
+    border-bottom: 1px solid #ccc!important;
+    color: black!important;
+}
+.gj-datepicker-md [role=right-icon] {
+    top: 12px;
+    right: 12px;
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 300px) {
+    span.psw {
+        display: block;
+        float: none;
+    }
+    .cancelbtn {
+        width: 100%;
+    }
+}

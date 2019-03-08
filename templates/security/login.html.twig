@@ -1,36 +1,49 @@
-{% extends 'base.html.twig' %}
+{% extends 'form.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% set pageTitle =  'Connexion' %}
 
-{% block body %}
-<form method="post">
-    {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
+{% block title %}
+    {{ pageTitle }}
+{% endblock %}
 
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <label for="inputUsername" class="sr-only">Username</label>
-    <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control" placeholder="Username" required autofocus>
-    <label for="inputPassword" class="sr-only">Password</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
+{% block stylesheets %}
+    {{ parent() }}
 
-    <input type="hidden" name="_csrf_token"
-           value="{{ csrf_token('authenticate') }}"
-    >
+    {{ encore_entry_link_tags('loginPage') }}
+{% endblock %}
 
-    {#
-        Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-        See https://symfony.com/doc/current/security/remember_me.html
+{% block formTitle %}
+    {{ pageTitle }}
+{% endblock %}
 
-        <div class="checkbox mb-3">
-            <label>
-                <input type="checkbox" name="_remember_me"> Remember me
-            </label>
-        </div>
-    #}
+{% block form %}
 
-    <button class="btn btn-lg btn-primary" type="submit">
-        Sign in
-    </button>
-</form>
+    <form method="post">
+
+        {% if error %}
+            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
+
+        <label for="inputUsername" class="sr-only">Nom d'utilisateur</label>
+        <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control" required autofocus>
+        <label for="inputPassword" class="sr-only">Mot de passe</label>
+        <input type="password" name="password" id="inputPassword" class="form-control" required>
+
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" >
+
+        <button class="btn btn-lg btn-primary" type="submit">Se connecter</button>
+
+        <a class="w3-button btn w3-blue form-cancel-btn" href="{{ path('app_register') }}">S'inscrire</a>
+
+        <a class="w3-button btn w3-red form-cancel-btn" href="{{ path('default') }}">Retour à l'accueil</a>
+
+    </form>
+
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {{ encore_entry_script_tags('loginPage') }}
 {% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello {{ controller_name }}!{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+
+    {{ encore_entry_link_tags('defaultPage') }}
+
+{% endblock %}
+
+{% block body %}
+
+    <div class="bgimg w3-display-container w3-text-white">
+        <div class="w3-display-middle w3-jumbo">
+            <p id="EPHECSportLogo"><img src="{{ asset('build/images/logoEPHECSport.gif') }}" style="width: 100%;" class="w3-opacity-max" alt="EPHEC Sport"/></p>
+        </div>
+        <div class="w3-display-topleft w3-container w3-xlarge">
+            <p><a href="{{ path('app_register',{}) }}"><button class="w3-button w3-black">S'inscrire</button></a></p>
+            <p><a href="{{ path('app_login',{}) }}"><button class="w3-button w3-black">Se connecter</button></a></p>
+        </div>
+        <div class="w3-display-bottomleft w3-container">
+            <p class="w3-xlarge">monday - friday 10-23 | saturday 14-02</p>
+            <p class="w3-large">42 village St, New York</p>
+            <p>powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+
+    {{ parent() }}
+
+    {{ encore_entry_script_tags('defaultPage') }}
+
+{% endblock %}

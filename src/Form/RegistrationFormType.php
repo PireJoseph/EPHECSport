@@ -67,7 +67,7 @@ class RegistrationFormType extends AbstractType
                 'mapped' => false,
             ])
             ->add('birthDate', DateType::class,[
-                'label' => 'Date d\'anniversaire',
+                'label' => 'Date de naissance',
                 'format' => 'dd/mm/yyyy',
                 'widget' => 'single_text',
                 'html5' => false,

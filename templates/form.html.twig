@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+
+    {{ parent() }}
+
+    {{ encore_entry_link_tags('form') }}
+
+{% endblock %}
+
+{% block body %}
+
+    <div class="background-image"></div>
+    <div class="page-content w3-display-container">
+
+        <div class="form-container">
+
+            <div class="form-title">
+
+                <h1 class="h3 mb-3 font-weight-normal form-title">{% block formTitle %}Titre temporaire{% endblock %}</h1>
+
+            </div>
+
+            <div class="form-content w3-container w3-card w3-padding-32 w3-white">
+
+                {% block form %}{% endblock %}
+
+            </div>
+        </div>
+
+
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+
+    {{ parent() }}
+
+    {{ encore_entry_script_tags('form') }}
+
+{% endblock %}
