@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello {{ controller_name }}!{% endblock %}
+{% block title %}Accueil{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -11,20 +11,262 @@
 
 {% block body %}
 
-    <div class="bgimg w3-display-container w3-text-white">
-        <div class="w3-display-middle w3-jumbo">
-            <p id="EPHECSportLogo"><img src="{{ asset('build/images/logoEPHECSport.gif') }}" style="width: 100%;" class="w3-opacity-max" alt="EPHEC Sport"/></p>
+    {#<div class="bgimg w3-display-container w3-text-white">#}
+        {#<div class="w3-display-middle w3-jumbo">#}
+            {#<p id="EPHECSportLogo"><img src="{{ asset('build/images/logoEPHECSport.gif') }}" style="width: 100%;" class="w3-opacity-max" alt="EPHEC Sport"/></p>#}
+        {#</div>#}
+        {#<div class="w3-display-topleft w3-container w3-xlarge">#}
+            {#<p><a href="{{ path('app_register',{}) }}"><button class="w3-button w3-black">S'inscrire</button></a></p>#}
+            {#<p><a href="{{ path('app_login',{}) }}"><button class="w3-button w3-black">Se connecter</button></a></p>#}
+        {#</div>#}
+        {#<div class="w3-display-bottomleft w3-container">#}
+            {#<p class="w3-xlarge">Contacts</p>#}
+            {#<p class="w3-large">Emeric Clément <a href="mailto:e.clement@ephec.be">e.clement@ephec.be</a> 02/899.02.76</p>#}
+            {#<p class="w3-large">Pierre Schulte <a href="mailto:p.schulte@ephec.be">p.schulte@ephec.be</a> (relations avec l'<a href="https://www.aseus.be/" target="_blank" >ASEUS)</a></p>#}
+        {#</div>#}
+    {#</div>#}
+
+
+    <!------------>
+    <!-- Navbar -->
+    <!------------>
+
+    <!-- Navbar (sit on top) -->
+    <div class="w3-top">
+        <div class="w3-bar" id="myNavbar">
+            <a class="w3-bar-item w3-button w3-hover-black w3-hide-medium w3-hide-large w3-right" href="javascript:void(0);" onclick="toggleFunction()" title="Toggle Navigation Menu">
+                <i class="fa fa-bars"></i>
+            </a>
+            <a href="#home" class="w3-bar-item w3-button" onclick="hideNavBar()">HOME</a>
+            <a href="#about" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-info"></i> A PROPOS</a>
+            <a href="#activities" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-bolt"></i> ACTIVITES</a>
+            <a href="#promotion" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-star"></i> PROMOTION</a>
+            <a href="#information" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-search"></i> INFORMATION</a>
+            <a href="#contact" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-envelope"></i> CONTACT</a>
+            <a href="{{ path('app_login',{}) }}" class="w3-bar-item w3-button w3-hide-small w3-right "><i class="fa fa-user"></i> SE CONNECTER</a>
         </div>
-        <div class="w3-display-topleft w3-container w3-xlarge">
-            <p><a href="{{ path('app_register',{}) }}"><button class="w3-button w3-black">S'inscrire</button></a></p>
-            <p><a href="{{ path('app_login',{}) }}"><button class="w3-button w3-black">Se connecter</button></a></p>
-        </div>
-        <div class="w3-display-bottomleft w3-container">
-            <p class="w3-xlarge">monday - friday 10-23 | saturday 14-02</p>
-            <p class="w3-large">42 village St, New York</p>
-            <p>powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
+
+        <!-- Navbar on small screens -->
+        <div id="navDemo" class="w3-bar-block w3-white w3-hide w3-hide-large w3-hide-medium">
+            <a href="#about" class="w3-bar-item w3-button" onclick="toggleFunction()">A PROPOS</a>
+            <a href="#activities" class="w3-bar-item w3-button" onclick="toggleFunction()">ACTIVITES</a>
+            <a href="#promotion" class="w3-bar-item w3-button" onclick="toggleFunction()">PROMOTION</a>
+            <a href="#information" class="w3-bar-item w3-button" onclick="toggleFunction()">INFORMATION</a>
+            <a href="#contact" class="w3-bar-item w3-button" onclick="toggleFunction()">CONTACT</a>
+            <a href="#" class="w3-bar-item w3-button">SE CONNECTER</a>
         </div>
     </div>
+
+    <!------------>
+    <!-- Home -->
+    <!------------>
+
+    <!-- First Parallax Image with Logo Text -->
+    <div class="bgimg-1 w3-display-container w3-opacity-min" id="home">
+        <div class="w3-display-middle" style="white-space:nowrap;">
+           <img src="{{ asset('build/images/logoEPHECSport.gif') }}" style="width: 100%;" class="w3-opacity" alt="EPHEC Sport"/>
+        </div>
+    </div>
+
+    <!------------>
+    <!-- About -->
+    <!------------>
+
+    <!-- Container (About Section) -->
+    <div class="w3-content w3-container w3-padding-64" id="about">
+
+        <h3 class="w3-center"> A PROPOS</h3>
+        <p class="w3-center"><em>Mens sana in corpore sano</em></p>
+
+        <h4>Qui sommes-nous ?</h4>
+        <p>EPHEC Sport est une association aux services des étudiants de l'<a href="https://www.ephec.be" title="site web de l'EPHEC" style="text-decoration: none">EPHEC</a>, proposants différants services centrés autour de la pratique du sport.</p>
+
+        <h4>Que pouvons-nous t'apporter ?</h4>
+        <ul>
+            <li><p>tu pourras bénéficier de la carte sport de l’UCL u  de l'ULB (inscription à tout un panel de sports, réservation de terrain...)</p></li>
+            <li><p>Si tu pratiques un sport d’équipe, tu pourras faire partie des équipes EPHEC représentées aux compétitions de l’ASUSFSUB, participer à des tournois...</p></li>
+            <li><p>Si tu es considéré comme sportif(ve) de haut niveau, nous pourrons t'aider dans l’aménagement de tes horaires de cours et d’examens et à conjuguer au mieux ton double parcours d'étudiant et de sportif.</p></li>
+        </ul>
+
+        <h4>Que propose cette plateforme ?</h4>
+        <p>Ce site web est un outil développé autour de trois axes</p>
+        <div class="w3-row" id="about-gallery">
+            <a href="#activities" class="w3-button w3-third w3-container w3-center about-gallery-item w3-padding-large">
+                <p class="about-gallery-item-title"><b>Organiser</b></p>
+                <p class="about-gallery-item-label">Activités et rencontres</p>
+                <img src="{{ asset('build/images/IMGActiviteEPHEC.jpg') }}" class="w3-round w3-image w3-opacity w3-hover-opacity-off w3-grayscale img-about w3-hide-small" alt="Photo of Me" >
+            </a>
+            <a href="#promotion" class="w3-button w3-third w3-container w3-center about-gallery-item w3-padding-large">
+                <p class="about-gallery-item-title"><b>Promouvoir</b></p>
+                <p class="about-gallery-item-label">Equipes et sportifs</p>
+                <img src="{{ asset('build/images/IMGPromotionEPHEC.jpg') }}" class="w3-round w3-image w3-opacity w3-hover-opacity-off w3-grayscale img-about w3-hide-small" alt="Photo of Me" >
+            </a>
+            <a href="#information" class="w3-button w3-third w3-container w3-center about-gallery-item w3-padding-large">
+                <p class="about-gallery-item-title"><b>Informer</b></p>
+                <p class="about-gallery-item-label">Sport, nutrition et santé</p>
+                <img src="{{ asset('build/images/IMGInformationEPHEC.jpg') }}" class="w3-round w3-image w3-opacity w3-hover-opacity-off w3-grayscale img-about w3-hide-small" alt="Photo of Me">
+            </a>
+        </div>
+
+
+
+        {#<p class="w3-large w3-center w3-padding-16">Im really good at:</p>#}
+        {#<p class="w3-wide"><i class="fa fa-camera"></i>Photography</p>#}
+        {#<div class="w3-light-grey">#}
+        {#<div class="w3-container w3-padding-small w3-dark-grey w3-center" style="width:90%">90%</div>#}
+        {#</div>#}
+        {#<p class="w3-wide"><i class="fa fa-laptop"></i>Web Design</p>#}
+        {#<div class="w3-light-grey">#}
+        {#<div class="w3-container w3-padding-small w3-dark-grey w3-center" style="width:85%">85%</div>#}
+        {#</div>#}
+        {#<p class="w3-wide"><i class="fa fa-photo"></i>Photoshop</p>#}
+        {#<div class="w3-light-grey">#}
+        {#<div class="w3-container w3-padding-small w3-dark-grey w3-center" style="width:75%">75%</div>#}
+        {#</div>#}
+
+    </div>
+
+    <!------------------------->
+    <!-- Bandeau quantitatif -->
+    <!------------------------->
+
+    <div class="w3-row w3-center w3-dark-grey w3-padding-16">
+        <div class="w3-quarter w3-section">
+            <span class="w3-xlarge">{{ userNumber|default('0') }}{% if userNumber > 1 %}+{% endif %}</span><br>
+            Inscrit{% if userNumber > 1 %}s{% endif %}
+        </div>
+        <div class="w3-quarter w3-section">
+            <span class="w3-xlarge">{{ activityNumber|default('0') }}{% if activityNumber > 1 %}+{% endif %}</span><br>
+            Activitée{% if activityNumber > 1 %}s{% endif %} créée{% if activityNumber> 1 %}s{% endif %}
+        </div>
+        <div class="w3-quarter w3-section">
+            <span class="w3-xlarge">{{ teamNumber|default('0') }}{% if teamNumber > 1 %}+{% endif %}</span><br>
+            Equipe{% if teamNumber > 1 %}s{% endif %} EPHEC
+        </div>
+        <div class="w3-quarter w3-section">
+            <span class="w3-xlarge">{{ highLevelSportManNumber|default('0') }}{% if highLevelSportManNumber > 1 %}+{% endif %}</span><br>
+            Sportif{% if highLevelSportManNumber > 1 %}s{% endif %} de haut niveau
+        </div>
+    </div>
+
+    <!------------------------->
+    <!-- Activités           -->
+    <!------------------------->
+
+    <!-- Second Parallax Image with Portfolio Text -->
+    <div class="bgimg-2 w3-display-container w3-opacity-min">
+        <div class="w3-display-middle">
+            <span class="w3-xxlarge w3-text-white w3-wide">PORTFOLIO</span>
+        </div>
+    </div>
+
+    <!-- Container (Portfolio Section) -->
+    <div class="w3-content w3-container w3-padding-64" id="portfolio">
+        <h3 class="w3-center">MY WORK</h3>
+        <p class="w3-center"><em>Here are some of my latest lorem work ipsum tipsum.<br> Click on the images to make them bigger</em></p><br>
+
+        <!-- Responsive Grid. Four columns on tablets, laptops and desktops. Will stack on mobile devices/small screens (100% width) -->
+        <div class="w3-row-padding w3-center">
+            <div class="w3-col m3">
+                <img src="/w3images/p1.jpg" style="width:100%" onclick="onClick(this)" class="w3-hover-opacity" alt="The mist over the mountains">
+            </div>
+
+            <div class="w3-col m3">
+                <img src="/w3images/p2.jpg" style="width:100%" onclick="onClick(this)" class="w3-hover-opacity" alt="Coffee beans">
+            </div>
+
+            <div class="w3-col m3">
+                <img src="/w3images/p3.jpg" style="width:100%" onclick="onClick(this)" class="w3-hover-opacity" alt="Bear closeup">
+            </div>
+
+            <div class="w3-col m3">
+                <img src="/w3images/p4.jpg" style="width:100%" onclick="onClick(this)" class="w3-hover-opacity" alt="Quiet ocean">
+            </div>
+        </div>
+
+        <div class="w3-row-padding w3-center w3-section">
+            <div class="w3-col m3">
+                <img src="/w3images/p5.jpg" style="width:100%" onclick="onClick(this)" class="w3-hover-opacity" alt="The mist">
+            </div>
+
+            <div class="w3-col m3">
+                <img src="/w3images/p6.jpg" style="width:100%" onclick="onClick(this)" class="w3-hover-opacity" alt="My beloved typewriter">
+            </div>
+
+            <div class="w3-col m3">
+                <img src="/w3images/p7.jpg" style="width:100%" onclick="onClick(this)" class="w3-hover-opacity" alt="Empty ghost train">
+            </div>
+
+            <div class="w3-col m3">
+                <img src="/w3images/p8.jpg" style="width:100%" onclick="onClick(this)" class="w3-hover-opacity" alt="Sailing">
+            </div>
+            <button class="w3-button w3-padding-large w3-light-grey" style="margin-top:64px">LOAD MORE</button>
+        </div>
+    </div>
+
+    <!-- Modal for full size images on click-->
+    <div id="modal01" class="w3-modal w3-black" onclick="this.style.display='none'">
+        <span class="w3-button w3-large w3-black w3-display-topright" title="Close Modal Image"><i class="fa fa-remove"></i></span>
+        <div class="w3-modal-content w3-animate-zoom w3-center w3-transparent w3-padding-64">
+            <img id="img01" class="w3-image">
+            <p id="caption" class="w3-opacity w3-large"></p>
+        </div>
+    </div>
+
+    <!-- Third Parallax Image with Portfolio Text -->
+    <div class="bgimg-3 w3-display-container w3-opacity-min">
+        <div class="w3-display-middle">
+            <span class="w3-xxlarge w3-text-white w3-wide">CONTACT</span>
+        </div>
+    </div>
+
+    <!-- Container (Contact Section) -->
+    <div class="w3-content w3-container w3-padding-64" id="contact">
+        <h3 class="w3-center">WHERE I WORK</h3>
+        <p class="w3-center"><em>I'd love your feedback!</em></p>
+
+        <div class="w3-row w3-padding-32 w3-section">
+            <div class="w3-col m4 w3-container">
+                <img src="/w3images/map.jpg" class="w3-image w3-round" style="width:100%">
+            </div>
+            <div class="w3-col m8 w3-panel">
+                <div class="w3-large w3-margin-bottom">
+                    <i class="fa fa-map-marker fa-fw w3-hover-text-black w3-xlarge w3-margin-right"></i> Chicago, US<br>
+                    <i class="fa fa-phone fa-fw w3-hover-text-black w3-xlarge w3-margin-right"></i> Phone: +00 151515<br>
+                    <i class="fa fa-envelope fa-fw w3-hover-text-black w3-xlarge w3-margin-right"></i> Email: mail@mail.com<br>
+                </div>
+                <p>Swing by for a cup of <i class="fa fa-coffee"></i>, or leave me a note:</p>
+                <form action="/action_page.php" target="_blank">
+                    <div class="w3-row-padding" style="margin:0 -16px 8px -16px">
+                        <div class="w3-half">
+                            <input class="w3-input w3-border" type="text" placeholder="Name" required name="Name">
+                        </div>
+                        <div class="w3-half">
+                            <input class="w3-input w3-border" type="text" placeholder="Email" required name="Email">
+                        </div>
+                    </div>
+                    <input class="w3-input w3-border" type="text" placeholder="Message" required name="Message">
+                    <button class="w3-button w3-black w3-right w3-section" type="submit">
+                        <i class="fa fa-paper-plane"></i> SEND MESSAGE
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="w3-center w3-black w3-padding-64 w3-opacity w3-hover-opacity-off">
+        <a href="#home" class="w3-button w3-light-grey"><i class="fa fa-arrow-up w3-margin-right"></i>To the top</a>
+        <div class="w3-xlarge w3-section">
+            <i class="fa fa-facebook-official w3-hover-opacity"></i>
+            <i class="fa fa-instagram w3-hover-opacity"></i>
+            <i class="fa fa-snapchat w3-hover-opacity"></i>
+            <i class="fa fa-pinterest-p w3-hover-opacity"></i>
+            <i class="fa fa-twitter w3-hover-opacity"></i>
+            <i class="fa fa-linkedin w3-hover-opacity"></i>
+        </div>
+        <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" title="W3.CSS" target="_blank" class="w3-hover-text-green">w3.css</a></p>
+    </footer>
 
 {% endblock %}
 
@@ -32,6 +274,42 @@
 
     {{ parent() }}
 
+    <script type="application/javascript">
+        // Modal Image Gallery
+        function onClick(element) {
+            document.getElementById("img01").src = element.src;
+            document.getElementById("modal01").style.display = "block";
+            var captionText = document.getElementById("caption");
+            captionText.innerHTML = element.alt;
+        }
+
+        // Change style of navbar on scroll
+        window.onscroll = function() {myFunction()};
+        function myFunction() {
+            var navbar = document.getElementById("myNavbar");
+            if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+                navbar.className = "w3-bar" + " w3-card" + " w3-animate-top" + " w3-white";
+            } else {
+                navbar.className = navbar.className.replace(" w3-card w3-animate-top w3-white", "");
+            }
+        }
+
+        // Used to toggle the menu on small screens when clicking on the menu button
+        function toggleFunction() {
+            var x = document.getElementById("navDemo");
+            if (x.className.indexOf("w3-show") == -1) {
+                x.className += " w3-show";
+            } else {
+                x.className = x.className.replace(" w3-show", "");
+            }
+        }
+
+        function hideNavBar() {
+            var y = document.getElementById("navDemo");
+            document.getElementById("navDemo").className = y.className.replace(" w3-show", "");
+        }
+
+    </script>
     {{ encore_entry_script_tags('defaultPage') }}
 
 {% endblock %}

@@ -13,8 +13,19 @@ class DefaultController extends AbstractController
     public function index()
     {
 
+        /** TODO  Implémenter les compteurs */
+
+        $userNumber = 0;
+        $activityNumber = 0;
+        $teamNumber = 0;
+        $highLevelSportManNumber = 0;
+
         return $this->render('default.html.twig', [
             'controller_name' => 'DefaultController',
+            'userNumber' => $userNumber,
+            'activityNumber' => $activityNumber,
+            'teamNumber' => $teamNumber,
+            'highLevelSportManNumber' => $highLevelSportManNumber
         ]);
 
 

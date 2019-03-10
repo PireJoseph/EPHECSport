@@ -24,6 +24,8 @@ Encore
     .addEntry('defaultPage','./assets/js/defaultPage.js')
     .addEntry('loginPage','./assets/js/loginPage.js')
     .addEntry('registerPage','./assets/js/registerPage.js')
+    .addEntry('user','./assets/js/user.js')
+
 
     //.addEntry('page1', './assets/js/page1.js')
     //.addEntry('page2', './assets/js/page2.js')
@@ -55,11 +57,14 @@ Encore
     .enableTypeScriptLoader()
 
     // uncomment if you're having problems with a jQuery plugin
-    .autoProvidejQuery()
+    // .autoProvidejQuery()
 
     // uncomment if you use API Platform Admin (composer req api-admin)
     // .enableReactPreset()
     //.addEntry('admin', './assets/js/admin.js')
+
+    // Enable Vue loader
+    .enableVueLoader()
 ;
 
 module.exports = Encore.getWebpackConfig();
