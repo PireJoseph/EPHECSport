@@ -10,7 +10,7 @@ doctrine:
         # configure these for your database server
         dbname:               apiephecsport
         user:                 root
-        password:             '!zryt2465!'
+        password:             'zryt2465'
         port:                 3306
         driver: pdo_mysql
         server_version: '5.7'

@@ -73,6 +73,11 @@ class SportProfile
      */
     private $sport;
 
+    public function __toString()
+    {
+        return $this->user . ' - ' . $this->sport;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

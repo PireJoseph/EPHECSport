@@ -3,6 +3,9 @@
 namespace App\Entity\Promotion;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Entity\Picture;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -37,6 +40,25 @@ class OfficialTeam
      * @ORM\Column(type="string", length=255)
      */
     private $label;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Picture", cascade={"persist"})
+     * @ORM\JoinTable(name="official_team_pictures",
+     *      joinColumns={@ORM\JoinColumn(name="official_team_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="picture_id", referencedColumnName="id", unique=true)}
+     * )
+     */
+    private $pictures;
+
+    public function __construct()
+    {
+        $this->pictures = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->shortName . ' : ' . $this->name;
+    }
 
     public function getId(): ?int
     {
@@ -87,6 +109,32 @@ class OfficialTeam
     public function setLabel(string $label): self
     {
         $this->label = $label;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Picture[]
+     */
+    public function getPictures(): Collection
+    {
+        return $this->pictures;
+    }
+
+    public function addPicture(Picture $picture): self
+    {
+        if (!$this->pictures->contains($picture)) {
+            $this->pictures[] = $picture;
+        }
+
+        return $this;
+    }
+
+    public function removePicture(Picture $picture): self
+    {
+        if ($this->pictures->contains($picture)) {
+            $this->pictures->removeElement($picture);
+        }
 
         return $this;
     }

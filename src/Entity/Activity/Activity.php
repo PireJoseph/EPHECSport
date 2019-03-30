@@ -4,6 +4,7 @@ namespace App\Entity\Activity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Entity\Location;
+use App\Entity\Picture;
 use App\Entity\User\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -81,7 +82,7 @@ class Activity
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Activity\Sport")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $sport;
 
@@ -91,11 +92,25 @@ class Activity
      */
     private $createdBy;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Picture" , cascade={"persist"})
+     * @ORM\JoinTable(name="activity_pictures",
+     *      joinColumns={@ORM\JoinColumn(name="activity_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="picture_id", referencedColumnName="id", unique=true)}
+     * )
+     */
+    private $pictures;
+
     public function __construct()
     {
         $this->material = new ArrayCollection();
+        $this->pictures = new ArrayCollection();
     }
 
+    public function __toString()
+    {
+        return $this->label . ' - ' . $this->startAt->format('d/m/Y');
+    }
 
     public function getId(): ?int
     {
@@ -268,6 +283,32 @@ class Activity
     public function setCreatedBy(?User $createdBy): self
     {
         $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Picture[]
+     */
+    public function getPictures(): Collection
+    {
+        return $this->pictures;
+    }
+
+    public function addPicture(Picture $picture): self
+    {
+        if (!$this->pictures->contains($picture)) {
+            $this->pictures[] = $picture;
+        }
+
+        return $this;
+    }
+
+    public function removePicture(Picture $picture): self
+    {
+        if ($this->pictures->contains($picture)) {
+            $this->pictures->removeElement($picture);
+        }
 
         return $this;
     }

@@ -26,21 +26,61 @@ class UserFixtures extends Fixture
      */
     public function load(ObjectManager $manager)
     {
+
+        $now = new DateTime();
+
         $userTest = new User();
-        $userTest->setUsername('test');
-        $userTest->setEmail('test@gmail.com');
-        $birthDate = new DateTime();
-        $userTest->setBirthDate($birthDate);
+        $userTest->setUsername('user_test');
+        $userTest->setEmail('test-user-ephec-sport@mailinator.com');
+        $userTest->setBirthDate($now);
         $userTestRoles = array(iHasRole::ROLE_USER);
-        $cratedAt = new DateTime();
-        $userTest->setCreatedAt($cratedAt);
+        $userTest->setCreatedAt($now);
         $userTest->setRoles($userTestRoles);
         $userTest->setPassword($this->passwordEncoder->encodePassword(
             $userTest,
             'test'
         ));
-
         $manager->persist($userTest);
         $manager->flush();
+
+        ///////////////////////////////////////////////
+
+        $userAdmin = new User();
+        $userAdmin->setUsername('admin_test');
+        $userAdmin->setEmail('test-admin-ephec-sport@mailinator.com');
+        $userAdmin->setBirthDate($now);
+        $userAdminRoles = array(iHasRole::ROLE_ADMIN);
+        $userAdmin->setCreatedAt($now);
+        $userAdmin->setRoles($userAdminRoles);
+        $userAdmin->setPassword($this->passwordEncoder->encodePassword(
+            $userAdmin,
+            'test'
+        ));
+        $manager->persist($userAdmin);
+        $manager->flush();
+
+        ///////////////////////////////////////////////
+
+        $preferedPartner = new User();
+        $preferedPartner->setUsername('partner');
+        $preferedPartner->setEmail('partner@gmail.com');
+        $birthDate = new DateTime();
+        $preferedPartner->setBirthDate($birthDate);
+        $userTestRoles = array(iHasRole::ROLE_USER);
+        $cratedAt = new DateTime();
+        $preferedPartner->setCreatedAt($cratedAt);
+        $preferedPartner->setRoles($userTestRoles);
+        $preferedPartner->setPassword($this->passwordEncoder->encodePassword(
+            $preferedPartner,
+            'partner'
+        ));
+
+        $manager->persist($preferedPartner);
+        $manager->flush();
+
+        $userTest->addPreferedPartner($preferedPartner);
+        $manager->persist($userTest);
+        $manager->flush();
+
     }
 }

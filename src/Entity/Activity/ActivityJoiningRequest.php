@@ -41,6 +41,12 @@ class ActivityJoiningRequest
      */
     private $createdBy;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User\User")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $recipitent;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -90,6 +96,18 @@ class ActivityJoiningRequest
     public function setCreatedBy(?User $createdBy): self
     {
         $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    public function getRecipitent(): ?User
+    {
+        return $this->recipitent;
+    }
+
+    public function setRecipitent(?User $recipitent): self
+    {
+        $this->recipitent = $recipitent;
 
         return $this;
     }

@@ -22,7 +22,7 @@ class ActivityRelatedFeedback
     /**
      * @ORM\Column(type="integer")
      */
-    private $ActivityRatingOutOfFive;
+    private $activityRatingOutOfFive;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -41,6 +41,12 @@ class ActivityRelatedFeedback
      */
     private $createdBy;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User\User")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $author;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -48,12 +54,12 @@ class ActivityRelatedFeedback
 
     public function getActivityRatingOutOfFive(): ?int
     {
-        return $this->ActivityRatingOutOfFive;
+        return $this->activityRatingOutOfFive;
     }
 
-    public function setActivityRatingOutOfFive(int $ActivityRatingOutOfFive): self
+    public function setActivityRatingOutOfFive(int $activityRatingOutOfFive): self
     {
-        $this->ActivityRatingOutOfFive = $ActivityRatingOutOfFive;
+        $this->activityRatingOutOfFive = $activityRatingOutOfFive;
 
         return $this;
     }
@@ -90,6 +96,18 @@ class ActivityRelatedFeedback
     public function setCreatedBy(?User $createdBy): self
     {
         $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): self
+    {
+        $this->author = $author;
 
         return $this;
     }

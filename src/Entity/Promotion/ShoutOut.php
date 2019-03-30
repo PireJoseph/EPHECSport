@@ -36,14 +36,20 @@ class ShoutOut
     private $createdBy;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Promotion\EmeritusSportman")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Promotion\EmeritusSportMan")
      */
-    private $EmeritusSportmanTarget;
+    private $emeritusSportManTarget;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Promotion\OfficialTeam")
      */
-    private $OfficialTeamTarget;
+    private $officialTeamTarget;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User\User")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $transmitter;
 
     public function getId(): ?int
     {
@@ -86,26 +92,38 @@ class ShoutOut
         return $this;
     }
 
-    public function getEmeritusSportmanTarget(): ?EmeritusSportman
+    public function getEmeritusSportManTarget(): ?EmeritusSportMan
     {
-        return $this->EmeritusSportmanTarget;
+        return $this->emeritusSportManTarget;
     }
 
-    public function setEmeritusSportmanTarget(?EmeritusSportman $EmeritusSportmanTarget): self
+    public function setEmeritusSportManTarget(?EmeritusSportMan $emeritusSportManTarget): self
     {
-        $this->EmeritusSportmanTarget = $EmeritusSportmanTarget;
+        $this->emeritusSportManTarget = $emeritusSportManTarget;
 
         return $this;
     }
 
     public function getOfficialTeamTarget(): ?OfficialTeam
     {
-        return $this->OfficialTeamTarget;
+        return $this->officialTeamTarget;
     }
 
-    public function setOfficialTeamTarget(?OfficialTeam $OfficialTeamTarget): self
+    public function setOfficialTeamTarget(?OfficialTeam $officialTeamTarget): self
     {
-        $this->OfficialTeamTarget = $OfficialTeamTarget;
+        $this->officialTeamTarget = $officialTeamTarget;
+
+        return $this;
+    }
+
+    public function getTransmitter(): ?User
+    {
+        return $this->transmitter;
+    }
+
+    public function setTransmitter(?User $transmitter): self
+    {
+        $this->transmitter = $transmitter;
 
         return $this;
     }

@@ -228,21 +228,33 @@
             <span class="w3-xxlarge w3-text-white w3-wide" >PROMOTION</span>
         </div>
     </div>
+
     <!-- Container (Promotion Section) -->
-
-    <!-- Container (Information Section) -->
     <div class="w3-content w3-container w3-padding-64" id="promotion">
-
+        <h3 class="w3-center">Qui soutenir?</h3>
+        <p class="w3-center"><em>Suivez et supportez nos équipes et sportifs de haut niveau.</em></p>
+        <p class="w3-center"><em>Soyez au courant de leurs plus grands exploits et venez les soutenir lors de leur prochaine rencontre.</em></p>
     </div>
+    <!-- slideshow with ephec team and emeritus sportman -->
+    <div class="w3-content w3-display-container">
+        <img class="mySlides" src="{{ asset('build/images/activityPic1.jpg') }}" style="width:100%">
+        <img class="mySlides" src="{{ asset('build/images/activityPic2.jpg') }}" style="width:100%">
+        <img class="mySlides" src="{{ asset('build/images/activityPic3.jpg') }}" style="width:100%">
+        <img class="mySlides" src="{{ asset('build/images/activityPic4.jpg') }}" style="width:100%">
+
+        <button class="w3-button w3-black w3-display-left" onclick="plusDivs(-1)">&#10094;</button>
+        <button class="w3-button w3-black w3-display-right" onclick="plusDivs(1)">&#10095;</button>
+    </div>
+
 
     <!------------------------->
     <!--   Information       -->
     <!------------------------->
 
-    <!-- Third Parallax Image Promotion -->
+    <!-- Third Parallax Image Information -->
     <div class="bgimg-4 w3-display-container w3-opacity-min">
         <div class="w3-display-middle">
-            <span class="w3-xxlarge w3-text-white w3-wide" >INFORPMATION</span>
+            <span class="w3-xxlarge w3-text-white w3-wide" >INFORMATION</span>
         </div>
     </div>
 
@@ -351,7 +363,26 @@
             document.getElementById("navDemo").className = y.className.replace(" w3-show", "");
         }
 
+        // promotion slideshow
+        var slideIndex = 1;
+        showDivs(slideIndex);
+
+        function plusDivs(n) {
+            showDivs(slideIndex += n);
+        }
+
+        function showDivs(n) {
+            var i;
+            var x = document.getElementsByClassName("mySlides");
+            if (n > x.length) {slideIndex = 1}
+            if (n < 1) {slideIndex = x.length}
+            for (i = 0; i < x.length; i++) {
+                x[i].style.display = "none";
+            }
+            x[slideIndex-1].style.display = "block";
+        }
     </script>
+
     {{ encore_entry_script_tags('defaultPage') }}
 
 {% endblock %}

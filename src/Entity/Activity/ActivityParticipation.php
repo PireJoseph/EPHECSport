@@ -5,6 +5,7 @@ namespace App\Entity\Activity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Entity\User\User;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Activity\UserRelatedFeedback;
 
 /**
  * @ApiResource()
@@ -37,9 +38,10 @@ class ActivityParticipation
     private $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Activity\UserRelatedFeedBack")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User\User")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $feedback;
+    private $createdBy;
 
     public function getId(): ?int
     {
@@ -82,15 +84,16 @@ class ActivityParticipation
         return $this;
     }
 
-    public function getFeedback(): ?UserRelatedFeedBack
+    public function getCreatedBy(): ?User
     {
-        return $this->feedback;
+        return $this->createdBy;
     }
 
-    public function setFeedback(?UserRelatedFeedBack $feedback): self
+    public function setCreatedBy(?User $createdBy): self
     {
-        $this->feedback = $feedback;
+        $this->createdBy = $createdBy;
 
         return $this;
     }
+
 }

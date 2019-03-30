@@ -1,14 +1,9 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Profile;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use App\Entity\Activity\Activity;
-use App\Entity\Promotion\EmeritusSportman;
-use App\Entity\Promotion\OfficialTeam;
 use App\Entity\User\User;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Serializable;
 use Symfony\Component\HttpFoundation\File\File;
@@ -16,10 +11,10 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ApiResource()
- * @ORM\Entity(repositoryClass="App\Repository\PictureRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\Profile\ProfilePictureRepository")
  * @Vich\Uploadable
  */
-class Picture implements Serializable
+class ProfilePicture implements Serializable
 {
     /**
      * @ORM\Id()
@@ -29,91 +24,74 @@ class Picture implements Serializable
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $label;
-
-    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @var string
-     *
-     * @ORM\Column(type="string", length=255)
      */
-    private $image;
+    private $picture;
 
     /**
+     * @Vich\UploadableField(mapping="profilePicture", fileNameProperty="picture")
      * @var File
-     *
-     * @Vich\UploadableField(mapping="pictures", fileNameProperty="image")
      */
-    private $imageFile;
+    private $pictureFile;
 
     /**
+     * @ORM\Column(type="datetime", nullable=true)
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", length=255)
      */
     private $updatedAt;
-
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getLabel(): ?string
+    /**
+     * @return string
+     */
+    public function getPicture(): ?string
     {
-        return $this->label;
-    }
-
-    public function setLabel(string $label): self
-    {
-        $this->label = $label;
-
-        return $this;
+        return $this->picture;
     }
 
     /**
-     * @param File|null $image
-     * @return Picture
-     * @throws \Exception
+     * @param string $picture
+     * @return ProfilePicture
      */
-    public function setImageFile(File $image = null)
+    public function setPicture(?string $picture): ProfilePicture
     {
-        $this->imageFile = $image;
-
-        if ($image) {
-            $this->updatedAt = new \DateTime('now');
-        }
-
+        $this->picture = $picture;
         return $this;
     }
 
     /**
      * @return File
      */
-    public function getImageFile()
+    public function getPictureFile(): ?File
     {
-        return $this->imageFile;
+        return $this->pictureFile;
     }
 
     /**
-     * @return string
+     * @param File $pictureFile
+     * @return ProfilePicture
+     * @throws \Exception
      */
-    public function getImage()
+    public function setPictureFile(File $pictureFile = null): ProfilePicture
     {
-        return $this->image;
-    }
+        $this->pictureFile = $pictureFile;
 
-    /**
-     * @param string $image
-     * @return Picture
-     */
-    public function setImage($image)
-    {
-        $this->image = $image;
+        // VERY IMPORTANT:
+        // It is required that at least one field changes if you are using Doctrine,
+        // otherwise the event listeners won't be called and the file is lost
+        if ($pictureFile) {
+            // if 'updatedAt' is not defined in your entity, use another property
+            $this->updatedAt = new \DateTime('now');
+        }
 
         return $this;
     }
+
 
     /**
      * String representation of object
@@ -125,8 +103,7 @@ class Picture implements Serializable
     {
         return serialize(array(
             $this->id,
-            $this->label,
-            $this->image,
+            $this->picture,
         ));
     }
 

@@ -34,14 +34,9 @@ class Achievement
     private $AcquiredAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Promotion\EmeritusSportman")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Promotion\EmeritusSportMan")
      */
-    private $EmeritusSportman;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Promotion\EmeritusSportman")
-     */
-    private $emeritusSportman;
+    private $emeritusSportMan;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Promotion\OfficialTeam")
@@ -89,14 +84,14 @@ class Achievement
         return $this;
     }
 
-    public function getEmeritusSportman(): ?EmeritusSportman
+    public function getEmeritusSportMan(): ?EmeritusSportMan
     {
-        return $this->EmeritusSportman;
+        return $this->emeritusSportMan;
     }
 
-    public function setEmeritusSportman(?EmeritusSportman $EmeritusSportman): self
+    public function setEmeritusSportMan(?EmeritusSportMan $EmeritusSportMan): self
     {
-        $this->EmeritusSportman = $EmeritusSportman;
+        $this->emeritusSportMan = $EmeritusSportMan;
 
         return $this;
     }

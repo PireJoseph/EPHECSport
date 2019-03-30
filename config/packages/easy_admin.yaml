@@ -1,0 +1,383 @@
+easy_admin:
+
+    site_name: '<img src="/images/logoEPHECSport.gif" style="width:150px"/>'
+
+    design:
+        brand_color: '#ee7102'
+        assets:
+            favicon: '/images/favicon.png'
+            css: ['/admin/customStyle.css']
+            js:  ['/admin/customScript.js']
+
+        menu:
+            - label: 'Module Activité'
+              icon: 'soccer-ball-o'
+              css_class: 'hehe'
+              children:
+                 - 'Activity'
+                 - 'Sport'
+                 - 'ActivityInvitation'
+                 - 'ActivityJoiningRequest'
+                 - 'ActivityCancellation'
+                 - 'ActivityParticipation'
+                 - 'ActivityRelatedFeedback'
+                 - 'UserRelatedFeedback'
+
+            - label: 'Module Profil'
+              icon: 'user'
+              css_class: 'hehe'
+              children:
+                  - 'User'
+                  - 'SportProfile'
+                  - 'Success'
+                  - 'SportClub'
+                  - 'SchoolClass'
+                  - 'SchoolSection'
+
+            - label: 'Module Promotion'
+              icon: 'star'
+              css_class: 'hehe'
+              children:
+                  - 'EmeritusSportMan'
+                  - 'OfficialTeam'
+                  - 'Achievement'
+                  - 'CrucialMeeting'
+                  - 'ShoutOut'
+
+            - label: 'Module Information'
+              icon: 'graduation-cap'
+              css_class: 'hehe'
+              children:
+                  - 'ExternalLink'
+                  - 'HealthProfessional'
+    formats:
+        date:     'd/m/Y'
+        time:     'H:i'
+        datetime: 'd/m/Y - H:i'
+
+#    user:
+#        avatar_property_path: '%%profile_picture.uri_prefix%%/ProfilePictureOrFallback'
+
+
+
+#        ---------------------------------------------------------------------------------------------------
+
+
+    entities:
+        # List the entity class name you want to manage
+        Activity:
+            class: App\Entity\Activity\Activity
+            form:
+                fields:
+                    - 'label'
+                    - 'cost'
+                    - 'startAt'
+                    - 'endAt'
+                    - 'maxNumberOfPlayer'
+                    - 'isJoinableByAnyone'
+                    - 'isVisible'
+                    - 'isPublished'
+                    - { property: 'pictures', type: 'collection', type_options: { entry_type: 'App\Form\PictureType' } }
+            list:
+                fields:
+                    - 'label'
+                    - 'startAt'
+                    - 'isPublished'
+                    - 'isVisible'
+                    - 'createdAt'
+
+        Sport:
+            class: App\Entity\Activity\Sport
+            form:
+                fields:
+                    - 'label'
+            list:
+                fields:
+                    - 'label'
+
+        ActivityCancellation:
+            class: App\Entity\Activity\ActivityCancellation
+            form:
+                fields:
+                    - 'activity'
+                    - 'cancellationMotivation'
+                    - 'cancellingUser'
+                    - 'createdBy'
+            list:
+                fields:
+                    - 'activity'
+                    - 'cancellationMotivation'
+                    - 'cancellingUser'
+                    - 'createdBy'
+                    - 'createdAt'
+
+        ActivityInvitation:
+            class: App\Entity\Activity\ActivityInvitation
+            form:
+                fields:
+                    - 'activity'
+                    - 'recipitent'
+                    - 'isAccepted'
+                    - 'createdAt'
+            list:
+                fields:
+                    - 'activity'
+                    - 'recipitent'
+                    - 'isAccepted'
+
+        ActivityJoiningRequest:
+            class: App\Entity\Activity\ActivityJoiningRequest
+            form:
+                fields:
+                    - 'activity'
+                    - 'recipitent'
+                    - 'isAccepted'
+            list:
+                fields:
+                    - 'activity'
+                    - 'recipitent'
+                    - 'isAccepted'
+                    - 'createdAt'
+
+        ActivityParticipation:
+            class: App\Entity\Activity\ActivityParticipation
+            form:
+                fields:
+                    - 'activity'
+                    - 'user'
+                    - 'isConfirmed'
+            list:
+                fields:
+                    - 'activity'
+                    - 'user'
+                    - 'isConfirmed'
+                    - 'createdBy'
+
+        ActivityRelatedFeedback:
+            class: App\Entity\Activity\ActivityRelatedFeedback
+            form:
+                fields:
+                    - 'activity'
+                    - 'activityRatingOutOfFive'
+                    - 'label'
+                    - 'author'
+            list:
+                fields:
+                    - 'activity'
+                    - 'activityRatingOutOfFive'
+                    - 'label'
+                    - 'author'
+                    - 'createdBy'
+
+        UserRelatedFeedback:
+            class: App\Entity\Activity\UserRelatedFeedback
+            form:
+                fields:
+                    - 'user'
+                    - 'activity'
+                    - 'label'
+                    - 'isReallyPresent'
+            list:
+                fields:
+                    - 'user'
+                    - 'activity'
+                    - 'label'
+                    - 'isReallyPresent'
+                    - 'createdBy'
+
+#        ---------------------------------------------------------------------------------------------------
+
+        User:
+            class: App\Entity\User\User
+            form:
+                fields:
+                    - 'username'
+                    - 'roles'
+                    - 'password'
+                    - 'email'
+                    - 'birthDate'
+                    - 'gender'
+                    - 'phoneNumber'
+                    - 'description'
+                    - 'canGoAway'
+                    - 'activityCostLimit'
+                    - 'isInjured'
+                    - 'isPersonalProfileVisible'
+                    - 'areActivityParticipationVisible'
+                    - 'areSuccessUnlockedVisible'
+                    - 'disponibilityPattern'
+                    - 'preferedPartners'
+                    - 'schoolClass'
+                    - 'schoolSection'
+                    - { property: 'pictures', type: 'collection', type_options: { entry_type: 'App\Form\PictureType' } }
+                    - { property: 'profilePicture', type: 'App\Form\Profile\ProfilePictureType' }
+            list:
+                fields:
+                    - 'userName'
+                    - 'roles'
+                    - 'schoolClass'
+                    - 'schoolSection'
+                    - { property: 'profilePicture.picture', type: 'image', base_path: '%profile_picture.uri_prefix%' }
+            show:
+                fields:
+                    - 'userName'
+                    - 'roles'
+                    - 'schoolClass'
+                    - 'schoolSection'
+                    - { property: 'profilePicture.picture', type: 'image', base_path: '%profile_picture.uri_prefix%' }
+
+        SportProfile:
+            class: App\Entity\Profile\SportProfile
+            form:
+            list:
+               fields:
+                   - 'user'
+                   - 'sport'
+                   - 'isVisible'
+
+        Success:
+            class: App\Entity\Profile\Success
+            form:
+               fields:
+                   - 'user'
+                   - 'label'
+            list:
+               fields:
+                   - 'user'
+                   - 'label'
+
+        SportClub:
+            class: App\Entity\Activity\SportClub
+            form:
+                fields:
+                    - 'label'
+                    - 'sport'
+            list:
+                fields:
+                    - 'label'
+                    - 'sport'
+
+        SchoolClass:
+            class: App\Entity\Profile\SchoolClass
+            form:
+                fields:
+                    - 'label'
+            list:
+                fields:
+                    - 'label'
+
+        SchoolSection:
+            class: App\Entity\Profile\SchoolSection
+            form:
+                fields:
+                    - 'label'
+            list:
+                fields:
+                    - 'label'
+
+
+#        ---------------------------------------------------------------------------------------------------
+
+        EmeritusSportMan:
+            class: App\Entity\Promotion\EmeritusSportMan
+            form:
+                fields:
+                    - 'firstName'
+                    - 'lastName'
+                    - 'nickName'
+                    - 'gender'
+                    - 'role'
+                    - 'sport'
+                    - 'sportClub'
+                    - { property: 'pictures', type: 'collection', type_options: { entry_type: 'App\Form\PictureType' } }
+            list:
+                fields:
+                    - 'firstName'
+                    - 'lastName'
+                    - 'sport'
+
+        OfficialTeam:
+            class: App\Entity\Promotion\OfficialTeam
+            form:
+                fields:
+                    - 'name'
+                    - 'shortName'
+                    - 'nickName'
+                    - 'label'
+                    - { property: 'pictures', type: 'collection', type_options: { entry_type: 'App\Form\PictureType' } }
+            list:
+                fields:
+                    - 'name'
+                    - 'shortName'
+
+        Achievement:
+            class: App\Entity\Promotion\Achievement
+            form:
+            list:
+                fields:
+                    - 'label'
+                    - 'comment'
+                    - 'acquiredAt'
+                    - 'emeritusSportMan'
+                    - 'officialTeam'
+
+        CrucialMeeting:
+            class: App\Entity\Promotion\CrucialMeeting
+            form:
+            list:
+                fields:
+                    - 'label'
+                    - 'startAt'
+                    - 'sport'
+                    - 'emeritusSportMan'
+                    - 'officialTeam'
+
+        ShoutOut:
+            class: App\Entity\Promotion\ShoutOut
+            form:
+                fields:
+                    - 'content'
+                    - 'emeritusSportManTarget'
+                    - 'officialTeamTarget'
+                    - 'transmitter'
+            list:
+                fields:
+                    - 'content'
+                    - 'emeritusSportManTarget'
+                    - 'officialTeamTarget'
+                    - 'transmitter'
+                    - 'createdAt'
+
+#        ---------------------------------------------------------------------------------------------------
+
+        ExternalLink:
+            class: App\Entity\Information\ExternalLink
+            form:
+                fields:
+                    - 'url'
+                    - 'label'
+                    - 'description'
+                    - { property: 'picture', type: 'App\Form\PictureType' }
+            list:
+                fields:
+                    - 'url'
+                    - 'label'
+                    - 'description'
+                    - { property: 'picture.image', type: 'image', base_path: '%picture.uri_prefix%' }
+
+        HealthProfessional:
+            class: App\Entity\Information\HealthProfessional
+            form:
+                fields:
+                    - 'firstName'
+                    - 'lastName'
+                    - 'email'
+                    - 'phoneNumber'
+                    - 'title'
+                    - { property: 'picture', type: 'App\Form\PictureType' }
+            list:
+                fields:
+                    - 'firstName'
+                    - 'lastName'
+                    - 'title'
+                    - { property: 'picture.image', type: 'image', base_path: '%picture.uri_prefix%' }

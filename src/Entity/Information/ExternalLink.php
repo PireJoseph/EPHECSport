@@ -35,7 +35,7 @@ class ExternalLink
     private $description;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\picture", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Picture", cascade={"persist", "remove"})
      */
     private $picture;
 

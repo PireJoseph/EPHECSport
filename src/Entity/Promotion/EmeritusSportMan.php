@@ -5,6 +5,7 @@ namespace App\Entity\Promotion;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Entity\Activity\Sport;
 use App\Entity\Activity\SportClub;
+use App\Entity\Picture;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -58,6 +59,24 @@ class EmeritusSportMan
      */
     private $sportClub;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Picture", cascade={"persist"})
+     * @ORM\JoinTable(name="emeritus_sport_man_pictures",
+     *      joinColumns={@ORM\JoinColumn(name="emeritus_sport_man_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="picture_id", referencedColumnName="id", unique=true)}
+     * )
+     */
+    private $pictures;
+
+    public function __construct()
+    {
+        $this->pictures = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->firstName . ' ' . $this->lastName . ' - ' . $this->sport;
+    }
 
     public function getId(): ?int
     {
@@ -144,6 +163,32 @@ class EmeritusSportMan
     public function setSportClub(?SportClub $sportClub): self
     {
         $this->sportClub = $sportClub;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Picture[]
+     */
+    public function getPictures(): Collection
+    {
+        return $this->pictures;
+    }
+
+    public function addPicture(Picture $picture): self
+    {
+        if (!$this->pictures->contains($picture)) {
+            $this->pictures[] = $picture;
+        }
+
+        return $this;
+    }
+
+    public function removePicture(Picture $picture): self
+    {
+        if ($this->pictures->contains($picture)) {
+            $this->pictures->removeElement($picture);
+        }
 
         return $this;
     }

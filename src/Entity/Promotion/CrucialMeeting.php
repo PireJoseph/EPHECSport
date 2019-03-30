@@ -54,9 +54,9 @@ class CrucialMeeting
     private $location;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Promotion\EmeritusSportman")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Promotion\EmeritusSportMan")
      */
-    private $emeritusSportman;
+    private $emeritusSportMan;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Promotion\OfficialTeam")
@@ -66,7 +66,7 @@ class CrucialMeeting
     public function __construct()
     {
         $this->sport = new ArrayCollection();
-        $this->emeritusSportman = new ArrayCollection();
+        $this->emeritusSportMan = new ArrayCollection();
         $this->officialTeam = new ArrayCollection();
     }
 
@@ -164,24 +164,24 @@ class CrucialMeeting
     /**
      * @return Collection|EmeritusSportman[]
      */
-    public function getEmeritusSportman(): Collection
+    public function getEmeritusSportMan(): Collection
     {
-        return $this->emeritusSportman;
+        return $this->emeritusSportMan;
     }
 
-    public function addEmeritusSportman(EmeritusSportman $emeritusSportman): self
+    public function addEmeritusSportMan(EmeritusSportman $emeritusSportMan): self
     {
-        if (!$this->emeritusSportman->contains($emeritusSportman)) {
-            $this->emeritusSportman[] = $emeritusSportman;
+        if (!$this->emeritusSportMan->contains($emeritusSportMan)) {
+            $this->emeritusSportMan[] = $emeritusSportMan;
         }
 
         return $this;
     }
 
-    public function removeEmeritusSportman(EmeritusSportman $emeritusSportman): self
+    public function removeEmeritusSportMan(EmeritusSportman $emeritusSportMan): self
     {
-        if ($this->emeritusSportman->contains($emeritusSportman)) {
-            $this->emeritusSportman->removeElement($emeritusSportman);
+        if ($this->emeritusSportMan->contains($emeritusSportMan)) {
+            $this->emeritusSportMan->removeElement($emeritusSportMan);
         }
 
         return $this;

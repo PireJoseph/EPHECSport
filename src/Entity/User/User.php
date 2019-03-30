@@ -2,7 +2,11 @@
 
 namespace App\Entity\User;
 
+use App\Entity\Picture;
 use App\Entity\Profile\DisponibilityPattern;
+use App\Entity\Profile\ProfilePicture;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use App\Entity\Profile\SchoolClass;
 use App\Entity\Profile\SchoolSection;
 use App\Entity\Profile\Success;
@@ -17,10 +21,16 @@ use Symfony\Component\Validator\Constraints\Date;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\User\UserRepository")
+ * @Vich\Uploadable
  * @UniqueEntity(fields={"username"}, message="Il existe déja un compte avec ce nom d'utilisatateur")
  */
 class User implements UserInterface, iHasRole
 {
+    const USER_GENDER_KEY_MALE = 'M';
+    const USER_GENDER_VALUE_MALE = 'homme';
+    const USER_GENDER_KEY_FEMALE = 'F';
+    const USER_GENDER_VALUE_FEMALE = 'femme';
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -61,7 +71,7 @@ class User implements UserInterface, iHasRole
      *
      * @Assert\NotNull()
      * @Assert\Date()
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="date", nullable=true)
      */
     private $birthDate;
 
@@ -74,12 +84,12 @@ class User implements UserInterface, iHasRole
     private $createdAt;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $gender;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $phoneNumber;
 
@@ -99,55 +109,74 @@ class User implements UserInterface, iHasRole
     private $activityCostLimit;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", nullable=true)
      */
     private $isInjured;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", nullable=true)
      */
     private $isPersonalProfileVisible;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", nullable=true)
      */
-    private $AreActivityParticipationVisible;
+    private $areActivityParticipationVisible;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", nullable=true)
      */
     private $areSuccessUnlockedVisible;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Profile\Success")
-     */
-    private $success;
-
-    /**
+     * @ORM\Column(nullable=true)
      * @ORM\ManyToMany(targetEntity="App\Entity\Profile\DisponibilityPattern")
      */
     private $disponibilityPattern;
 
     /**
+     * @ORM\Column(nullable=true)
      * @ORM\ManyToMany(targetEntity="App\Entity\User\User")
      */
     private $preferedPartners;
 
     /**
+     * @ORM\Column(nullable=true)
      * @ORM\ManyToOne(targetEntity="App\Entity\Profile\SchoolClass")
      */
     private $schoolClass;
 
     /**
+     * @ORM\Column(nullable=true)
      * @ORM\ManyToOne(targetEntity="App\Entity\Profile\SchoolSection")
      */
     private $schoolSection;
 
+    /**
+     * @var Picture[]|ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="App\Entity\Picture", cascade={"persist"})
+     * @ORM\JoinTable(name="user_pictures",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="picture_id", referencedColumnName="id", unique=true)}
+     * )
+     */
+    private $pictures;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Profile\ProfilePicture", cascade={"persist", "remove"})
+     * @ORM\JoinTable(name="user_profile_pictures",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="profile_picture_id", referencedColumnName="id", unique=true)}
+     * )
+     */
+    private $profilePicture;
+
     public function __construct()
     {
-        $this->success = new ArrayCollection();
         $this->disponibilityPattern = new ArrayCollection();
         $this->preferedPartners = new ArrayCollection();
+        $this->pictures = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -223,6 +252,10 @@ class User implements UserInterface, iHasRole
         // $this->plainPassword = null;
     }
 
+    function __toString(){
+        return $this->getUsername();
+    }
+
     public function getEmail(): ?string
     {
         return $this->email;
@@ -252,7 +285,6 @@ class User implements UserInterface, iHasRole
         $this->birthDate = $birthDate;
         return $this;
     }
-
 
     /**
      * @return mixed
@@ -358,50 +390,12 @@ class User implements UserInterface, iHasRole
 
     public function getAreActivityParticipationVisible(): ?bool
     {
-        return $this->AreActivityParticipationVisible;
+        return $this->areActivityParticipationVisible;
     }
 
-    public function setAreActivityParticipationVisible(bool $AreActivityParticipationVisible): self
+    public function setAreActivityParticipationVisible(bool $areActivityParticipationVisible): self
     {
-        $this->AreActivityParticipationVisible = $AreActivityParticipationVisible;
-
-        return $this;
-    }
-
-    public function getAreSuccessUnlockedVisible(): ?bool
-    {
-        return $this->areSuccessUnlockedVisible;
-    }
-
-    public function setAreSuccessUnlockedVisible(bool $areSuccessUnlockedVisible): self
-    {
-        $this->areSuccessUnlockedVisible = $areSuccessUnlockedVisible;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Success[]
-     */
-    public function getSuccess(): Collection
-    {
-        return $this->success;
-    }
-
-    public function addSuccess(Success $success): self
-    {
-        if (!$this->success->contains($success)) {
-            $this->success[] = $success;
-        }
-
-        return $this;
-    }
-
-    public function removeSuccess(Success $success): self
-    {
-        if ($this->success->contains($success)) {
-            $this->success->removeElement($success);
-        }
+        $this->areActivityParticipationVisible = $areActivityParticipationVisible;
 
         return $this;
     }
@@ -429,6 +423,24 @@ class User implements UserInterface, iHasRole
             $this->disponibilityPattern->removeElement($disponibilityPattern);
         }
 
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAreSuccessUnlockedVisible()
+    {
+        return $this->areSuccessUnlockedVisible;
+    }
+
+    /**
+     * @param mixed $areSuccessUnlockedVisible
+     * @return User
+     */
+    public function setAreSuccessUnlockedVisible($areSuccessUnlockedVisible)
+    {
+        $this->areSuccessUnlockedVisible = $areSuccessUnlockedVisible;
         return $this;
     }
 
@@ -478,6 +490,26 @@ class User implements UserInterface, iHasRole
     public function setSchoolSection(?SchoolSection $schoolSection): self
     {
         $this->schoolSection = $schoolSection;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Picture[]
+     */
+    public function getPictures(): Collection
+    {
+        return $this->pictures;
+    }
+
+    public function getProfilePicture(): ?ProfilePicture
+    {
+        return $this->profilePicture;
+    }
+
+    public function setProfilePicture(?ProfilePicture $profilePicture): self
+    {
+        $this->profilePicture = $profilePicture;
 
         return $this;
     }

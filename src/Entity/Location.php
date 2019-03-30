@@ -43,6 +43,11 @@ class Location
      */
     private $number;
 
+    public function __toString()
+    {
+        return $this->label . ', ' . $this->city;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

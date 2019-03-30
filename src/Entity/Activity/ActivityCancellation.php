@@ -41,6 +41,12 @@ class ActivityCancellation
      */
     private $createdBy;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User\User")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $cancellingUser;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -90,6 +96,18 @@ class ActivityCancellation
     public function setCreatedBy(?User $createdBy): self
     {
         $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    public function getCancellingUser(): ?User
+    {
+        return $this->cancellingUser;
+    }
+
+    public function setCancellingUser(?User $cancellingUser): self
+    {
+        $this->cancellingUser = $cancellingUser;
 
         return $this;
     }
