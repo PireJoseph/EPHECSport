@@ -2,21 +2,19 @@
 /**
  * Created by PhpStorm.
  * User: jpire
- * Date: 28/03/19
- * Time: 1:02
+ * Date: 5/04/19
+ * Time: 15:46
  */
 
 namespace App\Controller\Admin;
 
-use App\Entity\User\User;
-use App\Security\iHasRole;
-use DateTime;
+
 use EasyCorp\Bundle\EasyAdminBundle\Controller\EasyAdminController;
-use Exception;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class AdminController extends EasyAdminController
+class UserAdminController  extends EasyAdminController
 {
+
     private $passwordEncoder;
 
     public function __construct(UserPasswordEncoderInterface $passwordEncoder)
@@ -33,9 +31,7 @@ class AdminController extends EasyAdminController
     public function persistEntity($entity)
     {
 
-        $hehe = 'test';
 
-        //
         if (method_exists($entity, 'setCreatedAt'))
         {
             $now = new DateTime();
@@ -61,7 +57,39 @@ class AdminController extends EasyAdminController
     protected function updateEntity($entity)
     {
 
-        $hehehe= 'testtsdt';
+
+        // User update
+        if (is_a($entity, User::class))
+        {
+            /** @var User $entity */
+            $userRequestArray= $this->request->get('user');
+
+            // ROLE
+            if (array_key_exists('isAdmin', $userRequestArray) && ("1" === $userRequestArray['isAdmin']))
+            {
+                $entity->setRoles([iHasRole::ROLE_ADMIN]);
+            }
+            else
+            {
+                $entity->setRoles([iHasRole::ROLE_USER]);
+            }
+
+
+            // Password
+            if (array_key_exists('plainTextPassword', $userRequestArray)  && ('' !== $userRequestArray['plainTextPassword']))
+            {
+                $plainTextPassword = $userRequestArray['plainTextPassword'];
+
+                $entity->setPassword(
+                    $this->passwordEncoder->encodePassword(
+                        $entity,
+                        $plainTextPassword
+                    )
+                );
+            }
+
+
+        }
 
         parent::persistEntity($entity);
     }

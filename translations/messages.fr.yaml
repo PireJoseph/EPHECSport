@@ -1,0 +1,113 @@
+Module Activité: Module Activité
+
+Activity: Activité
+Label: Libellé
+Start at: Début
+Created at: Créé le
+Cost: Coût (euro cent)
+Year: Année
+Month: Mois
+Day: Jour
+Hour: Heure
+Minute: Minute
+End at: Fin
+Max number of player: Nombre maximal de participants
+Is joinable by anyone: Est joignable par n'importe qui
+Is visible: Est visible
+Is published: Est publiée
+Pictures: Photos
+
+Sport: Sport
+
+Material: Matériel
+
+ActivityInvitation: Invitation à une activité
+Recipitent: Destinataire
+Is accepted: Est acceptée
+
+ActivityJoiningRequest: Demande de participation
+
+ActivityCancellation: Annulation d'activité
+
+Cancellation motivation: Motif d'annulation
+Is confirmed: Est confirmée
+Cancelling user: Utilisateur
+Created by: Créé par
+
+ActivityParticipation: Participation
+
+ActivityRelatedFeedback: Retour sur l'activité
+Activity rating out of five: Notation de l'activité
+Author: Auteur
+Comment: Commentaire
+ACTIVITY_RELATED_FEEDBACK_LABEL_TOKEN_NOTHING: Rien à dire
+ACTIVITY_RELATED_FEEDBACK_LABEL_TOKEN_BORING: Ennuyeux
+ACTIVITY_RELATED_FEEDBACK_LABEL_TOKEN_EASY: Facile
+ACTIVITY_RELATED_FEEDBACK_LABEL_TOKEN_FUN: Fun
+ACTIVITY_RELATED_FEEDBACK_LABEL_TOKEN_EPIC: Epique
+ACTIVITY_RELATED_FEEDBACK_LABEL_TOKEN_CHALLENGING: Challenging
+
+UserRelatedFeedback: Retour sur participation
+Is really present: Est réellement présent
+USER_RELATED_FEEDBACK_LABEL_TOKEN_NOTHING: Rien à dire
+USER_RELATED_FEEDBACK_LABEL_TOKEN_MVP: Joueur méritant
+USER_RELATED_FEEDBACK_LABEL_TOKEN_FAIRPLAY: Fairplay
+USER_RELATED_FEEDBACK_LABEL_TOKEN_FRIENDLY: Amical
+USER_RELATED_FEEDBACK_LABEL_TOKEN_LATE: En retard
+USER_RELATED_FEEDBACK_LABEL_TOKEN_NEGATIVE_ATTITUDE: Attitude négative
+
+Module Profil: 	Module Profil
+User name: Nom d'utilisateur
+Username: Nom d'utilisateur
+Password: Mot de passe
+Email: Email
+Birth date: Date de naissance
+Gender: genre
+Phone number: Numéro de téléphone
+Description: Description
+Can go away: Peut se déplacer
+Activity cost limit: Limite de coût (euro cent)
+Is injured: Est blessé
+Is personal profile visible: Profil visible
+Are activity participation visible: Participation aux activités visibles
+Are success unlocked visible: Succès débloqués visibles
+Disponibility pattern: Disponibilités
+Prefered partners: Partenaire favori
+Profile picture: Photo de profil
+Picture file: Fichier
+Roles: Roles
+School class: Classe
+School section: Section
+Profile picture.picture: Photo de profil
+Is admin: Est administrateur
+Nouveau mot de passe: Nouveau mot de passe
+USER_GENDER_VALUE_TOKEN_MALE: Homme
+USER_GENDER_VALUE_TOKEN_FEMALE: Femme
+
+User: Utilisateur
+SportProfile: Profil sportif
+Success: Succès
+SportClub: Club de sport
+SchoolClass: Classe scolaire
+SchoolSection: Section scolaire
+Module Promotion: Module Promotion
+EmeritusSportMan: Sportif émérite
+OfficialTeam: Equipe officielle
+Achievement: Haut fait
+CrucialMeeting: Rencontre importante
+ShoutOut: Encouragement
+Module Information: Module Information
+ExternalLink: Lien externe
+HealthProfessional: Professionel de la santé
+First name: Prénom
+Last name: Nom de famille
+Title: Titre
+Picture.image: Photo
+
+Autre: Autre
+Location: Localisation
+City: Ville
+Post code: Code postal
+Street or place: Rue
+Number: Nombre
+

@@ -5,10 +5,17 @@ namespace App\Entity\Activity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Entity\User\User;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\Activity\ActivityCancellationRepository")
+ * @UniqueEntity(
+ *     fields={"activity", "cancellingUser"},
+ *     errorPath="cancellingUser",
+ *     message="ACTIVITY_CANCELLATION_ALREADY_MADE_TOKEN"
+ * )
  */
 class ActivityCancellation
 {
@@ -25,11 +32,15 @@ class ActivityCancellation
     private $createdAt;
 
     /**
+     * @Assert\NotNull
+     * @Assert\NotBlank
+     * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=2056)
      */
     private $cancellationMotivation;
 
     /**
+     * @Assert\NotNull
      * @ORM\ManyToOne(targetEntity="App\Entity\Activity\Activity")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -42,6 +53,7 @@ class ActivityCancellation
     private $createdBy;
 
     /**
+     * @Assert\NotNull
      * @ORM\ManyToOne(targetEntity="App\Entity\User\User")
      * @ORM\JoinColumn(nullable=false)
      */

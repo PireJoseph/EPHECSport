@@ -12,10 +12,10 @@ easy_admin:
         menu:
             - label: 'Module Activité'
               icon: 'soccer-ball-o'
-              css_class: 'hehe'
               children:
                  - 'Activity'
                  - 'Sport'
+                 - 'Material'
                  - 'ActivityInvitation'
                  - 'ActivityJoiningRequest'
                  - 'ActivityCancellation'
@@ -25,7 +25,6 @@ easy_admin:
 
             - label: 'Module Profil'
               icon: 'user'
-              css_class: 'hehe'
               children:
                   - 'User'
                   - 'SportProfile'
@@ -46,10 +45,15 @@ easy_admin:
 
             - label: 'Module Information'
               icon: 'graduation-cap'
-              css_class: 'hehe'
               children:
                   - 'ExternalLink'
                   - 'HealthProfessional'
+
+            - label: 'Autre'
+              icon: 'ellipsis-h'
+              children:
+                  - 'Location'
+
     formats:
         date:     'd/m/Y'
         time:     'H:i'
@@ -70,17 +74,21 @@ easy_admin:
             form:
                 fields:
                     - 'label'
-                    - 'cost'
+                    - 'sport'
+                    - { property: 'cost',type: 'integer', type_options: { attr: { value: 0, min: 0 } }  }
                     - 'startAt'
                     - 'endAt'
-                    - 'maxNumberOfPlayer'
+                    - { property: 'maxNumberOfPlayer',type: 'integer', type_options: { attr: { value: 10, min: 0 } }  }
                     - 'isJoinableByAnyone'
                     - 'isVisible'
                     - 'isPublished'
+                    - 'location'
+                    - { property: 'material', type: 'entity', type_options: { class:  'App\Entity\Activity\Material', multiple: true } }
                     - { property: 'pictures', type: 'collection', type_options: { entry_type: 'App\Form\PictureType' } }
             list:
                 fields:
                     - 'label'
+                    - 'sport'
                     - 'startAt'
                     - 'isPublished'
                     - 'isVisible'
@@ -95,21 +103,14 @@ easy_admin:
                 fields:
                     - 'label'
 
-        ActivityCancellation:
-            class: App\Entity\Activity\ActivityCancellation
+        Material:
+            class: App\Entity\Activity\Material
             form:
                 fields:
-                    - 'activity'
-                    - 'cancellationMotivation'
-                    - 'cancellingUser'
-                    - 'createdBy'
+                    - 'label'
             list:
                 fields:
-                    - 'activity'
-                    - 'cancellationMotivation'
-                    - 'cancellingUser'
-                    - 'createdBy'
-                    - 'createdAt'
+                    - 'label'
 
         ActivityInvitation:
             class: App\Entity\Activity\ActivityInvitation
@@ -118,12 +119,12 @@ easy_admin:
                     - 'activity'
                     - 'recipitent'
                     - 'isAccepted'
-                    - 'createdAt'
             list:
                 fields:
                     - 'activity'
                     - 'recipitent'
                     - 'isAccepted'
+                    - 'createdAt'
 
         ActivityJoiningRequest:
             class: App\Entity\Activity\ActivityJoiningRequest
@@ -137,6 +138,21 @@ easy_admin:
                     - 'activity'
                     - 'recipitent'
                     - 'isAccepted'
+                    - 'createdAt'
+
+        ActivityCancellation:
+            class: App\Entity\Activity\ActivityCancellation
+            form:
+                fields:
+                    - 'activity'
+                    - 'cancellingUser'
+                    - 'cancellationMotivation'
+            list:
+                fields:
+                    - 'activity'
+                    - 'cancellingUser'
+                    - 'cancellationMotivation'
+                    - 'createdBy'
                     - 'createdAt'
 
         ActivityParticipation:
@@ -158,8 +174,9 @@ easy_admin:
             form:
                 fields:
                     - 'activity'
-                    - 'activityRatingOutOfFive'
-                    - 'label'
+                    - { property: 'activityRatingOutOfFive',type: 'integer', type_options: { attr: { value: 3, min: 0, max: 5 } }  }
+                    - { property: 'label', type: 'App\Form\Activity\ActivityRelatedFeedbackLabelType' }
+                    - { property: 'comment', type: 'textarea' }
                     - 'author'
             list:
                 fields:
@@ -175,7 +192,7 @@ easy_admin:
                 fields:
                     - 'user'
                     - 'activity'
-                    - 'label'
+                    - { property: 'label', type: 'App\Form\Activity\UserRelatedFeedBackLabelType' }
                     - 'isReallyPresent'
             list:
                 fields:
@@ -189,24 +206,26 @@ easy_admin:
 
         User:
             class: App\Entity\User\User
-            form:
+            controller: App\Controller\Admin\UserAdminController
+            disabled_actions: ['new']
+            edit:
                 fields:
                     - 'username'
-                    - 'roles'
-                    - 'password'
+                    - { property: 'isAdmin', type: 'checkbox'  }
+                    - { property: 'plainTextPassword', type: 'text', label: 'Nouveau mot de passe', type_options: { required: false, empty_data: null } }
                     - 'email'
-                    - 'birthDate'
-                    - 'gender'
+                    - { property: 'birthDate', type: 'datetime' }
+                    - { property: 'gender', type: 'App\Form\Profile\GenderType' }
                     - 'phoneNumber'
-                    - 'description'
+                    - { property: 'description', type: 'textarea' }
                     - 'canGoAway'
-                    - 'activityCostLimit'
+                    - { property: 'activityCostLimit',type: 'integer', type_options: { attr: { value: 0, min: 0 } }  }
                     - 'isInjured'
                     - 'isPersonalProfileVisible'
                     - 'areActivityParticipationVisible'
                     - 'areSuccessUnlockedVisible'
-                    - 'disponibilityPattern'
-                    - 'preferedPartners'
+#                    - { property: 'disponibilityPattern', type: 'entity', type_options: { class:  'App\Entity\Profile\DisponibilityPattern', multiple: true } }
+                    - { property: 'preferredPartners', type: 'entity', type_options: { class:  'App\Entity\User\User', multiple: true } }
                     - 'schoolClass'
                     - 'schoolSection'
                     - { property: 'pictures', type: 'collection', type_options: { entry_type: 'App\Form\PictureType' } }
@@ -381,3 +400,19 @@ easy_admin:
                     - 'lastName'
                     - 'title'
                     - { property: 'picture.image', type: 'image', base_path: '%picture.uri_prefix%' }
+
+#        ---------------------------------------------------------------------------------------------------
+
+        Location:
+            class: App\Entity\Location
+            form:
+                fields:
+                    - 'label'
+                    - 'city'
+                    - 'postCode'
+                    - 'streetOrPlace'
+                    - 'number'
+            list:
+                fields:
+                    - 'label'
+                    - 'city'

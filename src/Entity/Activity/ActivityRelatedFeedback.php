@@ -5,13 +5,40 @@ namespace App\Entity\Activity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Entity\User\User;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\Activity\ActivityRelatedFeedbackRepository")
+ * @UniqueEntity(
+ *     fields={"activity", "author"},
+ *     errorPath="author",
+ *     message="ACTIVITY_RELATED_FEEDBACK_ALREADY_MADE_TOKEN"
+ * )
  */
 class ActivityRelatedFeedback
 {
+
+    const ACTIVITY_RELATED_FEEDBACK_LABEL_TOKEN_NOTHING = 'ACTIVITY_RELATED_FEEDBACK_LABEL_TOKEN_NOTHING';
+    const ACTIVITY_RELATED_FEEDBACK_LABEL_VALUE_NOTHING = 'ACTIVITY_RELATED_FEEDBACK_LABEL_VALUE_NOTHING';
+    
+    const ACTIVITY_RELATED_FEEDBACK_LABEL_TOKEN_BORING = 'ACTIVITY_RELATED_FEEDBACK_LABEL_TOKEN_BORING';
+    const ACTIVITY_RELATED_FEEDBACK_LABEL_VALUE_BORING = 'ACTIVITY_RELATED_FEEDBACK_LABEL_VALUE_BORING';
+
+    const ACTIVITY_RELATED_FEEDBACK_LABEL_TOKEN_EASY = 'ACTIVITY_RELATED_FEEDBACK_LABEL_TOKEN_EASY';
+    const ACTIVITY_RELATED_FEEDBACK_LABEL_VALUE_EASY = 'ACTIVITY_RELATED_FEEDBACK_LABEL_VALUE_EASY';
+
+    const ACTIVITY_RELATED_FEEDBACK_LABEL_TOKEN_FUN = 'ACTIVITY_RELATED_FEEDBACK_LABEL_TOKEN_FUN';
+    const ACTIVITY_RELATED_FEEDBACK_LABEL_VALUE_FUN = 'ACTIVITY_RELATED_FEEDBACK_LABEL_VALUE_FUN';
+
+    const ACTIVITY_RELATED_FEEDBACK_LABEL_TOKEN_EPIC = 'ACTIVITY_RELATED_FEEDBACK_LABEL_TOKEN_EPIC';
+    const ACTIVITY_RELATED_FEEDBACK_LABEL_VALUE_EPIC = 'ACTIVITY_RELATED_FEEDBACK_LABEL_VALUE_EPIC';
+
+    const ACTIVITY_RELATED_FEEDBACK_LABEL_TOKEN_CHALLENGING = 'ACTIVITY_RELATED_FEEDBACK_LABEL_TOKEN_CHALLENGING';
+    const ACTIVITY_RELATED_FEEDBACK_LABEL_VALUE_CHALLENGING = 'ACTIVITY_RELATED_FEEDBACK_LABEL_TOKEN_CHALLENGING';
+
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -21,15 +48,25 @@ class ActivityRelatedFeedback
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\Range(
+     *      min = 0,
+     *      max = 5,
+     *      minMessage = "La cotation minimale est de {{ limit }}",
+     *      maxMessage = "La cotation maximale est de {{ limit }}"
+     * )
      */
     private $activityRatingOutOfFive;
 
     /**
+     * @Assert\NotNull
+     * @Assert\NotBlank
+     * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
      */
     private $label;
 
     /**
+     * @Assert\NotNull
      * @ORM\ManyToOne(targetEntity="App\Entity\Activity\Activity")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -42,10 +79,17 @@ class ActivityRelatedFeedback
     private $createdBy;
 
     /**
+     * @Assert\NotNull
      * @ORM\ManyToOne(targetEntity="App\Entity\User\User")
      * @ORM\JoinColumn(nullable=false)
      */
     private $author;
+
+    /**
+     * @Assert\Type(type="string")
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $comment;
 
     public function getId(): ?int
     {
@@ -111,4 +155,28 @@ class ActivityRelatedFeedback
 
         return $this;
     }
+
+    public function getComment(): ?string
+    {
+        return $this->comment;
+    }
+
+    public function setComment(?string $comment): self
+    {
+        $this->comment = $comment;
+
+        return $this;
+    }
+
+    public static function getLabelValueTokenArray(){
+        return [
+            self::ACTIVITY_RELATED_FEEDBACK_LABEL_TOKEN_NOTHING => self::ACTIVITY_RELATED_FEEDBACK_LABEL_VALUE_NOTHING,
+            self::ACTIVITY_RELATED_FEEDBACK_LABEL_TOKEN_BORING => self::ACTIVITY_RELATED_FEEDBACK_LABEL_VALUE_BORING,
+            self::ACTIVITY_RELATED_FEEDBACK_LABEL_TOKEN_EASY => self::ACTIVITY_RELATED_FEEDBACK_LABEL_VALUE_EASY,
+            self::ACTIVITY_RELATED_FEEDBACK_LABEL_TOKEN_FUN => self::ACTIVITY_RELATED_FEEDBACK_LABEL_VALUE_FUN,
+            self::ACTIVITY_RELATED_FEEDBACK_LABEL_TOKEN_EPIC => self::ACTIVITY_RELATED_FEEDBACK_LABEL_VALUE_EPIC,
+            self::ACTIVITY_RELATED_FEEDBACK_LABEL_TOKEN_CHALLENGING => self::ACTIVITY_RELATED_FEEDBACK_LABEL_VALUE_CHALLENGING,
+        ];
+    }
+
 }

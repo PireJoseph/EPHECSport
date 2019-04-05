@@ -1,0 +1,11 @@
+ACTIVITY_INVITATION_ALREADY_MADE_TOKEN: Une invitation a déja été envoyée à cet utilisateur pour cette activité
+
+ACTIVITY_JOINING_REQUEST_ALREADY_MADE_TOKEN: Une requête a déja été effectuée par cet utilisateur pour cette activité
+
+ACTIVITY_CANCELLATION_ALREADY_MADE_TOKEN: Une annulation a déja été soumise par cet utilisateur pour cette activité
+
+ACTIVITY_PARTICIPATION_ALREADY_MADE_TOKEN: Une participation a déja été spécifiée par cet utilisateur pour cette activité
+
+ACTIVITY_RELATED_FEEDBACK_ALREADY_MADE_TOKEN: Un feedback a déja été fournis par cet utilisateur pour cette activité
+
+USER_RELATED_FEEDBACK_ALREADY_MADE_TOKEN:  Un feedback a déja été fournis pour la participation de cet utilisateur à cette activité

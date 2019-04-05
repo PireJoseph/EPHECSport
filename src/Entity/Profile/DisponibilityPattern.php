@@ -3,6 +3,7 @@
 namespace App\Entity\Profile;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -38,5 +39,10 @@ class DisponibilityPattern
         $this->label = $label;
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->label;
     }
 }

@@ -5,6 +5,7 @@ namespace App\Entity\User;
 use App\Entity\Picture;
 use App\Entity\Profile\DisponibilityPattern;
 use App\Entity\Profile\ProfilePicture;
+use DateTime;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use App\Entity\Profile\SchoolClass;
@@ -17,19 +18,19 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Validator\Constraints\Date;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\User\UserRepository")
  * @Vich\Uploadable
  * @UniqueEntity(fields={"username"}, message="Il existe déja un compte avec ce nom d'utilisatateur")
+ * @UniqueEntity(fields={"email"}, message="Il existe déja un compte avec cet emial")
  */
 class User implements UserInterface, iHasRole
 {
     const USER_GENDER_KEY_MALE = 'M';
-    const USER_GENDER_VALUE_MALE = 'homme';
+    const USER_GENDER_VALUE_MALE = 'USER_GENDER_VALUE_TOKEN_MALE';
     const USER_GENDER_KEY_FEMALE = 'F';
-    const USER_GENDER_VALUE_FEMALE = 'femme';
+    const USER_GENDER_VALUE_FEMALE = 'USER_GENDER_VALUE_TOKEN_FEMALE';
 
     /**
      * @ORM\Id()
@@ -41,6 +42,7 @@ class User implements UserInterface, iHasRole
     /**
      * @Assert\NotBlank()
      * @Assert\NotNull()
+     * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=180, unique=true)
      */
     private $username;
@@ -53,6 +55,7 @@ class User implements UserInterface, iHasRole
     /**
      * @Assert\NotBlank()
      * @Assert\NotNull()
+     * @Assert\Type(type="string")
      * @var string The hashed password
      * @ORM\Column(type="string")
      */
@@ -67,78 +70,72 @@ class User implements UserInterface, iHasRole
     private $email;
 
     /**
-     * @var Date $birthDate
-     *
      * @Assert\NotNull()
-     * @Assert\Date()
-     * @ORM\Column(type="date", nullable=true)
+     * @Assert\Type(type="DateTime")
+     * @var DateTime $birthDate
+     * @ORM\Column(type="datetime")
      */
     private $birthDate;
 
     /**
-     *
-     * @Assert\NotNull()
-     * @Assert\DateTime()
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
 
     /**
+     * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $gender;
 
     /**
+     * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $phoneNumber;
 
     /**
+     * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=1024, nullable=true)
      */
     private $description;
 
     /**
+     * @Assert\Type(type="bool")
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $canGoAway;
 
     /**
+     * @Assert\Type(type="integer")
      * @ORM\Column(type="integer", nullable=true)
      */
     private $activityCostLimit;
 
     /**
+     * @Assert\Type(type="bool")
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $isInjured;
 
     /**
+     * @Assert\Type(type="bool")
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $isPersonalProfileVisible;
 
     /**
+     * @Assert\Type(type="bool")
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $areActivityParticipationVisible;
 
     /**
+     * @Assert\Type(type="bool")
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $areSuccessUnlockedVisible;
 
-    /**
-     * @ORM\Column(nullable=true)
-     * @ORM\ManyToMany(targetEntity="App\Entity\Profile\DisponibilityPattern")
-     */
-    private $disponibilityPattern;
-
-    /**
-     * @ORM\Column(nullable=true)
-     * @ORM\ManyToMany(targetEntity="App\Entity\User\User")
-     */
-    private $preferedPartners;
 
     /**
      * @ORM\Column(nullable=true)
@@ -172,11 +169,22 @@ class User implements UserInterface, iHasRole
      */
     private $profilePicture;
 
+    private $isAdmin;
+
+    private $plainTextPassword;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\User\User")
+     */
+    private $preferredPartners;
+
+
+
+
     public function __construct()
     {
-        $this->disponibilityPattern = new ArrayCollection();
-        $this->preferedPartners = new ArrayCollection();
         $this->pictures = new ArrayCollection();
+        $this->preferredPartners = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -269,7 +277,7 @@ class User implements UserInterface, iHasRole
     }
 
     /**
-     * @return mixed
+     * @return DateTime
      */
     public function getBirthDate()
     {
@@ -277,7 +285,7 @@ class User implements UserInterface, iHasRole
     }
 
     /**
-     * @param mixed $birthDate
+     * @param DateTime $birthDate
      * @return User
      */
     public function setBirthDate($birthDate)
@@ -401,32 +409,6 @@ class User implements UserInterface, iHasRole
     }
 
     /**
-     * @return Collection|DisponibilityPattern[]
-     */
-    public function getDisponibilityPattern(): Collection
-    {
-        return $this->disponibilityPattern;
-    }
-
-    public function addDisponibilityPattern(DisponibilityPattern $disponibilityPattern): self
-    {
-        if (!$this->disponibilityPattern->contains($disponibilityPattern)) {
-            $this->disponibilityPattern[] = $disponibilityPattern;
-        }
-
-        return $this;
-    }
-
-    public function removeDisponibilityPattern(DisponibilityPattern $disponibilityPattern): self
-    {
-        if ($this->disponibilityPattern->contains($disponibilityPattern)) {
-            $this->disponibilityPattern->removeElement($disponibilityPattern);
-        }
-
-        return $this;
-    }
-
-    /**
      * @return mixed
      */
     public function getAreSuccessUnlockedVisible()
@@ -441,32 +423,6 @@ class User implements UserInterface, iHasRole
     public function setAreSuccessUnlockedVisible($areSuccessUnlockedVisible)
     {
         $this->areSuccessUnlockedVisible = $areSuccessUnlockedVisible;
-        return $this;
-    }
-
-    /**
-     * @return Collection|self[]
-     */
-    public function getPreferedPartners(): Collection
-    {
-        return $this->preferedPartners;
-    }
-
-    public function addPreferedPartner(self $preferedPartner): self
-    {
-        if (!$this->preferedPartners->contains($preferedPartner)) {
-            $this->preferedPartners[] = $preferedPartner;
-        }
-
-        return $this;
-    }
-
-    public function removePreferedPartner(self $preferedPartner): self
-    {
-        if ($this->preferedPartners->contains($preferedPartner)) {
-            $this->preferedPartners->removeElement($preferedPartner);
-        }
-
         return $this;
     }
 
@@ -513,6 +469,71 @@ class User implements UserInterface, iHasRole
 
         return $this;
     }
+
+    public function getIsAdmin(): ?bool
+    {
+        return $this->isAdmin;
+    }
+
+    public function setIsAdmin(bool $isAdmin): self
+    {
+        $this->isAdmin = $isAdmin;
+
+        return $this;
+    }
+
+
+    /**
+     * @return string|null
+     */
+    public function getPlainTextPassword() : ?string
+    {
+        return $this->plainTextPassword;
+    }
+
+    /**
+     * @param string|null $plainTextPassword
+     * @return User
+     */
+    public function setPlainTextPassword( string $plainTextPassword)
+    {
+        $this->plainTextPassword = $plainTextPassword;
+        return $this;
+    }
+
+    public static function getGenderTokenArray(){
+        return [
+            self::USER_GENDER_VALUE_MALE => self::USER_GENDER_KEY_MALE,
+            self::USER_GENDER_VALUE_FEMALE => self::USER_GENDER_KEY_FEMALE,
+        ];
+    }
+
+    /**
+     * @return Collection|self[]
+     */
+    public function getPreferredPartners(): Collection
+    {
+        return $this->preferredPartners;
+    }
+
+    public function addPreferredPartner(self $preferredPartner): self
+    {
+        if (!$this->preferredPartners->contains($preferredPartner)) {
+            $this->preferredPartners[] = $preferredPartner;
+        }
+
+        return $this;
+    }
+
+    public function removePreferredPartner(self $preferredPartner): self
+    {
+        if ($this->preferredPartners->contains($preferredPartner)) {
+            $this->preferredPartners->removeElement($preferredPartner);
+        }
+
+        return $this;
+    }
+
 
 
 }

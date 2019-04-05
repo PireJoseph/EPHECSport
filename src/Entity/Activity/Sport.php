@@ -3,9 +3,13 @@
 namespace App\Entity\Activity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\Activity\SportRepository")
+ * @UniqueEntity("label")
  */
 class Sport
 {
@@ -17,6 +21,8 @@ class Sport
     private $id;
 
     /**
+     * @Assert\NotBlank
+     * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
      */
     private $label;
