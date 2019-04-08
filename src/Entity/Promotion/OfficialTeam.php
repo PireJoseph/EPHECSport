@@ -3,14 +3,19 @@
 namespace App\Entity\Promotion;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Entity\Activity\SportClub;
 use App\Entity\Picture;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\Promotion\OfficialTeamRepository")
+ * @UniqueEntity("name")
  */
 class OfficialTeam
 {
@@ -22,24 +27,39 @@ class OfficialTeam
     private $id;
 
     /**
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
+     * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
      */
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @Assert\Type(type="string")
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $shortName;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @Assert\Type(type="string")
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $nickName;
 
     /**
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
+     * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
      */
     private $label;
+
+    /**
+     * @Assert\NotNull()
+     * @ORM\ManyToOne(targetEntity="App\Entity\Activity\Sport")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $sport;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Picture", cascade={"persist"})
@@ -49,6 +69,7 @@ class OfficialTeam
      * )
      */
     private $pictures;
+
 
     public function __construct()
     {
@@ -109,6 +130,18 @@ class OfficialTeam
     public function setLabel(string $label): self
     {
         $this->label = $label;
+
+        return $this;
+    }
+
+    public function getSport(): ?SportClub
+    {
+        return $this->sport;
+    }
+
+    public function setSport(?SportClub $sport): self
+    {
+        $this->sport = $sport;
 
         return $this;
     }

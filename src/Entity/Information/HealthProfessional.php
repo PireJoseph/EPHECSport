@@ -5,10 +5,20 @@ namespace App\Entity\Information;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Entity\picture;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\Information\HealthProfessionalRepository")
+ * @UniqueEntity(
+ *     fields={"firstName", "lastName"},
+ *     errorPath="firstName",
+ *     message="HEALTH_PROFESSIONAL_ALREADY_EXISTING_TOKEN"
+ * )
+ * @UniqueEntity("email")
+ * @UniqueEntity("phoneNumber")
+ *
  */
 class HealthProfessional
 {
@@ -20,26 +30,41 @@ class HealthProfessional
     private $id;
 
     /**
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
+     * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
      */
     private $firstName;
 
     /**
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
+     * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
      */
     private $lastName;
 
     /**
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
+     * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
      */
     private $email;
 
     /**
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
+     * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
      */
     private $phoneNumber;
 
     /**
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
+     * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
      */
     private $title;
@@ -48,6 +73,14 @@ class HealthProfessional
      * @ORM\OneToOne(targetEntity="App\Entity\picture", cascade={"persist", "remove"})
      */
     private $picture;
+
+    /**
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
+     * @Assert\Type(type="string")
+     * @ORM\Column(type="string", length=255)
+     */
+    private $presentation;
 
     public function getId(): ?int
     {
@@ -122,6 +155,18 @@ class HealthProfessional
     public function setPicture(?picture $picture): self
     {
         $this->picture = $picture;
+
+        return $this;
+    }
+
+    public function getPresentation(): ?string
+    {
+        return $this->presentation;
+    }
+
+    public function setPresentation(string $presentation): self
+    {
+        $this->presentation = $presentation;
 
         return $this;
     }

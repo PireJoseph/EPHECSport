@@ -34,3 +34,11 @@ services:
         autoconfigure: false # Automatically registers your services as commands, event subscribers, etc.
         class: App\Security\Guard\JWTTokenAuthenticator
         parent: lexik_jwt_authentication.security.guard.jwt_token_authenticator
+
+    App\EventListener\Profile\SuccessListener:
+        tags:
+            - { name: doctrine.event_listener, event: postPersist }
+
+    App\EventListener\Activity\ActivityParticipationListener:
+        tags:
+            - { name: doctrine.event_listener, event: postPersist }

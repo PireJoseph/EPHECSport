@@ -32,6 +32,14 @@ class User implements UserInterface, iHasRole
     const USER_GENDER_KEY_FEMALE = 'F';
     const USER_GENDER_VALUE_FEMALE = 'USER_GENDER_VALUE_TOKEN_FEMALE';
 
+    const USER_DISPONIBILITY_PATTERN_VALUE_AFTERNOON = 'AFTERNOON';
+    const USER_DISPONIBILITY_PATTERN_TOKEN_AFTERNOON = 'USER_DISPONIBILITY_PATTERN_TOKEN_AFTERNOON';
+    const USER_DISPONIBILITY_PATTERN_VALUE_WEEKEND = 'WEEKEND';
+    const USER_DISPONIBILITY_PATTERN_TOKEN_WEEKEND = 'USER_DISPONIBILITY_PATTERN_TOKEN_WEEKEND';
+    const USER_DISPONIBILITY_PATTERN_VALUE_SUMMER_HOLYDAY = 'SUMMER_HOLYDAY';
+    const USER_DISPONIBILITY_PATTERN_TOKEN_SUMMER_HOLYDAY = 'USER_DISPONIBILITY_PATTERN_TOKEN_SUMMER_HOLYDAY';
+
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -60,6 +68,8 @@ class User implements UserInterface, iHasRole
      * @ORM\Column(type="string")
      */
     private $password;
+
+    private $plainTextPassword;
 
     /**
      * @Assert\NotBlank()
@@ -136,19 +146,6 @@ class User implements UserInterface, iHasRole
      */
     private $areSuccessUnlockedVisible;
 
-
-    /**
-     * @ORM\Column(nullable=true)
-     * @ORM\ManyToOne(targetEntity="App\Entity\Profile\SchoolClass")
-     */
-    private $schoolClass;
-
-    /**
-     * @ORM\Column(nullable=true)
-     * @ORM\ManyToOne(targetEntity="App\Entity\Profile\SchoolSection")
-     */
-    private $schoolSection;
-
     /**
      * @var Picture[]|ArrayCollection
      *
@@ -169,14 +166,22 @@ class User implements UserInterface, iHasRole
      */
     private $profilePicture;
 
-    private $isAdmin;
-
-    private $plainTextPassword;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\User\User")
      */
     private $preferredPartners;
+
+    /**
+     * @ORM\Column(type="array")
+     */
+    private $disponibilityPatterns = [];
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Profile\SchoolClass")
+     */
+    private $schoolClass;
+
 
 
 
@@ -317,7 +322,7 @@ class User implements UserInterface, iHasRole
         return $this->gender;
     }
 
-    public function setGender(string $gender): self
+    public function setGender(?string $gender): self
     {
         $this->gender = $gender;
 
@@ -426,29 +431,6 @@ class User implements UserInterface, iHasRole
         return $this;
     }
 
-    public function getSchoolClass(): ?SchoolClass
-    {
-        return $this->schoolClass;
-    }
-
-    public function setSchoolClass(?SchoolClass $schoolClass): self
-    {
-        $this->schoolClass = $schoolClass;
-
-        return $this;
-    }
-
-    public function getSchoolSection(): ?SchoolSection
-    {
-        return $this->schoolSection;
-    }
-
-    public function setSchoolSection(?SchoolSection $schoolSection): self
-    {
-        $this->schoolSection = $schoolSection;
-
-        return $this;
-    }
 
     /**
      * @return Collection|Picture[]
@@ -470,19 +452,6 @@ class User implements UserInterface, iHasRole
         return $this;
     }
 
-    public function getIsAdmin(): ?bool
-    {
-        return $this->isAdmin;
-    }
-
-    public function setIsAdmin(bool $isAdmin): self
-    {
-        $this->isAdmin = $isAdmin;
-
-        return $this;
-    }
-
-
     /**
      * @return string|null
      */
@@ -499,13 +468,6 @@ class User implements UserInterface, iHasRole
     {
         $this->plainTextPassword = $plainTextPassword;
         return $this;
-    }
-
-    public static function getGenderTokenArray(){
-        return [
-            self::USER_GENDER_VALUE_MALE => self::USER_GENDER_KEY_MALE,
-            self::USER_GENDER_VALUE_FEMALE => self::USER_GENDER_KEY_FEMALE,
-        ];
     }
 
     /**
@@ -532,6 +494,56 @@ class User implements UserInterface, iHasRole
         }
 
         return $this;
+    }
+
+    public function getDisponibilityPatterns(): ?array
+    {
+        return $this->disponibilityPatterns;
+    }
+
+    public function setDisponibilityPatterns(array $disponibilityPatterns): self
+    {
+        $this->disponibilityPatterns = $disponibilityPatterns;
+
+        return $this;
+    }
+
+    public function getSchoolClass(): ?SchoolClass
+    {
+        return $this->schoolClass;
+    }
+
+    public function setSchoolClass(?SchoolClass $schoolClass): self
+    {
+        $this->schoolClass = $schoolClass;
+
+        return $this;
+    }
+
+    public static function getGenderTokenArray()
+    {
+        return [
+            self::USER_GENDER_VALUE_MALE => self::USER_GENDER_KEY_MALE,
+            self::USER_GENDER_VALUE_FEMALE => self::USER_GENDER_KEY_FEMALE,
+        ];
+    }
+
+    public static function getDisponibilityPatternTokenArray()
+    {
+        return [
+            self::USER_DISPONIBILITY_PATTERN_TOKEN_AFTERNOON => self::USER_DISPONIBILITY_PATTERN_VALUE_AFTERNOON,
+            self::USER_DISPONIBILITY_PATTERN_TOKEN_WEEKEND => self::USER_DISPONIBILITY_PATTERN_VALUE_WEEKEND,
+            self::USER_DISPONIBILITY_PATTERN_TOKEN_SUMMER_HOLYDAY => self::USER_DISPONIBILITY_PATTERN_VALUE_SUMMER_HOLYDAY,
+        ];
+    }
+
+    public static function getRolesTokenArray()
+    {
+        return [
+            iHasRole::USER_ROLE_TOKEN_USER => iHasRole::USER_ROLE_VALUE_USER,
+            iHasRole::USER_ROLE_TOKEN_ADMIN => iHasRole::USER_ROLE_VALUE_ADMIN,
+//            iHasRole::USER_ROLE_TOKEN_ALLOWED_TO_SWITCH => iHasRole::USER_ROLE_VALUE_ALLOWED_TO_SWITCH,
+        ];
     }
 
 

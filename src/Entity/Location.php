@@ -4,10 +4,19 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\LocationRepository")
+ * @UniqueEntity(
+ *     fields={"postCode", "city","streetOrPlace","number"},
+ *     errorPath="number",
+ *     message="LOCATION_ALREADY_EXISTING_TOKEN"
+ * )
+ * @UniqueEntity("label")
+ *
  */
 class Location
 {
@@ -19,26 +28,39 @@ class Location
     private $id;
 
     /**
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
+     * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
      */
     private $label;
 
     /**
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
+     * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
      */
     private $city;
 
     /**
+     * @Assert\NotNull()
+     * @Assert\Type(type="integer")
      * @ORM\Column(type="integer")
      */
     private $postCode;
 
     /**
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
+     * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
      */
     private $streetOrPlace;
 
     /**
+     * @Assert\NotNull()
+     * @Assert\Type(type="integer")
      * @ORM\Column(type="integer")
      */
     private $number;

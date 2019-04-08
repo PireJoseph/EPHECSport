@@ -9,3 +9,21 @@ ACTIVITY_PARTICIPATION_ALREADY_MADE_TOKEN: Une participation a déja été spéc
 ACTIVITY_RELATED_FEEDBACK_ALREADY_MADE_TOKEN: Un feedback a déja été fournis par cet utilisateur pour cette activité
 
 USER_RELATED_FEEDBACK_ALREADY_MADE_TOKEN:  Un feedback a déja été fournis pour la participation de cet utilisateur à cette activité
+
+SPORT_PROFILE_ALREADY_EXISTING_TOKEN:  Un profil existe déja pour ce sport et cet utilisateur
+
+SUCCESS_ALREADY_MADE_TOKEN: Ce succès a déja été débloqué par cet utilisateur
+
+EMERITUS_SPORTMAN_ALREADY_EXISTING_TOKEN: Un sportif émérite a déjà été enregistré avec ce nom et ce prénom
+
+ACHIEVEMENT_ALREADY_EXISTING_TOKEN: Ce haut fait a déja été enregistré à cette date
+
+CRUCIAL_MEETING_ALREADY_EXISTING_TOKEN: Cette rencontre a déja été enregistrée a cette date pour ces participants
+
+SHOUTOUT_ALREADY_EXISTING_TOKEN: Cet encouragement a déja été envoyé à ce destinataires
+
+EXTERNAL_LINK_ALREADY_EXISTING_TOKEN: Lien externe existant déja pour cette addresse
+
+HEALTH_PROFESSIONAL_ALREADY_EXISTING_TOKEN: Un professionel de la santé avec ce nom et prénom a déja été enregistré
+
+LOCATION_ALREADY_EXISTING_TOKEN: Cette localisation a déja été enregistrée

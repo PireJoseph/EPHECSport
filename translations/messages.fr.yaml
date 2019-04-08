@@ -83,6 +83,14 @@ Is admin: Est administrateur
 Nouveau mot de passe: Nouveau mot de passe
 USER_GENDER_VALUE_TOKEN_MALE: Homme
 USER_GENDER_VALUE_TOKEN_FEMALE: Femme
+USER_ROLE_TOKEN_USER: Utilisateur
+USER_ROLE_TOKEN_ADMIN: Administrateur
+USER_ROLE_TOKEN_ALLOWED_TO_SWITCH: Autorisé à changer
+Disponibility patterns: Pattern de disponibilité
+USER_DISPONIBILITY_PATTERN_TOKEN_AFTERNOON: Soirée
+USER_DISPONIBILITY_PATTERN_TOKEN_WEEKEND: Weekend
+USER_DISPONIBILITY_PATTERN_TOKEN_SUMMER_HOLYDAY: Vacances d'été
+Preferred partners: Partenaires préférés
 
 User: Utilisateur
 SportProfile: Profil sportif
@@ -109,5 +117,44 @@ Location: Localisation
 City: Ville
 Post code: Code postal
 Street or place: Rue
-Number: Nombre
+Number: Numéro
+
+Role: Role
+Level: Niveau
+Is aiming fun: Vise l'amusement
+Is aiming perf: Vise les performances
+Wanted times per week: Fréquence hebdomadaire désirée
+Want to be notified about this sport: Désire être notifié à propos de ce sport
+Sport club: Club de sport
+SPORT_PROFILE_LEVEL_TOKEN_AMATEUR: Amateur
+SPORT_PROFILE_LEVEL_TOKEN_SEMI_PRO: Semi-pro
+SPORT_PROFILE_LEVEL_TOKEN_PRO: pro
+
+SUCCESS_LABEL_TOKEN_TEN_ACTIVITY_PARTICIPATION: Dix participations à une activité
+SUCCESS_LABEL_TOKEN_TEN_TIMES_FRIENDLY: Dix fois amical
+SUCCESS_LABEL_TOKEN_TEN_TIMES_MVP: Dix fois méritant
+SUCCESS_LABEL_TOKEN_TEN_TIMES_FAIR_PLAY: 10 fois fair play
+
+Nick name: Surnom
+
+Name: Nom
+Short name: Initiales
+
+Acquired at: Acquis le
+Emeritus sport man: Sportif émérite
+Official team: Equipe officielle
+
+Sports: Sports
+Emeritus sport men: Sportifs émérites
+Official teams: Equipes officielles
+
+Content: Contenu
+Emeritus sport man target: Sportif émérite
+Official team target: Equipe officielle
+
+Url: Addresse web
+
+Picture: Photo
+
+Presentation: Présentation
 

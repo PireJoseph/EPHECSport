@@ -31,18 +31,11 @@ class UserAdminController  extends EasyAdminController
     public function persistEntity($entity)
     {
 
-
         if (method_exists($entity, 'setCreatedAt'))
         {
             $now = new DateTime();
             $entity->setCreatedAt($now);
         }
-        if (method_exists($entity, 'setCreatedBy'))
-        {
-            $user = $this->get('security.token_storage')->getToken()->getUser();
-            $entity->setCreatedBy($user);
-        }
-
 
         parent::persistEntity($entity);
     }
@@ -57,23 +50,11 @@ class UserAdminController  extends EasyAdminController
     protected function updateEntity($entity)
     {
 
-
         // User update
         if (is_a($entity, User::class))
         {
             /** @var User $entity */
-            $userRequestArray= $this->request->get('user');
-
-            // ROLE
-            if (array_key_exists('isAdmin', $userRequestArray) && ("1" === $userRequestArray['isAdmin']))
-            {
-                $entity->setRoles([iHasRole::ROLE_ADMIN]);
-            }
-            else
-            {
-                $entity->setRoles([iHasRole::ROLE_USER]);
-            }
-
+            $userRequestArray = $this->request->get('user');
 
             // Password
             if (array_key_exists('plainTextPassword', $userRequestArray)  && ('' !== $userRequestArray['plainTextPassword']))
@@ -88,10 +69,8 @@ class UserAdminController  extends EasyAdminController
                 );
             }
 
-
         }
 
         parent::persistEntity($entity);
     }
-
 }

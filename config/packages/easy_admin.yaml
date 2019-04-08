@@ -167,7 +167,7 @@ easy_admin:
                     - 'activity'
                     - 'user'
                     - 'isConfirmed'
-                    - 'createdBy'
+                    - 'answeredAt'
 
         ActivityRelatedFeedback:
             class: App\Entity\Activity\ActivityRelatedFeedback
@@ -211,7 +211,7 @@ easy_admin:
             edit:
                 fields:
                     - 'username'
-                    - { property: 'isAdmin', type: 'checkbox'  }
+                    - { property: 'roles', type: 'App\Form\Profile\RoleType', type_options: { expanded: true, multiple: true }  }
                     - { property: 'plainTextPassword', type: 'text', label: 'Nouveau mot de passe', type_options: { required: false, empty_data: null } }
                     - 'email'
                     - { property: 'birthDate', type: 'datetime' }
@@ -224,10 +224,9 @@ easy_admin:
                     - 'isPersonalProfileVisible'
                     - 'areActivityParticipationVisible'
                     - 'areSuccessUnlockedVisible'
-#                    - { property: 'disponibilityPattern', type: 'entity', type_options: { class:  'App\Entity\Profile\DisponibilityPattern', multiple: true } }
+                    - { property: 'disponibilityPatterns', type: 'App\Form\Profile\DisponibilityPatternType', type_options: { expanded: true, multiple: true }  }
                     - { property: 'preferredPartners', type: 'entity', type_options: { class:  'App\Entity\User\User', multiple: true } }
                     - 'schoolClass'
-                    - 'schoolSection'
                     - { property: 'pictures', type: 'collection', type_options: { entry_type: 'App\Form\PictureType' } }
                     - { property: 'profilePicture', type: 'App\Form\Profile\ProfilePictureType' }
             list:
@@ -235,19 +234,30 @@ easy_admin:
                     - 'userName'
                     - 'roles'
                     - 'schoolClass'
-                    - 'schoolSection'
+                    - 'schoolClass.schoolSection'
                     - { property: 'profilePicture.picture', type: 'image', base_path: '%profile_picture.uri_prefix%' }
             show:
                 fields:
                     - 'userName'
                     - 'roles'
                     - 'schoolClass'
-                    - 'schoolSection'
+                    - 'schoolClass.schoolSection'
                     - { property: 'profilePicture.picture', type: 'image', base_path: '%profile_picture.uri_prefix%' }
 
         SportProfile:
             class: App\Entity\Profile\SportProfile
             form:
+                fields:
+                    - 'user'
+                    - 'sport'
+                    - 'role'
+                    - { property: 'level', type: 'App\Form\Profile\SportProfileLevelType' }
+                    - 'isAimingFun'
+                    - 'isAimingPerf'
+                    - { property: 'wantedTimesPerWeek',type: 'integer', type_options: { attr: { value: 1, min: 0} }  }
+                    - 'wantToBeNotifiedAboutThisSport'
+                    - 'isVisible'
+                    - 'sportClub'
             list:
                fields:
                    - 'user'
@@ -256,6 +266,7 @@ easy_admin:
 
         Success:
             class: App\Entity\Profile\Success
+            disabled_actions: ['new', 'edit']
             form:
                fields:
                    - 'user'
@@ -281,9 +292,11 @@ easy_admin:
             form:
                 fields:
                     - 'label'
+                    - 'schoolSection'
             list:
                 fields:
                     - 'label'
+                    - 'schoolSection'
 
         SchoolSection:
             class: App\Entity\Profile\SchoolSection
@@ -304,7 +317,7 @@ easy_admin:
                     - 'firstName'
                     - 'lastName'
                     - 'nickName'
-                    - 'gender'
+                    - { property: 'gender', type: 'App\Form\Profile\GenderType' }
                     - 'role'
                     - 'sport'
                     - 'sportClub'
@@ -314,6 +327,7 @@ easy_admin:
                     - 'firstName'
                     - 'lastName'
                     - 'sport'
+                    - 'role'
 
         OfficialTeam:
             class: App\Entity\Promotion\OfficialTeam
@@ -323,15 +337,24 @@ easy_admin:
                     - 'shortName'
                     - 'nickName'
                     - 'label'
+                    - 'sport'
                     - { property: 'pictures', type: 'collection', type_options: { entry_type: 'App\Form\PictureType' } }
             list:
                 fields:
                     - 'name'
                     - 'shortName'
+                    - 'sport'
 
         Achievement:
             class: App\Entity\Promotion\Achievement
             form:
+                fields:
+                    - 'label'
+                    - { property: 'comment', type: 'textarea' }
+                    - 'acquiredAt'
+                    - 'emeritusSportMan'
+                    - 'officialTeam'
+
             list:
                 fields:
                     - 'label'
@@ -343,28 +366,37 @@ easy_admin:
         CrucialMeeting:
             class: App\Entity\Promotion\CrucialMeeting
             form:
+                fields:
+                    - 'label'
+                    - 'startAt'
+                    - 'endAt'
+                    - { property: 'sports', type: 'entity', type_options: { class:  'App\Entity\Activity\Sport', multiple: true } }
+                    - { property: 'comment', type: 'textarea' }
+                    - 'location'
+                    - 'emeritusSportMen'
+                    - 'officialTeams'
+                    - { property: 'emeritusSportMen', type: 'entity', type_options: { class:  'App\Entity\Promotion\EmeritusSportMan', multiple: true } }
+                    - { property: 'officialTeams', type: 'entity', type_options: { class:  'App\Entity\Promotion\OfficialTeam', multiple: true } }
+
             list:
                 fields:
                     - 'label'
                     - 'startAt'
-                    - 'sport'
-                    - 'emeritusSportMan'
-                    - 'officialTeam'
 
         ShoutOut:
             class: App\Entity\Promotion\ShoutOut
             form:
                 fields:
-                    - 'content'
+                    - 'author'
+                    - { property: 'content', type: 'textarea' }
                     - 'emeritusSportManTarget'
                     - 'officialTeamTarget'
-                    - 'transmitter'
             list:
                 fields:
+                    - 'author'
                     - 'content'
                     - 'emeritusSportManTarget'
                     - 'officialTeamTarget'
-                    - 'transmitter'
                     - 'createdAt'
 
 #        ---------------------------------------------------------------------------------------------------
@@ -373,15 +405,14 @@ easy_admin:
             class: App\Entity\Information\ExternalLink
             form:
                 fields:
-                    - 'url'
+                    - { property: 'url', type: 'url' }
                     - 'label'
-                    - 'description'
+                    - { property: 'description', type: 'textarea' }
                     - { property: 'picture', type: 'App\Form\PictureType' }
             list:
                 fields:
                     - 'url'
                     - 'label'
-                    - 'description'
                     - { property: 'picture.image', type: 'image', base_path: '%picture.uri_prefix%' }
 
         HealthProfessional:
@@ -393,6 +424,7 @@ easy_admin:
                     - 'email'
                     - 'phoneNumber'
                     - 'title'
+                    - { property: 'presentation', type: 'textarea' }
                     - { property: 'picture', type: 'App\Form\PictureType' }
             list:
                 fields:
@@ -409,9 +441,9 @@ easy_admin:
                 fields:
                     - 'label'
                     - 'city'
-                    - 'postCode'
+                    - { property: 'postCode',type: 'integer', type_options: { attr: { min: 0} }  }
                     - 'streetOrPlace'
-                    - 'number'
+                    - { property: 'number',type: 'integer', type_options: { attr: { min: 0} }  }
             list:
                 fields:
                     - 'label'

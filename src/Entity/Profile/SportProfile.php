@@ -7,13 +7,28 @@ use App\Entity\Activity\Sport;
 use App\Entity\Activity\SportClub;
 use App\Entity\User\User;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\Profile\SportProfileRepository")
+ * @UniqueEntity(
+ *     fields={"user", "sport"},
+ *     errorPath="user",
+ *     message="SPORT_PROFILE_ALREADY_EXISTING_TOKEN"
+ * )
  */
 class SportProfile
 {
+
+    const SPORT_PROFILE_LEVEL_VALUE_AMATEUR = 'AMATEUR';
+    const SPORT_PROFILE_LEVEL_TOKEN_AMATEUR = 'SPORT_PROFILE_LEVEL_TOKEN_AMATEUR';
+    const SPORT_PROFILE_LEVEL_VALUE_SEMI_PRO = 'SEMI_PRO';
+    const SPORT_PROFILE_LEVEL_TOKEN_SEMI_PRO = 'SPORT_PROFILE_LEVEL_TOKEN_SEMI_PRO';
+    const SPORT_PROFILE_LEVEL_VALUE_PRO = 'PRO';
+    const SPORT_PROFILE_LEVEL_TOKEN_PRO = 'SPORT_PROFILE_LEVEL_TOKEN_PRO';
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -22,36 +37,43 @@ class SportProfile
     private $id;
 
     /**
+     * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $role;
 
     /**
+     * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $level;
 
     /**
+     * @Assert\Type(type="bool")
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $isAimingFun;
 
     /**
+     * @Assert\Type(type="bool")
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $isAimingPerf;
 
     /**
+     * @Assert\Type(type="integer")
      * @ORM\Column(type="integer", nullable=true)
      */
     private $wantedTimesPerWeek;
 
     /**
+     * @Assert\Type(type="bool")
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $wantToBeNotifiedAboutThisSport;
 
     /**
+     * @Assert\Type(type="bool")
      * @ORM\Column(type="boolean")
      */
     private $isVisible;
@@ -202,4 +224,14 @@ class SportProfile
 
         return $this;
     }
+
+    public static function getLevelTokenArray()
+    {
+        return [
+            self::SPORT_PROFILE_LEVEL_TOKEN_AMATEUR => self::SPORT_PROFILE_LEVEL_VALUE_AMATEUR,
+            self::SPORT_PROFILE_LEVEL_TOKEN_SEMI_PRO => self::SPORT_PROFILE_LEVEL_VALUE_SEMI_PRO,
+            self::SPORT_PROFILE_LEVEL_TOKEN_PRO => self::SPORT_PROFILE_LEVEL_VALUE_PRO,
+        ];
+    }
+
 }

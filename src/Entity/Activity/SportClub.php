@@ -4,10 +4,13 @@ namespace App\Entity\Activity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\Activity\SportClubRepository")
+ * @UniqueEntity("label")
  */
 class SportClub
 {
@@ -19,11 +22,15 @@ class SportClub
     private $id;
 
     /**
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
+     * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
      */
     private $label;
 
     /**
+     * @Assert\NotNull()
      * @ORM\ManyToOne(targetEntity="App\Entity\Activity\Sport")
      * @ORM\JoinColumn(nullable=false)
      */

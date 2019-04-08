@@ -5,10 +5,17 @@ namespace App\Entity\Promotion;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Entity\User\User;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\Promotion\ShoutOutRepository")
+ * @UniqueEntity(
+ *     fields={"content", "transmitter", "emeritusSportManTarget", "officialTeamTarget"},
+ *     errorPath="content",
+ *     message="SHOUTOUT_ALREADY_EXISTING_TOKEN"
+ * )
  */
 class ShoutOut
 {
@@ -20,7 +27,8 @@ class ShoutOut
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @Assert\Type(type="string")
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $content;
 
@@ -46,10 +54,11 @@ class ShoutOut
     private $officialTeamTarget;
 
     /**
+     * @Assert\NotNull()
      * @ORM\ManyToOne(targetEntity="App\Entity\User\User")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $transmitter;
+    private $author;
 
     public function getId(): ?int
     {
@@ -116,14 +125,14 @@ class ShoutOut
         return $this;
     }
 
-    public function getTransmitter(): ?User
+    public function getAuthor(): ?User
     {
-        return $this->transmitter;
+        return $this->author;
     }
 
-    public function setTransmitter(?User $transmitter): self
+    public function setAuthor(?User $author): self
     {
-        $this->transmitter = $transmitter;
+        $this->author = $author;
 
         return $this;
     }

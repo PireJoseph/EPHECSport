@@ -4,10 +4,13 @@ namespace App\Entity\Profile;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\Profile\SchoolSectionRepository")
+ * @UniqueEntity("label")
  */
 class SchoolSection
 {
@@ -19,6 +22,9 @@ class SchoolSection
     private $id;
 
     /**
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
+     * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
      */
     private $label;
@@ -38,5 +44,10 @@ class SchoolSection
         $this->label = $label;
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->label;
     }
 }

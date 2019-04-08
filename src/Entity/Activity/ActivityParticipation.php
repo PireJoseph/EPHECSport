@@ -49,10 +49,9 @@ class ActivityParticipation
     private $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User\User")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\Column(type="datetime", nullable=true)
      */
-    private $createdBy;
+    private $answeredAt;
 
     public function getId(): ?int
     {
@@ -95,14 +94,14 @@ class ActivityParticipation
         return $this;
     }
 
-    public function getCreatedBy(): ?User
+    public function getAnsweredAt(): ?\DateTimeInterface
     {
-        return $this->createdBy;
+        return $this->answeredAt;
     }
 
-    public function setCreatedBy(?User $createdBy): self
+    public function setAnsweredAt(?\DateTimeInterface $answeredAt): self
     {
-        $this->createdBy = $createdBy;
+        $this->answeredAt = $answeredAt;
 
         return $this;
     }

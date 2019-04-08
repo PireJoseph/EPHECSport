@@ -58,6 +58,11 @@ class ActivityInvitation
      */
     private $recipitent;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $answeredAt;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -119,6 +124,18 @@ class ActivityInvitation
     public function setRecipitent(?User $recipitent): self
     {
         $this->recipitent = $recipitent;
+
+        return $this;
+    }
+
+    public function getAnsweredAt(): ?\DateTimeInterface
+    {
+        return $this->answeredAt;
+    }
+
+    public function setAnsweredAt(?\DateTimeInterface $answeredAt): self
+    {
+        $this->answeredAt = $answeredAt;
 
         return $this;
     }

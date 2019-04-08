@@ -4,10 +4,17 @@ namespace App\Entity\Promotion;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\Promotion\AchievementRepository")
+ * @UniqueEntity(
+ *     fields={"label", "emeritusSportMan", "officialTeam", "acquiredAt"},
+ *     errorPath="label",
+ *     message="ACHIEVEMENT_ALREADY_EXISTING_TOKEN"
+ * )
  */
 class Achievement
 {
@@ -19,19 +26,26 @@ class Achievement
     private $id;
 
     /**
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
+     * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
      */
     private $label;
 
     /**
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
+     * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
      */
     private $comment;
 
     /**
+     * @Assert\NotNull()
      * @ORM\Column(type="datetime")
      */
-    private $AcquiredAt;
+    private $acquiredAt;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Promotion\EmeritusSportMan")
@@ -74,12 +88,12 @@ class Achievement
 
     public function getAcquiredAt(): ?\DateTimeInterface
     {
-        return $this->AcquiredAt;
+        return $this->acquiredAt;
     }
 
-    public function setAcquiredAt(\DateTimeInterface $AcquiredAt): self
+    public function setAcquiredAt(\DateTimeInterface $acquiredAt): self
     {
-        $this->AcquiredAt = $AcquiredAt;
+        $this->acquiredAt = $acquiredAt;
 
         return $this;
     }

@@ -33,8 +33,6 @@ class AdminController extends EasyAdminController
     public function persistEntity($entity)
     {
 
-        $hehe = 'test';
-
         //
         if (method_exists($entity, 'setCreatedAt'))
         {

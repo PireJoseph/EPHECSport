@@ -9,10 +9,17 @@ use App\Entity\Picture;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\Promotion\EmeritusSportManRepository")
+ * @UniqueEntity(
+ *     fields={"firstName", "lastName"},
+ *     errorPath="firstName",
+ *     message="EMERITUS_SPORTMAN_ALREADY_EXISTING_TOKEN"
+ * )
  */
 class EmeritusSportMan
 {
@@ -24,16 +31,23 @@ class EmeritusSportMan
     private $id;
 
     /**
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
+     * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
      */
     private $firstName;
 
     /**
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
+     * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
      */
     private $lastName;
 
     /**
+     * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $nickName;
@@ -44,11 +58,15 @@ class EmeritusSportMan
     private $gender;
 
     /**
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
+     * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
      */
     private $role;
 
     /**
+     * @Assert\NotNull()
      * @ORM\ManyToOne(targetEntity="App\Entity\Activity\Sport")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -56,6 +74,7 @@ class EmeritusSportMan
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Activity\SportClub")
+     * @ORM\JoinColumn(nullable=true)
      */
     private $sportClub;
 
