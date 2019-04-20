@@ -22,7 +22,7 @@ body, html {
 }
 
 /* Create a Parallax Effect */
-.bgimg-1, .bgimg-2, .bgimg-3 {
+.bgimg-1, .bgimg-2, .bgimg-3, .bgimg-4, .bgimg-5  {
     background-attachment: fixed;
     background-position: center;
     background-repeat: no-repeat;
@@ -35,17 +35,30 @@ body, html {
     min-height: 100%;
 }
 
-/* Second image (Portfolio) */
+/* Second image (activité) */
 .bgimg-2 {
     background-image: url('../img/BGImgActivity.jpg');
     min-height: 400px;
 }
 
-/* Third image (Contact) */
+/* Third image (promotion) */
 .bgimg-3 {
     background-image: url("../img/BGImgPromotion.jpg");
     min-height: 400px;
 }
+
+/* Third image (information) */
+.bgimg-4 {
+    background-image: url("../img/BGImgInformation.jpg");
+    min-height: 400px;
+}
+
+/* Third image (Contact) */
+.bgimg-5 {
+    background-image: url("../img/BGImgContact.jpg");
+    min-height: 400px;
+}
+
 
 .img-about {
     /*max-width: 25%;*/

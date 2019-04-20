@@ -1,63 +1,59 @@
-// import React from 'react';
-// import ReactDOM from 'react-dom';
-//
-// import Items from './Components/Items';
-//
-//
-// class App extends React.Component {
-//     constructor() {
-//         super();
-//
-//         this.state = {
-//             entries: []
-//         };
-//     }
-//
-//     componentDidMount() {
-//         fetch('https://jsonplaceholder.typicode.com/posts/')
-//             .then(response => response.json())
-//             .then(entries => {
-//                 this.setState({
-//                     entries
-//                 });
-//             });
-//     }
-//
-//     render() {
-//         return (
-//             <div className="row">
-//             {this.state.entries.map(
-//                     ({ id, title, body }) => (
-//                         <Items
-//                 key={id}
-//                 title={title}
-//                 body={body}
-//                 >
-//                 </Items>
-//     )
-//     )}
-//     </div>
-//     );
-//     }
-// }
-//
-// ReactDOM.render(<App />, document.getElementById('root'));
-
-// assets/js/app.js
 import Vue from 'vue'
 import Vuex from 'vuex'
+
+import { mapGetters } from 'vuex'
+import { mapMutations } from 'vuex'
+
+
 import VueRouter from 'vue-router'
-import Example from './components/Example'
+
+import router from './router';
+import store from './store';
+
+require('../css/user.css');
+
+// import Example from './components/Example'
+
+// import App from './views/app'
 
 Vue.use(VueRouter)
 Vue.use(Vuex)
 
-/**
- * Create a fresh Vue Application instance
- */
+
 new Vue({
     el: '#root',
-    components: {Example}
-});
+    router: router,
+    store,
+    // components: {App},
+    // computed: {
+    //     // mobileMenuShowed ()
+    //     // {
+    //     //     return store.getters['mobileMenu/isMobileMenuShowed']
+    //     // }
+    //     ...mapGetters({
+    //         isAuthenticated:  'security/isAuthenticated',
+    //         mobileMenuShowed: 'mobileMenu/isMobileMenuShowed',
+    //         // currentUserId: 'user/currentUserId'
+    //     })
+    // },
+    // methods: {
+    //     // toggleNavMenu() {
+    //     //     store.commit('mobileMenu/TOGGLE_MOBILE_MENU')
+    //     // },
+    //     // closeNavMenu() {
+    //     //     store.commit('mobileMenu/CLOSE_MOBILE_MENU')
+    //     // },
+    //     // makeApiCall(){
+    //     //     this.$store.dispatch('user/fetchCurrentUser')
+    //     // },
+    //     ...mapMutations({
+    //         toggleNavMenu : 'mobileMenu/TOGGLE_MOBILE_MENU',
+    //         closeNavMenu : 'mobileMenu/CLOSE_MOBILE_MENU'
+    //     })
+    // },
+    // mounted: function(){
+    //     this.makeApiCall()
+    // }
+})
 
 

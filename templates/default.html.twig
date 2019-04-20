@@ -11,22 +11,6 @@
 
 {% block body %}
 
-    {#<div class="bgimg w3-display-container w3-text-white">#}
-        {#<div class="w3-display-middle w3-jumbo">#}
-            {#<p id="EPHECSportLogo"><img src="{{ asset('build/images/logoEPHECSport.gif') }}" style="width: 100%;" class="w3-opacity-max" alt="EPHEC Sport"/></p>#}
-        {#</div>#}
-        {#<div class="w3-display-topleft w3-container w3-xlarge">#}
-            {#<p><a href="{{ path('app_register',{}) }}"><button class="w3-button w3-black">S'inscrire</button></a></p>#}
-            {#<p><a href="{{ path('app_login',{}) }}"><button class="w3-button w3-black">Se connecter</button></a></p>#}
-        {#</div>#}
-        {#<div class="w3-display-bottomleft w3-container">#}
-            {#<p class="w3-xlarge">Contacts</p>#}
-            {#<p class="w3-large">Emeric Clément <a href="mailto:e.clement@ephec.be">e.clement@ephec.be</a> 02/899.02.76</p>#}
-            {#<p class="w3-large">Pierre Schulte <a href="mailto:p.schulte@ephec.be">p.schulte@ephec.be</a> (relations avec l'<a href="https://www.aseus.be/" target="_blank" >ASEUS)</a></p>#}
-        {#</div>#}
-    {#</div>#}
-
-
     <!------------>
     <!-- Navbar -->
     <!------------>
@@ -37,13 +21,18 @@
             <a class="w3-bar-item w3-button w3-hover-black w3-hide-medium w3-hide-large w3-right" href="javascript:void(0);" onclick="toggleFunction()" title="Toggle Navigation Menu">
                 <i class="fa fa-bars"></i>
             </a>
-            <a href="#home" class="w3-bar-item w3-button" onclick="hideNavBar()">HOME</a>
+            <a href="#home" class="w3-bar-item w3-button" onclick="hideNavBar()"><i class="fa fa-home"></i>HOME</a>
             <a href="#about" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-info"></i> A PROPOS</a>
             {#<a href="#activities" class="w3-bar-item w3-button w3-hide-small" style="text-transform: uppercase"><i class="fa fa-bolt"></i> activités</a>
             <a href="#promotion" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-star"></i> PROMOTION</a>
             <a href="#information" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-search"></i> INFORMATION</a>#}
             <a href="#contact" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-envelope"></i> CONTACT</a>
-            <a href="{{ path('app_login',{}) }}" class="w3-bar-item w3-button w3-hide-small w3-right "><i class="fa fa-user"></i> SE CONNECTER</a>
+            {% if app.user %}
+                <a href="{{ path('app_logout', {}) }}" class="w3-bar-item w3-button w3-hide-small w3-right "><i class="fa fa-user-times"></i> SE DECONNECTER</a>
+            {% else %}
+                <a href="{{ path('app_login',{}) }}" class="w3-bar-item w3-button w3-hide-small w3-right "><i class="fa fa-user"></i> SE CONNECTER</a>
+            {% endif %}
+
         </div>
 
         <!-- Navbar on small screens -->
@@ -53,7 +42,11 @@
             <a href="#promotion" class="w3-bar-item w3-button" onclick="toggleFunction()">PROMOTION</a>
             <a href="#information" class="w3-bar-item w3-button" onclick="toggleFunction()">INFORMATION</a>#}
             <a href="#contact" class="w3-bar-item w3-button" onclick="toggleFunction()">CONTACT</a>
-            <a href="#" class="w3-bar-item w3-button">SE CONNECTER</a>
+            {% if app.user %}
+                <a href="{{ path('app_logout', {}) }}" class="w3-bar-item w3-button">SE DECONNECTER</a>
+            {% else %}
+                <a href="{{  path('app_login',{}) }}" class="w3-bar-item w3-button">SE CONNECTER</a>
+            {% endif %}
         </div>
     </div>
 
@@ -94,37 +87,23 @@
             <a href="#activities" class="w3-button w3-third w3-container w3-center about-gallery-item w3-padding-large">
                 <p class="about-gallery-item-title"><b>Organiser</b></p>
                 <p class="about-gallery-item-label">Activités et rencontres</p>
-                <img src="{{ asset('build/images/IMGActiviteEPHEC.jpg') }}" class="w3-round w3-image w3-opacity w3-hover-opacity-off w3-grayscale img-about w3-hide-small" alt="Photo of Me" >
+                {#<img src="{{ asset('build/images/IMGActiviteEPHEC.jpg') }}" class="w3-round w3-image w3-opacity w3-hover-opacity-off w3-grayscale img-about w3-hide-small" alt="Photo of Me" >#}
             </a>
             <a href="#promotion" class="w3-button w3-third w3-container w3-center about-gallery-item w3-padding-large">
                 <p class="about-gallery-item-title"><b>Promouvoir</b></p>
                 <p class="about-gallery-item-label">Equipes et sportifs</p>
-                <img src="{{ asset('build/images/IMGPromotionEPHEC.jpg') }}" class="w3-round w3-image w3-opacity w3-hover-opacity-off w3-grayscale img-about w3-hide-small" alt="Photo of Me" >
+                {#<img src="{{ asset('build/images/IMGPromotionEPHEC.jpg') }}" class="w3-round w3-image w3-opacity w3-hover-opacity-off w3-grayscale img-about w3-hide-small" alt="Photo of Me" >#}
             </a>
             <a href="#information" class="w3-button w3-third w3-container w3-center about-gallery-item w3-padding-large">
                 <p class="about-gallery-item-title"><b>Informer</b></p>
                 <p class="about-gallery-item-label">Sport, nutrition et santé</p>
-                <img src="{{ asset('build/images/IMGInformationEPHEC.jpg') }}" class="w3-round w3-image w3-opacity w3-hover-opacity-off w3-grayscale img-about w3-hide-small" alt="Photo of Me">
+                {#<img src="{{ asset('build/images/IMGInformationEPHEC.jpg') }}" class="w3-round w3-image w3-opacity w3-hover-opacity-off w3-grayscale img-about w3-hide-small" alt="Photo of Me">#}
             </a>
         </div>
 
-
-
-        {#<p class="w3-large w3-center w3-padding-16">Im really good at:</p>#}
-        {#<p class="w3-wide"><i class="fa fa-camera"></i>Photography</p>#}
-        {#<div class="w3-light-grey">#}
-        {#<div class="w3-container w3-padding-small w3-dark-grey w3-center" style="width:90%">90%</div>#}
-        {#</div>#}
-        {#<p class="w3-wide"><i class="fa fa-laptop"></i>Web Design</p>#}
-        {#<div class="w3-light-grey">#}
-        {#<div class="w3-container w3-padding-small w3-dark-grey w3-center" style="width:85%">85%</div>#}
-        {#</div>#}
-        {#<p class="w3-wide"><i class="fa fa-photo"></i>Photoshop</p>#}
-        {#<div class="w3-light-grey">#}
-        {#<div class="w3-container w3-padding-small w3-dark-grey w3-center" style="width:75%">75%</div>#}
-        {#</div>#}
-
     </div>
+
+
 
     <!------------------------->
     <!-- Bandeau quantitatif -->
@@ -149,6 +128,8 @@
         </div>
     </div>
 
+
+
     <!------------------------->
     <!-- Activités           -->
     <!------------------------->
@@ -170,52 +151,46 @@
         <!-- Responsive Grid. Four columns on tablets, laptops and desktops. Will stack on mobile devices/small screens (100% width) -->
         <div class="w3-row-padding w3-center ">
             <div class="w3-col m3">
-                <img src="{{ asset('build/images/activityPic5.jpg') }}" style="width:100%" onclick="onClick(this)" class="w3-grayscale w3-hover-opacity" alt="The mist over the mountains">
+                <img src="{{ asset('build/images/activityPic5.jpg') }}" style="width:100%"  class="w3-grayscale w3-hover-opacity" alt="The mist over the mountains">
             </div>
 
             <div class="w3-col m3">
-                <img src="{{ asset('build/images/activityPic14.jpg') }}" style="width:100%" onclick="onClick(this)" class= "w3-grayscale w3-hover-opacity" alt="Coffee beans">
+                <img src="{{ asset('build/images/activityPic14.jpg') }}" style="width:100%" class= "w3-grayscale w3-hover-opacity" alt="Coffee beans">
             </div>
 
             <div class="w3-col m3">
-                <img src="{{ asset('build/images/activityPic9.jpg') }}" style="width:100%" onclick="onClick(this)" class="w3-grayscale w3-hover-opacity" alt="Bear closeup">
+                <img src="{{ asset('build/images/activityPic9.jpg') }}" style="width:100%" class="w3-grayscale w3-hover-opacity" alt="Bear closeup">
             </div>
 
             <div class="w3-col m3">
-                <img src="{{ asset('build/images/activityPic6.jpg') }}" style="width:100%" onclick="onClick(this)" class="w3-grayscale w3-hover-opacity" alt="Quiet ocean">
+                <img src="{{ asset('build/images/activityPic6.jpg') }}" style="width:100%"  class="w3-grayscale w3-hover-opacity" alt="Quiet ocean">
             </div>
         </div>
 
-        <div class="w3-row-padding w3-center w3-section">
+{#        <div class="w3-row-padding w3-center w3-section">
             <div class="w3-col m3">
-                <img src="{{ asset('build/images/activityPic1.jpg') }}" style="width:100%" onclick="onClick(this)" class="w3-grayscale w3-hover-opacity" alt="The mist">
+                <img src="{{ asset('build/images/activityPic1.jpg') }}" style="width:100%"  class="w3-grayscale w3-hover-opacity" alt="The mist">
             </div>
 
             <div class="w3-col m3">
-                <img src="{{ asset('build/images/activityPic15.jpg') }}" style="width:100%" onclick="onClick(this)" class="w3-grayscale w3-hover-opacity" alt="My beloved typewriter">
+                <img src="{{ asset('build/images/activityPic15.jpg') }}" style="width:100%"  class="w3-grayscale w3-hover-opacity" alt="My beloved typewriter">
             </div>
 
             <div class="w3-col m3">
-                <img src="{{ asset('build/images/activityPic7.jpg') }}" style="width:100%" onclick="onClick(this)" class="w3-grayscale w3-hover-opacity" alt="Empty ghost train">
+                <img src="{{ asset('build/images/activityPic7.jpg') }}" style="width:100%"  class="w3-grayscale w3-hover-opacity" alt="Empty ghost train">
             </div>
 
             <div class="w3-col m3">
-                <img src="{{ asset('build/images/activityPic8.jpg') }}" style="width:100%" onclick="onClick(this)" class="w3-grayscale w3-hover-opacity" alt="Sailing">
+                <img src="{{ asset('build/images/activityPic8.jpg') }}" style="width:100%"  class="w3-grayscale w3-hover-opacity" alt="Sailing">
             </div>
-        </div>
+        </div>#}
+
         <div class="w3-row-padding w3-center w3-section">
             <button class="w3-button w3-padding-large w3-light-grey w3-margin">Participer</button>
         </div>
     </div>
 
-    <!-- Modal for full size images on click-->
-    <div id="modal01" class="w3-modal w3-black" onclick="this.style.display='none'">
-        <span class="w3-button w3-large w3-black w3-display-topright" title="Close Modal Image"><i class="fa fa-remove"></i></span>
-        <div class="w3-modal-content w3-animate-zoom w3-center w3-transparent w3-padding-64">
-            <img id="img01" class="w3-image w3-grayscale">
-            <p id="caption" class="w3-opacity w3-large"></p>
-        </div>
-    </div>
+
 
 
     <!------------------------->
@@ -231,10 +206,11 @@
 
     <!-- Container (Promotion Section) -->
     <div class="w3-content w3-container w3-padding-64" id="promotion">
-        <h3 class="w3-center">Qui soutenir?</h3>
+        <h3 class="w3-center">Qui suivre ?</h3>
         <p class="w3-center"><em>Suivez et supportez nos équipes et sportifs de haut niveau.</em></p>
         <p class="w3-center"><em>Soyez au courant de leurs plus grands exploits et venez les soutenir lors de leur prochaine rencontre.</em></p>
     </div>
+{#
     <!-- slideshow with ephec team and emeritus sportman -->
     <div class="w3-content w3-display-container">
         <img class="mySlides" src="{{ asset('build/images/activityPic1.jpg') }}" style="width:100%">
@@ -244,14 +220,19 @@
 
         <button class="w3-button w3-black w3-display-left" onclick="plusDivs(-1)">&#10094;</button>
         <button class="w3-button w3-black w3-display-right" onclick="plusDivs(1)">&#10095;</button>
-    </div>
+    </div>#}
 
+    <div class="w3-content w3-container" >
+        <div class="w3-row-padding w3-center w3-section">
+            <button class="w3-button w3-padding-large w3-light-grey w3-margin">Soutenir</button>
+        </div>
+    </div>
 
     <!------------------------->
     <!--   Information       -->
     <!------------------------->
 
-    <!-- Third Parallax Image Information -->
+    <!-- Fourth Parallax Image Information -->
     <div class="bgimg-4 w3-display-container w3-opacity-min">
         <div class="w3-display-middle">
             <span class="w3-xxlarge w3-text-white w3-wide" >INFORMATION</span>
@@ -260,14 +241,18 @@
 
     <!-- Container (Information Section) -->
     <div class="w3-content w3-container w3-padding-64" id="information">
-
+        <h3 class="w3-center">Que retenir?</h3>
+        <p class="w3-center"><em>Découvrer notre sélection de documentation.</em></p>
+        <p class="w3-center"><em>Interrogez nos professionels de la santé partenaires.</em></p>
     </div>
+
+
 
     <!------------------------->
     <!--    Contact          -->
     <!------------------------->
 
-    <!-- Third Parallax Image with Portfolio Text -->
+    <!-- Fifth Parallax Image with Portfolio Text -->
     <div class="bgimg-5 w3-display-container w3-opacity-min">
         <div class="w3-display-middle">
             <span class="w3-xxlarge w3-text-white w3-wide">CONTACT</span>
@@ -276,48 +261,27 @@
 
     <!-- Container (Contact Section) -->
     <div class="w3-content w3-container w3-padding-64" id="contact">
-        <h3 class="w3-center">WHERE I WORK</h3>
-        <p class="w3-center"><em>I'd love your feedback!</em></p>
+        <h3 class="w3-center">Comment nous joindre?</h3>
 
         <div class="w3-row w3-padding-32 w3-section">
             <div class="w3-col m4 w3-container">
-                <img src="/w3images/map.jpg" class="w3-image w3-round" style="width:100%">
             </div>
             <div class="w3-col m8 w3-panel">
                 <div class="w3-large w3-margin-bottom">
-                    <i class="fa fa-map-marker fa-fw w3-hover-text-black w3-xlarge w3-margin-right"></i> Chicago, US<br>
-                    <i class="fa fa-phone fa-fw w3-hover-text-black w3-xlarge w3-margin-right"></i> Phone: +00 151515<br>
-                    <i class="fa fa-envelope fa-fw w3-hover-text-black w3-xlarge w3-margin-right"></i> Email: mail@mail.com<br>
+                    <i class="fa fa-map-marker fa-fw w3-hover-text-black w3-xlarge w3-margin-right"></i> Louvain-la-Neuve, BE<br>
+                    <i class="fa fa-map-marker fa-fw w3-hover-text-black w3-xlarge w3-margin-right"></i> Woluwe, BE<br>
+                    <i class="fa fa-phone fa-fw w3-hover-text-black w3-xlarge w3-margin-right"></i> Téléphone: 02/899.02.76<br>
+                    <i class="fa fa-envelope fa-fw w3-hover-text-black w3-xlarge w3-margin-right"></i> Email: e.clement@ephec.be<br>
                 </div>
-                <p>Swing by for a cup of <i class="fa fa-coffee"></i>, or leave me a note:</p>
-                <form action="/action_page.php" target="_blank">
-                    <div class="w3-row-padding" style="margin:0 -16px 8px -16px">
-                        <div class="w3-half">
-                            <input class="w3-input w3-border" type="text" placeholder="Name" required name="Name">
-                        </div>
-                        <div class="w3-half">
-                            <input class="w3-input w3-border" type="text" placeholder="Email" required name="Email">
-                        </div>
-                    </div>
-                    <input class="w3-input w3-border" type="text" placeholder="Message" required name="Message">
-                    <button class="w3-button w3-black w3-right w3-section" type="submit">
-                        <i class="fa fa-paper-plane"></i> SEND MESSAGE
-                    </button>
-                </form>
             </div>
         </div>
     </div>
 
     <!-- Footer -->
     <footer class="w3-center w3-black w3-padding-64 w3-opacity w3-hover-opacity-off">
-        <a href="#home" class="w3-button w3-light-grey"><i class="fa fa-arrow-up w3-margin-right"></i>To the top</a>
+        <a href="#home" class="w3-button w3-light-grey"><i class="fa fa-arrow-up w3-margin-right"></i>Remonter</a>
         <div class="w3-xlarge w3-section">
-            <i class="fa fa-facebook-official w3-hover-opacity"></i>
-            <i class="fa fa-instagram w3-hover-opacity"></i>
-            <i class="fa fa-snapchat w3-hover-opacity"></i>
-            <i class="fa fa-pinterest-p w3-hover-opacity"></i>
-            <i class="fa fa-twitter w3-hover-opacity"></i>
-            <i class="fa fa-linkedin w3-hover-opacity"></i>
+            <a href="https://www.facebook.com/EphecSports/"><i class="fab fa-facebook-square"></i></a>
         </div>
         <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" title="W3.CSS" target="_blank" class="w3-hover-text-green">w3.css</a></p>
     </footer>
@@ -329,14 +293,6 @@
     {{ parent() }}
 
     <script type="application/javascript">
-        // Modal Image Gallery
-        function onClick(element) {
-            document.getElementById("img01").src = element.src;
-            document.getElementById("modal01").style.display = "block";
-            var captionText = document.getElementById("caption");
-            captionText.innerHTML = element.alt;
-        }
-
         // Change style of navbar on scroll
         window.onscroll = function() {myFunction()};
         function myFunction() {
@@ -363,24 +319,24 @@
             document.getElementById("navDemo").className = y.className.replace(" w3-show", "");
         }
 
-        // promotion slideshow
-        var slideIndex = 1;
-        showDivs(slideIndex);
+        // // promotion slideshow
+        // var slideIndex = 1;
+        // showDivs(slideIndex);
+        //
+        // function plusDivs(n) {
+        //     showDivs(slideIndex += n);
+        // }
 
-        function plusDivs(n) {
-            showDivs(slideIndex += n);
-        }
-
-        function showDivs(n) {
-            var i;
-            var x = document.getElementsByClassName("mySlides");
-            if (n > x.length) {slideIndex = 1}
-            if (n < 1) {slideIndex = x.length}
-            for (i = 0; i < x.length; i++) {
-                x[i].style.display = "none";
-            }
-            x[slideIndex-1].style.display = "block";
-        }
+        // function showDivs(n) {
+        //     var i;
+        //     var x = document.getElementsByClassName("mySlides");
+        //     if (n > x.length) {slideIndex = 1}
+        //     if (n < 1) {slideIndex = x.length}
+        //     for (i = 0; i < x.length; i++) {
+        //         x[i].style.display = "none";
+        //     }
+        //     x[slideIndex-1].style.display = "block";
+        // }
     </script>
 
     {{ encore_entry_script_tags('defaultPage') }}

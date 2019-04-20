@@ -8,14 +8,18 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserController extends AbstractController
 {
     /**
-     * @Route("/user", name="user")
+     * @Route("/user/{section}", name="user", defaults={"section"="home"} )
      */
-    public function index()
+    public function index($section)
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
+//        $this->denyAccessUnlessGranted('ROLE_USER');
+//
+//        $usr = $this->get('security.token_storage')->getToken()->getUser();
+//
+//        $userId = $usr->getId();
 
         return $this->render('user/index.html.twig', [
-            'controller_name' => 'UserController',
+//            'currentUserId' => $userId
         ]);
     }
 }
