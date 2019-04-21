@@ -17,15 +17,9 @@ export default {
         },
     },
     actions : {
-        // toggleMobileMenu({commit}){
-        //     commit('TOGGLE_MOBILE_MENU');
-        // },
         toggleNavMenu({commit}){
             commit('TOGGLE_MOBILE_MENU');
         },
-        // closeMobileMenu({commit}){
-        //     commit('CLOSE_MOBILE_MENU');
-        // },
         closeNavMenu({commit}){
             commit('CLOSE_MOBILE_MENU');
         },

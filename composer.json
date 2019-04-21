@@ -8,6 +8,7 @@
         "api-platform/api-pack": "^1.1",
         "doctrine/annotations": "^1.6",
         "easycorp/easyadmin-bundle": "^2.1",
+        "gesdinet/jwt-refresh-token-bundle": "^0.6.2",
         "lexik/jwt-authentication-bundle": "^2.6",
         "sensio/framework-extra-bundle": "^5.2",
         "symfony/apache-pack": "^1.0",

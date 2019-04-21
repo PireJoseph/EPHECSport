@@ -10,6 +10,8 @@
                 <router-link to="/user/activity" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Activités" ><i class="fa fa-bolt"></i></router-link>
                 <router-link to="/user/promotion" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Promotion" ><i class="fa fa-star"></i></router-link>
                 <router-link to="/user/information" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Information" ><i class="fa fa-search"></i></router-link>
+                <a href="#" class="w3-bar-item w3-button w3-hide-small w3-right w3-padding-large w3-hover-white" @click="testFetchUser" >call api</a>
+                <a href="#" class="w3-bar-item w3-button w3-hide-small w3-right w3-padding-large w3-hover-white" @click="testRefreshToken" >refresh token</a>
 
                 <a href="#" class="w3-bar-item w3-button w3-hide-small w3-right w3-padding-large w3-hover-white" @click="logout" title="My Account"><i class="fa fa-user-times w3-margin-right"></i>Se déconnecter</a>
             </div>
@@ -52,6 +54,18 @@
             logout() {
                 this.$store.commit('security/LOGOUT');
                 this.$router.push({path: '/user/login'});
+            },
+            testFetchUser(){
+                this.$store.dispatch('user/fetchCurrentUser')
+            },
+            testRefreshToken(){
+                let token = localStorage.getItem('token');
+                let refresh_token = localStorage.getItem('refresh_token');
+                let refreshTokenPayload = {
+                    'token' : token,
+                    'refresh_token' : refresh_token
+                };
+                this.$store.dispatch('security/refreshToken', refreshTokenPayload)
             },
             ...mapMutations({
                 toggleNavMenu: 'mobileMenu/TOGGLE_MOBILE_MENU',

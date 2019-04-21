@@ -61,55 +61,8 @@ const routes = [
             }
         ]
     },
-    // {
-    //     path: '/user/home',
-    //     components: {
-    //         default: App,
-    //         content: Home
-    //     },
-    //     meta: { requiresAuth: true }
-    // },
-    // {
-    //     path: '/user/profile',
-    //     components: {
-    //         default: App,
-    //         content: Profile
-    //     },
-    //     meta: { requiresAuth: true }
-    // },
-    // {
-    //     path: '/user/activity',
-    //     components: {
-    //         default: App,
-    //         content: Activity
-    //     },
-    //     meta: { requiresAuth: true }
-    // },
-    // {
-    //     path: '/user/promotion',
-    //     components: {
-    //         default: App,
-    //         content: Promotion
-    //     },
-    //     meta: { requiresAuth: true }
-    // },
-    // {
-    //     path: '/user/information',
-    //     components: {
-    //         default: App,
-    //         content: Information
-    //     },
-    //     meta: { requiresAuth: true }
-    // },
-
-    // { path: '/user/home', component: Home, meta: { requiresAuth: true }  },
-    // { path: '/user/profile', component: Profile, meta: { requiresAuth: true }  },
-    // { path: '/user/activity', component: Activity, meta: { requiresAuth: true }  },
-    // { path: '/user/promotion', component: Promotion, meta: { requiresAuth: true }  },
-    // { path: '/user/information', component: Information, meta: { requiresAuth: true }  },
-    // { path: '/user/login', component: Login },
     { path: '*', redirect: '/user/home' }
-]
+];
 
 Vue.use(VueRouter);
 

@@ -80,7 +80,10 @@
                                 this.$router.push({path: '/user/home'});
                             }
                         }
-                    });
+                    })
+                    // .then(() => {
+                    //     this.$store.dispatch('user/fetchCurrentUser')
+                    // })
             },
         },
     }

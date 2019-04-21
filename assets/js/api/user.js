@@ -1,11 +1,9 @@
-import customAxios from './customAxios';
+import ApiService from '../services/api'
 
 export default {
     get(id) {
-        // console.log(localStorage.token)
-        return customAxios.get(
-            // '/api/user/75'/* + id*/,
-            'user/75',
+        return ApiService.get(
+            '/api/user/75',
         );
     },
     // put(user){
