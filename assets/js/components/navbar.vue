@@ -1,8 +1,7 @@
 <template>
-    <div>
-
+    <div id="navbarContainer">
         <!-- Navbar -->
-        <div class="w3-top">
+        <div >
             <div class="w3-bar w3-theme-d2 w3-left-align w3-large">
                 <a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-padding-large w3-hover-white w3-large w3-theme-d2" href="javascript:void(0);" @click="toggleNavMenu" ><i class="fa fa-bars"></i></a>
                 <router-link to="/user/home" class="w3-bar-item w3-button w3-padding-large w3-theme-d4" ><span  v-on:click="closeNavMenu"><i class="fa fa-home w3-margin-right" ></i>Home</span></router-link>
@@ -24,7 +23,6 @@
             <router-link to="/user/promotion" class="w3-bar-item w3-button w3-padding-large" >Promotion</router-link>
             <router-link to="/user/information" class="w3-bar-item w3-button w3-padding-large"  >Information</router-link>
         </div>
-
     </div>
 </template>
 

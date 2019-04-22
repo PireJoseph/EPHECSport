@@ -1,9 +1,27 @@
-body {
-    font-family: "Raleway", sans-serif;
-    /*background-color: lightgray;*/
-    height: 100%
-}
 html {
     height: 100%;
+    margin: 0;
 }
+
+body {
+    min-height: 100%;
+    margin: 0;
+    display: flex;
+    flex-flow: column;
+}
+
+#root {
+    display: flex;
+    flex-flow: column;
+    flex-grow: 1;
+}
+
+#appContainer {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+    flex-grow: 1;
+    justify-content: space-between;
+}
+
 
