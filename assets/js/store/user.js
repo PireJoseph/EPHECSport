@@ -6,7 +6,7 @@ export default {
         isLoading: false,
         error: null,
         currentUser: null,
-        currentUserId: '0'
+        currentUserId: null
     },
     getters: {
         isLoading (state) {
@@ -41,7 +41,9 @@ export default {
         //     state.error = error;
         //     state.currentUser = null
         // },
-
+        ['SET_CURRENT_USER_ID'](state, id) {
+            state.currentUserId = id;
+        },
         ['FETCHING_CURRENT_USER'](state) {
             state.isLoading = true;
             state.error = null;

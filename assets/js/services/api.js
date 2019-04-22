@@ -60,9 +60,8 @@ const ApiService = {
             },
             async (error) => {
                 if (error.request.status == 401) {
-                    if (error.config.url.includes('/o/token/')) {
+                    if (error.config.url.includes('login_check')) {
                         // Refresh token has failed. Logout the user
-                        console.log('Refresh token has failed');
                         store.commit('security/LOGOUT');
                         throw error
                     } else {
@@ -74,7 +73,6 @@ const ApiService = {
                             };
                             await store.dispatch('security/refreshToken', refreshTokenPayload);
                             // Retry the original request
-                            console.log('relaunch initial request');
                             return this.customRequest({
                                 method: error.config.method,
                                 url: error.config.url,

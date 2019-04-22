@@ -7,6 +7,7 @@ parameters:
     locale: 'fr'
     profile_picture.uri_prefix: '/images/profilePictures'
     picture.uri_prefix: '/images/pictures/'
+    authentication.refreshToken.expiration: 2592000
 
 services:
     # default configuration for services in *this* file
@@ -34,6 +35,18 @@ services:
         autoconfigure: false # Automatically registers your services as commands, event subscribers, etc.
         class: App\Security\Guard\JWTTokenAuthenticator
         parent: lexik_jwt_authentication.security.guard.jwt_token_authenticator
+
+    app.event.jwt_created_listener:
+        class: App\EventListener\Authentication\JWTCreatedListener
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created, method: onJWTCreated }
+
+    acme_api.event.authentication_success_listener:
+        class: App\EventListener\Authentication\JWTAuthenticationSuccessListener
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_success, method: onAuthenticationSuccessResponse }
+        arguments: [ '%authentication.refreshToken.expiration%']
+
 
     App\EventListener\Profile\SuccessListener:
         tags:

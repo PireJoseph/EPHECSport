@@ -33,6 +33,8 @@
 </template>
 
 <script>
+    import TokenService from '../services/token'
+
     export default {
         name: 'login',
         data () {
@@ -43,8 +45,7 @@
         },
         created () {
             let redirect = this.$route.query.redirect;
-
-            if (this.$store.getters['security/isAuthenticated']) {
+            if (TokenService.refreshTokenIsStillValid()) {
                 if (typeof redirect !== 'undefined') {
                     this.$router.push({path: redirect});
                 } else {
@@ -70,7 +71,6 @@
                     password: this.$data.password
                 };
                 let redirect = this.$route.query.redirect;
-
                 this.$store.dispatch('security/login', payload)
                     .then(() => {
                         if (!this.$store.getters['security/hasError']) {

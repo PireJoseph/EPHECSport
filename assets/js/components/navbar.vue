@@ -1,5 +1,5 @@
 <template>
-    <div id="nav">
+    <div>
 
         <!-- Navbar -->
         <div class="w3-top">
@@ -31,6 +31,7 @@
 <script>
     import { mapGetters } from 'vuex'
     import { mapMutations } from 'vuex'
+    import TokenService from '../services/token'
 
     export default {
         name: 'navbar',
@@ -39,8 +40,12 @@
             // {
             //     return this.$store.getters['mobileMenu/isMobileMenuShowed']
             // }
+            // isAuthenticated()
+            // {
+            //     return ( !!this.$store.getters['security/token'] && !!this.$store.getters['security/token'] )
+            // },
             ...mapGetters({
-                isAuthenticated:  'security/isAuthenticated',
+                // isAuthenticated:  'security/isAuthenticated',
                 mobileMenuShowed: 'mobileMenu/isMobileMenuShowed',
             })
         },

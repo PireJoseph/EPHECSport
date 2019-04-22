@@ -186,6 +186,10 @@
     import { mapGetters } from 'vuex'
     import { mapMutations } from 'vuex'
 
+    import jwt_decode from 'jwt-decode';
+
+    import TokenService from '../services/token'
+
     import Navbar from '../components/navbar'
 
     export default {
@@ -197,7 +201,6 @@
             //     return this.$store.getters['mobileMenu/isMobileMenuShowed']
             // }
             ...mapGetters({
-                isAuthenticated:  'security/isAuthenticated',
                 mobileMenuShowed: 'mobileMenu/isMobileMenuShowed',
                 // currentUserId: 'user/currentUserId'
             })
@@ -209,11 +212,20 @@
             // closeNavMenu() {
             //     this.$store.commit('mobileMenu/CLOSE_MOBILE_MENU')
             // },
+            initApp() {
+                let accessToken = TokenService.getToken();
+                let decodedToken = jwt_decode(accessToken);
+                let userId = decodedToken.userId;
+                this.$store.commit('user/SET_CURRENT_USER_ID', userId)
+            },
             ...mapMutations({
                 toggleNavMenu: 'mobileMenu/TOGGLE_MOBILE_MENU',
                 closeNavMenu: 'mobileMenu/CLOSE_MOBILE_MENU'
             })
         },
+        mounted: function() {
+            this.initApp()
+        }
 
         
     }

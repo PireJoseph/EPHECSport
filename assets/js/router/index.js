@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 
 import store from '../store';
 
+import TokenService from '../services/token';
 
 // 1. Define route components.
 import Home from '../views/home';
@@ -76,7 +77,7 @@ router.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.requiresAuth)) {
         // this route requires auth, check if logged in
         // if not, redirect to login page.
-        if (store.getters['security/isAuthenticated']) {
+        if (TokenService.refreshTokenIsStillValid()) {
             next();
         } else {
             next({
