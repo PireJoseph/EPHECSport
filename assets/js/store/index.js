@@ -3,14 +3,18 @@ import Vuex from 'vuex';
 
 import UserModule from './user'
 import securityModule from './security'
-import mobileMenu from './mobileMenu'
+import mobileMenuModule from './mobileMenu'
+import AppCommonModule from './appCommon'
+import SideBarModule from './sideBar'
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
     modules: {
         user: UserModule,
-        mobileMenu: mobileMenu,
-        security: securityModule
+        mobileMenu: mobileMenuModule,
+        security: securityModule,
+        common: AppCommonModule,
+        sideBar: SideBarModule
     }
 });

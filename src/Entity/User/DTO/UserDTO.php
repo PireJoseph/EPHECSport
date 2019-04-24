@@ -45,7 +45,7 @@ final class UserDTO extends DataTransferObject
      * @var string|null
      *
      * @ApiProperty(identifier=true)
-     * @Groups({"read"})
+     * @Groups({"read", "appCommon"})
      * @Assert\NotBlank(groups={"GetUser"})
      */
     public $id;
@@ -62,7 +62,7 @@ final class UserDTO extends DataTransferObject
      *
      * @var string|null
      *
-     * @Groups({"read", "write"})
+     * @Groups({"read", "write", "appCommon"})
      * @Assert\NotBlank(groups={"PostUser","GetUser"})
      */
     public $username;
@@ -78,7 +78,7 @@ final class UserDTO extends DataTransferObject
     /**
      * @var string|null
      *
-     * @Groups({"read", "write"})
+     * @Groups({"read", "write", "appCommon"})
      * @Assert\NotBlank(groups={"PostUser","GetUser"})
      */
     public $email;
@@ -86,10 +86,59 @@ final class UserDTO extends DataTransferObject
     /**
      * @var string|null
      *
-     * @Groups({"read", "write"})
+     * @Groups({"read", "write", "appCommon"})
      * @Assert\NotBlank(groups={"PostUser","GetUser"})
      */
     public $birthDate;
+
+    /**
+     * @var string|null
+     *
+     * @Groups({"read", "appCommon"})
+     */
+    public $userPicture;
+
+    /**
+     * @var string|null
+     *
+     * @Groups({"read", "appCommon"})
+     */
+    public $userClass;
+
+    /**
+     * @var string|null
+     *
+     * @Groups({"read", "appCommon"})
+     */
+    public $userSection;
+
+    /**
+     * @var array
+     *
+     * @Groups({"read", "appCommon"})
+     */
+    public $successDTOs;
+
+    /**
+     * @var array
+     *
+     * @Groups({"read", "appCommon"})
+     */
+    public $pictureDTOs;
+
+    /**
+     * @var array
+     *
+     * @Groups({"read", "appCommon"})
+     */
+    public $preferredPartnerDTOs;
+
+    /**
+     * @var array
+     *
+     * @Groups({"read", "appCommon"})
+     */
+    public $disponibilityPatterns;
 
 }
 

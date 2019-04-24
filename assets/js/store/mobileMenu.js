@@ -16,14 +16,6 @@ export default {
             state.isMobileMenuOpen = false;
         },
     },
-    actions : {
-        toggleNavMenu({commit}){
-            commit('TOGGLE_MOBILE_MENU');
-        },
-        closeNavMenu({commit}){
-            commit('CLOSE_MOBILE_MENU');
-        },
-    },
 
 
 }

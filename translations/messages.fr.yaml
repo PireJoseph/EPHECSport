@@ -86,7 +86,7 @@ USER_GENDER_VALUE_TOKEN_FEMALE: Femme
 USER_ROLE_TOKEN_USER: Utilisateur
 USER_ROLE_TOKEN_ADMIN: Administrateur
 USER_ROLE_TOKEN_ALLOWED_TO_SWITCH: Autorisé à changer
-Disponibility patterns: Pattern de disponibilité
+Disponibility patterns: Patterns de disponibilité
 USER_DISPONIBILITY_PATTERN_TOKEN_AFTERNOON: Soirée
 USER_DISPONIBILITY_PATTERN_TOKEN_WEEKEND: Weekend
 USER_DISPONIBILITY_PATTERN_TOKEN_SUMMER_HOLYDAY: Vacances d'été

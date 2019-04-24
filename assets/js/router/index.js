@@ -25,6 +25,7 @@ const routes = [
     },
     {
         path: '/user/',
+        redirect: '/user/home',
         components: {
             default: App
         },

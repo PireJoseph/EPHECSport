@@ -8,6 +8,7 @@
 
 namespace App\Managers\User;
 
+use App\Entity\Profile\Success;
 use App\Exception\EmailAddressAlreadyExistsException;
 use App\Exception\InvalidIdentifierException;
 use App\Exception\ItemNotFoundException;
@@ -147,25 +148,11 @@ class UserManager
         }
         $user = $this->em->getRepository(User::class)->find($id);
 
-        if (is_null($user))
-        {
-            throw new ItemNotFoundException('User does not exist');
-        }
+//        if (is_null($user))
+//        {
+//            throw new ItemNotFoundException('User does not exist');
+//        }
         return $user;
-    }
-
-    /**
-     * @param $id
-     * @return User|null
-     * @throws Exception
-     */
-    public function getUserDTO($id) : ? UserDTO
-    {
-        $user = $this->getUser($id);
-
-        $userDTO = $this->userDTOAssembler->getFromUser($user);
-
-        return $userDTO;
     }
 
 

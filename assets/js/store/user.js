@@ -5,8 +5,14 @@ export default {
     state: {
         isLoading: false,
         error: null,
-        currentUser: null,
-        currentUserId: null
+        userId : Number,
+        username: "Nom d'utilisateur",
+        userMail: String,
+        userPicture: "/images/profilePictures/fallBackUserIcon.png",
+        userBirthDate: Date,
+        userSchoolClass : String,
+        userSchoolSection : String,
+        userCreatedAt : Date
     },
     getters: {
         isLoading (state) {
@@ -18,31 +24,35 @@ export default {
         error (state) {
             return state.error;
         },
-        currentUser (state) {
-            return state.currentUser
+        userId (state) {
+            return state.userId;
         },
-        currentUserId (state) {
-            return state.currentUserId
-        }
+        username (state) {
+            return state.username;
+        },
+        userMail (state) {
+            return state.userMail
+        },
+        userPicture (state) {
+            return state.userPicture
+        },
+        userSchoolClass (state) {
+            return state.userSchoolClass
+        },
+        userSchoolSection (state) {
+            return state.userSchoolSection
+        },
+        userBirthDate (state) {
+            return state.userBirthDate
+        },
+        userCreatedAt (state) {
+            return state.userCreatedAt
+        },
     },
     mutations: {
 
-        // ['UPDATING_CURRENT_USER'](state) {
-        //     state.isLoading = true;
-        //     state.error = null;
-        // },
-        // ['UPDATING_CURRENT_USER_SUCCESS'](state, user) {
-        //     state.isLoading = false;
-        //     state.error = null;
-        //     state.currentUser = user
-        // },
-        // ['UPDATING_CURRENT_USER_ERROR'](state, error) {
-        //     state.isLoading = false;
-        //     state.error = error;
-        //     state.currentUser = null
-        // },
-        ['SET_CURRENT_USER_ID'](state, id) {
-            state.currentUserId = id;
+        ['SET_USER_ID'](state, id) {
+            state.userId = id;
         },
         ['FETCHING_CURRENT_USER'](state) {
             state.isLoading = true;
@@ -59,13 +69,21 @@ export default {
             state.error = error.message;
             state.currentUser = null;
         },
+        ['SET_USER_BASE_DATA'](state, data) {
+            state.userId = data.id;
+            state.username = data.username;
+            state.userMail = data.email;
+            state.userPicture = data.userPicture;
+            state.userBirthDate = data.birthDate;
+            state.userSchoolClass = data.userClass;
+            state.userSchoolSection = data.userSection;
+            state.userCreatedAt = data.createdAt;
+            state.isLoading = false;
+            state.error = null;
+        },
 
     },
     actions : {
-        // updateCurrentUser({commit}, user){
-        //     commit('UPDATING_CURRENT_USER');
-        //     return UserAPI.post
-        // }
         fetchCurrentUser({commit}, id){
             commit('FETCHING_CURRENT_USER');
             return UserAPI.get(id)

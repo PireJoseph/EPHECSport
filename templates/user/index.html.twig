@@ -21,7 +21,6 @@
 
     <div id="root" {#data-current-user-id="{{ currentUserId|json_encode|e('html_attr') }}"#}>
         <router-view></router-view>
-
     </div>
 
 {% endblock %}
@@ -31,22 +30,5 @@
     {{ parent() }}
 
     {{ encore_entry_script_tags('user') }}
-
-   <script>
-       // Accordion
-       function myFunction(id) {
-           var x = document.getElementById(id);
-           if (x.className.indexOf("w3-show") == -1) {
-               x.className += " w3-show";
-               x.previousElementSibling.className += " w3-theme-d1";
-           } else {
-               x.className = x.className.replace("w3-show", "");
-               x.previousElementSibling.className =
-                   x.previousElementSibling.className.replace(" w3-theme-d1", "");
-           }
-       }
-
-
-   </script>
 
 {% endblock %}

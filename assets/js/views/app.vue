@@ -13,55 +13,12 @@
             <!-- Left Column -->
             <div class="w3-col m3 l2">
                 <!-- Profile -->
-                <div class="w3-card w3-round w3-white">
-                    <div class="w3-container">
-                        <h4 class="w3-center">My Profile</h4>
-                        <p class="w3-center"><img src="/w3images/avatar3.png" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>
-                        <hr>
-                        <p><i class="fa fa-pencil fa-fw w3-margin-right w3-text-theme"></i> Designer, UI</p>
-                        <p><i class="fa fa-home fa-fw w3-margin-right w3-text-theme"></i> London, UK</p>
-                        <p><i class="fa fa-birthday-cake fa-fw w3-margin-right w3-text-theme"></i> April 1, 1988</p>
-                    </div>
-                </div>
+                <user-tile></user-tile>
+
                 <br>
 
-                <!-- Accordion -->
-                <div class="w3-card w3-round">
-                    <div class="w3-white">
-                        <button onclick="myFunction('Demo1')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-circle-o-notch fa-fw w3-margin-right"></i> My Groups</button>
-                        <div id="Demo1" class="w3-hide w3-container">
-                            <p>Some text..</p>
-                        </div>
-                        <button onclick="myFunction('Demo2')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-calendar-check-o fa-fw w3-margin-right"></i> My Events</button>
-                        <div id="Demo2" class="w3-hide w3-container">
-                            <p>Some other text..</p>
-                        </div>
-                        <button onclick="myFunction('Demo3')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-users fa-fw w3-margin-right"></i> My Photos</button>
-                        <div id="Demo3" class="w3-hide w3-container">
-                            <div class="w3-row-padding">
-                                <br>
-                                <div class="w3-half">
-                                    <img src="/w3images/lights.jpg" style="width:100%" class="w3-margin-bottom">
-                                </div>
-                                <div class="w3-half">
-                                    <img src="/w3images/nature.jpg" style="width:100%" class="w3-margin-bottom">
-                                </div>
-                                <div class="w3-half">
-                                    <img src="/w3images/mountains.jpg" style="width:100%" class="w3-margin-bottom">
-                                </div>
-                                <div class="w3-half">
-                                    <img src="/w3images/forest.jpg" style="width:100%" class="w3-margin-bottom">
-                                </div>
-                                <div class="w3-half">
-                                    <img src="/w3images/nature.jpg" style="width:100%" class="w3-margin-bottom">
-                                </div>
-                                <div class="w3-half">
-                                    <img src="/w3images/snow.jpg" style="width:100%" class="w3-margin-bottom">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <side-bar-accordion></side-bar-accordion>
+
                 <br>
 
                 <!-- Interests -->
@@ -159,7 +116,7 @@
         <div id="footerContainer">
             <!-- Footer -->
             <footer class="w3-container w3-theme-d3 w3-padding-16">
-                <h5>Footer</h5>
+                <h5><img src="/images/favicon.png" style="width: 18px; height: 18px;"> EPHEC Sport </h5>
             </footer>
 
             <footer class="w3-container w3-theme-d5">
@@ -181,10 +138,12 @@
     import TokenService from '../services/token'
 
     import Navbar from '../components/navbar'
+    import sideBarAccordion from '../components/sideBarAccordion';
+    import UserTile from '../components/userTile';
 
     export default {
         name: 'app',
-        components : {Navbar},
+        components : {UserTile, Navbar, sideBarAccordion},
         computed: {
             // mobileMenuShowed ()
             // {
@@ -206,8 +165,41 @@
                 let accessToken = TokenService.getToken();
                 let decodedToken = jwt_decode(accessToken);
                 let userId = decodedToken.userId;
-                this.$store.commit('user/SET_CURRENT_USER_ID', userId)
+                this.$store.commit('user/SET_USER_ID', userId);
+                this.loadData()
             },
+            loadData () {
+                let payload = {
+                    userId: this.$store.getters['user/userId'],
+                };
+                console.log(payload);
+                this.$store.dispatch('common/loadBaseData', payload)
+                    // .then(() => {
+                    //     if (!this.$store.getters['appCommon/hasError']) {
+                    //         if (typeof redirect !== 'undefined') {
+                    //             this.$router.push({path: redirect});
+                    //         } else {
+                    //             this.$router.push({path: '/user/home'});
+                    //         }
+                    //     }
+                    // })
+
+                // let redirect = this.$route.query.redirect;
+                // this.$store.dispatch('security/login', payload)
+                //     .then(() => {
+                //         if (!this.$store.getters['security/hasError']) {
+                //             if (typeof redirect !== 'undefined') {
+                //                 this.$router.push({path: redirect});
+                //             } else {
+                //                 this.$router.push({path: '/user/home'});
+                //             }
+                //         }
+                //     })
+                // .then(() => {
+                //     this.$store.dispatch('user/fetchCurrentUser')
+                // })
+            },
+
             ...mapMutations({
                 toggleNavMenu: 'mobileMenu/TOGGLE_MOBILE_MENU',
                 closeNavMenu: 'mobileMenu/CLOSE_MOBILE_MENU'
