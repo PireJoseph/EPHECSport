@@ -65,7 +65,7 @@ class UserManager
             throw new itemAlreadyExistsException('User already exist');
         }
 
-        $alreadyExistingUser = $this->em->getRepository(User::class)->findOneByEmail($email);
+        $alreadyExistingUser = $this->em->getRepository(User::class)->findOneByEmail($userDTO->email);
         if (!is_null($alreadyExistingUser))
         {
             throw new EmailAddressAlreadyExistsException('L\'adresse mail spécifiée existe déja');

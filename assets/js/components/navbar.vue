@@ -17,7 +17,7 @@
         </div>
 
         <!-- Navbar on small screens -->
-        <div id="navDemo" v-show="mobileMenuShowed" @click="toggleNavMenu" class="w3-bar-block w3-theme-d2 w3-hide w3-hide-large w3-hide-medium w3-large">
+        <div id="navDemo" v-show="mobileMenuShowed" @click="toggleNavMenu" class="w3-bar-block w3-theme-d2 w3-hide-large w3-hide-medium w3-large">
             <router-link to="/user/profile" class="w3-bar-item w3-button w3-padding-large" >Profile</router-link>
             <router-link to="/user/activity" class="w3-bar-item w3-button w3-padding-large" >Activités</router-link>
             <router-link to="/user/promotion" class="w3-bar-item w3-button w3-padding-large" >Promotion</router-link>

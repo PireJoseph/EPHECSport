@@ -3,6 +3,7 @@
 namespace App\Repository\Activity;
 
 use App\Entity\Activity\UserRelatedFeedback;
+use App\Entity\User\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -17,6 +18,18 @@ class UserRelatedFeedbackRepository extends ServiceEntityRepository
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, UserRelatedFeedback::class);
+    }
+
+    public function getAggregatedUserFeedbackCount(User $user)
+    {
+        $qb = $this->createQueryBuilder('u');
+        return $qb
+            ->select('count(u.label) as count, u.label')
+            ->andWhere('u.user = :user')
+            ->setParameter('user', $user)
+            ->groupBy('u.label')
+            ->getQuery()
+            ->getResult();
     }
 
     // /**

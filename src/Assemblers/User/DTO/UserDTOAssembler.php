@@ -10,8 +10,10 @@ namespace App\Assemblers\User\DTO;
 
 
 use ApiPlatform\Core\Validator\Exception\ValidationException;
+use App\Assemblers\Activity\DTO\UserRelatedFeedbackDTOAssembler;
 use App\Assemblers\Profile\DTO\PictureDTOAssembler;
 use App\Assemblers\Profile\DTO\SuccessDTOAssembler;
+use App\Entity\Activity\UserRelatedFeedback;
 use App\Entity\Profile\Success;
 use App\Entity\User\DTO\PreferredPartnerDTO;
 use App\Entity\User\DTO\UserDTO;
@@ -31,9 +33,10 @@ class UserDTOAssembler
     private $successDTOAssembler;
     private $pictureDTOAssembler;
     private $preferredPartnerDTOAssembler;
+    private $userRelatedFeedbackAssembler;
     private $translator;
 
-    public function __construct(ValidatorInterface $validator, ContainerInterface $container, EntityManagerInterface $em, SuccessDTOAssembler $successDTOAssembler, PictureDTOAssembler $pictureDTOAssembler, PreferredPartnerDTOAssembler $preferredPartnerDTOAssembler, TranslatorInterface $translator)
+    public function __construct(ValidatorInterface $validator, ContainerInterface $container, EntityManagerInterface $em, SuccessDTOAssembler $successDTOAssembler, PictureDTOAssembler $pictureDTOAssembler, PreferredPartnerDTOAssembler $preferredPartnerDTOAssembler, TranslatorInterface $translator, UserRelatedFeedbackDTOAssembler $userRelatedFeedbackDTOAssembler)
     {
         $this->validator = $validator;
         $this->container = $container;
@@ -42,6 +45,7 @@ class UserDTOAssembler
         $this->pictureDTOAssembler = $pictureDTOAssembler;
         $this->preferredPartnerDTOAssembler = $preferredPartnerDTOAssembler;
         $this->translator = $translator;
+        $this->userRelatedFeedbackAssembler = $userRelatedFeedbackDTOAssembler;
     }
 
     /**
@@ -131,6 +135,42 @@ class UserDTOAssembler
             $disponibilityPatterns[] = $disponibilityPattern;
         }
         $newUserDTO->disponibilityPatterns = $disponibilityPatterns;
+
+        // label count array creation
+        $addressedUserRelatedFeedbackLabelsCumuled = [];
+        $distinctUserRelatedFeedbackLabelArray = UserRelatedFeedback::getLabelValueTokenArray();
+        foreach($distinctUserRelatedFeedbackLabelArray as $token => $value)
+        {
+            $addressedUserRelatedFeedbackLabelsCumuled[$value] = [
+                'label' => $this->translator->trans($token, [], 'messages'),
+                'value' => $value,
+                'count' => 0,
+                'percent' => 0,
+            ];
+        }
+
+        $addressedUserRelatedFeedbackDTOs = [];
+        $addressedUserRelatedFeedbackArray = $this->em->getRepository(UserRelatedFeedback::class)->findBy(['user' => $user]);
+        foreach ($addressedUserRelatedFeedbackArray as $addressedUserRelatedFeedback)
+        {
+            $totalUserRelatedFeedback = 0;
+            /** @var UserRelatedFeedback $addressedUserRelatedFeedback */
+            // DTOs
+            $addressedUserRelatedFeedbackDTO = $this->userRelatedFeedbackAssembler->getFromUserRelatedFeedback($addressedUserRelatedFeedback);
+            $addressedUserRelatedFeedbackDTOs[] = $addressedUserRelatedFeedbackDTO;
+
+            // label count
+            $addressedUserRelatedFeedbackLabelsCumuled[$addressedUserRelatedFeedback->getLabel()]['count'] += 1;
+            $totalUserRelatedFeedback += 1;
+
+            // label percent
+            $addressedUserRelatedFeedbackLabelsCumuled[$addressedUserRelatedFeedback->getLabel()]['percent'] = ($addressedUserRelatedFeedbackLabelsCumuled[$addressedUserRelatedFeedback->getLabel()]['count'] / $totalUserRelatedFeedback) *100;
+        }
+        $newUserDTO->addressedUserRelatedFeedbackDTOs = $addressedUserRelatedFeedbackDTOs;
+
+        // aggregated UserRelatedFeedback
+        $newUserDTO->addressedUserRelatedFeedbackLabelsCumuled = array_values($addressedUserRelatedFeedbackLabelsCumuled);
+
 
         if (count($errors = $this->validator->validate($newUserDTO)))
         {

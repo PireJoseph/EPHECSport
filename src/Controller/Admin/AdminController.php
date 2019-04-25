@@ -45,7 +45,6 @@ class AdminController extends EasyAdminController
             $entity->setCreatedBy($user);
         }
 
-
         parent::persistEntity($entity);
     }
 
@@ -58,9 +57,6 @@ class AdminController extends EasyAdminController
      */
     protected function updateEntity($entity)
     {
-
-        $hehehe= 'testtsdt';
-
         parent::persistEntity($entity);
     }
 

@@ -140,5 +140,20 @@ final class UserDTO extends DataTransferObject
      */
     public $disponibilityPatterns;
 
+    /**
+     * @var array
+     *
+     * @Groups({"read", "appCommon"})
+     */
+    public $addressedUserRelatedFeedbackDTOs;
+
+
+    /**
+     * @var array
+     *
+     * @Groups({"read", "appCommon"})
+     */
+    public $addressedUserRelatedFeedbackLabelsCumuled;
+
 }
 

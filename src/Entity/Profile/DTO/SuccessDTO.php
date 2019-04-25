@@ -14,4 +14,8 @@ class SuccessDTO
 
     public $label;
 
+    public $labelValue;
+
+    public $themeColor;
+
 }

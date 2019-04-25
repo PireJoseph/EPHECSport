@@ -12,7 +12,13 @@ export default {
         userBirthDate: Date,
         userSchoolClass : String,
         userSchoolSection : String,
-        userCreatedAt : Date
+        userCreatedAt : Date,
+        userPreferredPartners: Array,
+        userDisponibilityPatterns : Array,
+        userPictures: Array,
+        userSuccess: Array,
+        addressedUserRelatedFeedbacks : Array,
+        addressedUserRelatedFeedbackLabelsCumuled : Array,
     },
     getters: {
         isLoading (state) {
@@ -48,6 +54,24 @@ export default {
         userCreatedAt (state) {
             return state.userCreatedAt
         },
+        userPreferredPartners (state) {
+            return state.userPreferredPartners
+        },
+        userDisponibilityPatterns (state) {
+            return state.userDisponibilityPatterns
+        },
+        userPictures (state) {
+            return state.userPictures
+        },
+        userSuccess (state) {
+            return state.userSuccess
+        },
+        addressedUserRelatedFeedbacks (state) {
+            return state.addressedUserRelatedFeedbacks
+        },
+        addressedUserRelatedFeedbackLabelsCumuled (state) {
+            return state.addressedUserRelatedFeedbackLabelsCumuled;
+        }
     },
     mutations: {
 
@@ -78,6 +102,12 @@ export default {
             state.userSchoolClass = data.userClass;
             state.userSchoolSection = data.userSection;
             state.userCreatedAt = data.createdAt;
+            state.userPreferredPartners = data.preferredPartnerDTOs;
+            state.userDisponibilityPatterns = data.disponibilityPatterns;
+            state.userPictures = data.pictureDTOs;
+            state.userSuccess = data.successDTOs;
+            state.addressedUserRelatedFeedbacks = data.addressedUserRelatedFeedbackDTOs;
+            state.addressedUserRelatedFeedbackLabelsCumuled = data.addressedUserRelatedFeedbackLabelsCumuled;
             state.isLoading = false;
             state.error = null;
         },

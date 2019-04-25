@@ -22,13 +22,17 @@ class Success
 {
 
     const SUCCESS_LABEL_VALUE_TEN_ACTIVITY_PARTICIPATION = 'TEN_ACTIVITY_PARTICIPATION';
-    const SUCCESS_LABEL_TOKEN_TEN_ACTIVITY_PARTICIPATION = 'SUCCESS_LABEL_VALUE_TOKEN_TEN_ACTIVITY_PARTICIPATION';
+    const SUCCESS_LABEL_TOKEN_TEN_ACTIVITY_PARTICIPATION = 'SUCCESS_LABEL_TOKEN_TEN_ACTIVITY_PARTICIPATION';
+    const SUCCESS_THEME_COLOR_TEN_ACTIVITY_PARTICIPATION = 'w3-theme-d5';
     const SUCCESS_LABEL_VALUE_TEN_TIMES_FRIENDLY = 'TEN_TIMES_FRIENDLY';
     const SUCCESS_LABEL_TOKEN_TEN_TIMES_FRIENDLY = 'SUCCESS_LABEL_TOKEN_TEN_TIMES_FRIENDLY';
+    const SUCCESS_THEME_COLOR_TEN_TIMES_FRIENDLY = 'w3-theme-d2';
     const SUCCESS_LABEL_VALUE_TEN_TIMES_MVP = 'TEN_TIMES_MVP';
     const SUCCESS_LABEL_TOKEN_TEN_TIMES_MVP = 'SUCCESS_LABEL_TOKEN_TEN_TIMES_MVP';
+    const SUCCESS_THEME_COLOR_TEN_TIMES_MVP = 'w3-theme';
     const SUCCESS_LABEL_VALUE_TEN_TIMES_FAIR_PLAY = 'TEN_TIMES_FAIR_PLAY';
     const SUCCESS_LABEL_TOKEN_TEN_TIMES_FAIR_PLAY = 'SUCCESS_LABEL_TOKEN_TEN_TIMES_FAIR_PLAY';
+    const SUCCESS_THEME_COLOR_TEN_TIMES_FAIR_PLAY = 'w3-theme-l1';
 
 
     /**
@@ -79,5 +83,45 @@ class Success
         $this->user = $user;
 
         return $this;
+    }
+
+    public static function getSuccessColorThemeArray()
+    {
+        $colorThemeArray = [
+            self::SUCCESS_LABEL_VALUE_TEN_ACTIVITY_PARTICIPATION => self::SUCCESS_THEME_COLOR_TEN_ACTIVITY_PARTICIPATION,
+            self::SUCCESS_LABEL_VALUE_TEN_TIMES_FRIENDLY => self::SUCCESS_THEME_COLOR_TEN_TIMES_FRIENDLY,
+            self::SUCCESS_LABEL_VALUE_TEN_TIMES_MVP => self::SUCCESS_THEME_COLOR_TEN_TIMES_MVP,
+            self::SUCCESS_LABEL_VALUE_TEN_TIMES_FAIR_PLAY => self::SUCCESS_THEME_COLOR_TEN_TIMES_FAIR_PLAY
+        ];
+        return $colorThemeArray;
+    }
+
+    public static function getSuccessTokenArray()
+    {
+        $tokenArray = [
+            self::SUCCESS_LABEL_VALUE_TEN_ACTIVITY_PARTICIPATION => self::SUCCESS_LABEL_TOKEN_TEN_ACTIVITY_PARTICIPATION,
+            self::SUCCESS_LABEL_VALUE_TEN_TIMES_FRIENDLY => self::SUCCESS_LABEL_TOKEN_TEN_TIMES_FRIENDLY,
+            self::SUCCESS_LABEL_VALUE_TEN_TIMES_MVP => self::SUCCESS_LABEL_TOKEN_TEN_TIMES_MVP,
+            self::SUCCESS_LABEL_VALUE_TEN_TIMES_FAIR_PLAY => self::SUCCESS_LABEL_TOKEN_TEN_TIMES_FAIR_PLAY
+        ];
+        return $tokenArray;
+    }
+
+    public static function getSuccessColorTheme($value)
+    {
+        $colorThemeArray = self::getSuccessColorThemeArray();
+        if (array_key_exists($value, $colorThemeArray)){
+            return $colorThemeArray[$value];
+        }
+        return null;
+    }
+
+    public static function getSuccessToken($value)
+    {
+        $tokenArray = self::getSuccessTokenArray();
+        if (array_key_exists($value, $tokenArray)){
+            return $tokenArray[$value];
+        }
+        return null;
     }
 }

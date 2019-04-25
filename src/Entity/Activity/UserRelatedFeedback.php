@@ -19,6 +19,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  */
 class UserRelatedFeedback
 {
+
     const USER_RELATED_FEEDBACK_LABEL_TOKEN_NOTHING = 'USER_RELATED_FEEDBACK_LABEL_TOKEN_NOTHING';
     const USER_RELATED_FEEDBACK_LABEL_VALUE_NOTHING = 'USER_RELATED_FEEDBACK_LABEL_VALUE_NOTHING';
     
@@ -35,7 +36,7 @@ class UserRelatedFeedback
     const USER_RELATED_FEEDBACK_LABEL_VALUE_LATE = 'USER_RELATED_FEEDBACK_LABEL_VALUE_LATE';
 
     const USER_RELATED_FEEDBACK_LABEL_TOKEN_NEGATIVE_ATTITUDE = 'USER_RELATED_FEEDBACK_LABEL_TOKEN_NEGATIVE_ATTITUDE';
-    const USER_RELATED_FEEDBACK_LABEL_VALUE_NEGATIVE_ATTITUDE = 'USER_RELATED_FEEDBACK_LABEL_TOKEN_NEGATIVE_ATTITUDE';
+    const USER_RELATED_FEEDBACK_LABEL_VALUE_NEGATIVE_ATTITUDE = 'USER_RELATED_FEEDBACK_LABEL_VALUE_NEGATIVE_ATTITUDE';
 
 
     /**
@@ -144,7 +145,8 @@ class UserRelatedFeedback
         return $this;
     }
 
-    public static function getLabelValueTokenArray(){
+    public static function getLabelValueTokenArray()
+    {
         return [
             self::USER_RELATED_FEEDBACK_LABEL_TOKEN_NOTHING => self::USER_RELATED_FEEDBACK_LABEL_VALUE_NOTHING,
             self::USER_RELATED_FEEDBACK_LABEL_TOKEN_MVP => self::USER_RELATED_FEEDBACK_LABEL_VALUE_MVP,
@@ -154,4 +156,12 @@ class UserRelatedFeedback
             self::USER_RELATED_FEEDBACK_LABEL_TOKEN_NEGATIVE_ATTITUDE => self::USER_RELATED_FEEDBACK_LABEL_VALUE_NEGATIVE_ATTITUDE,
         ];
     }
+
+    public static function getLabelToken($labelValue)
+    {
+        $labelValueTokenArray = self::getLabelValueTokenArray();
+        $labelToken = array_search($labelValue, $labelValueTokenArray);
+        return $labelToken;
+    }
+
 }

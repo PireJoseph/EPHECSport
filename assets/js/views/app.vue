@@ -12,6 +12,7 @@
 
             <!-- Left Column -->
             <div class="w3-col m3 l2">
+
                 <!-- Profile -->
                 <user-tile></user-tile>
 
@@ -21,39 +22,14 @@
 
                 <br>
 
-                <!-- Interests -->
-                <div class="w3-card w3-round w3-white w3-hide-small">
-                    <div class="w3-container">
-                        <p>Interests</p>
-                        <p>
-                            <span class="w3-tag w3-small w3-theme-d5">News</span>
-                            <span class="w3-tag w3-small w3-theme-d4">W3Schools</span>
-                            <span class="w3-tag w3-small w3-theme-d3">Labels</span>
-                            <span class="w3-tag w3-small w3-theme-d2">Games</span>
-                            <span class="w3-tag w3-small w3-theme-d1">Friends</span>
-                            <span class="w3-tag w3-small w3-theme">Games</span>
-                            <span class="w3-tag w3-small w3-theme-l1">Friends</span>
-                            <span class="w3-tag w3-small w3-theme-l2">Food</span>
-                            <span class="w3-tag w3-small w3-theme-l3">Design</span>
-                            <span class="w3-tag w3-small w3-theme-l4">Art</span>
-                            <span class="w3-tag w3-small w3-theme-l5">Photos</span>
-                        </p>
-                    </div>
-                </div>
+                <side-bar-success-widget></side-bar-success-widget>
+
                 <br>
 
-                <!-- Alert Box -->
-                <div class="w3-container w3-display-container w3-round w3-theme-l4 w3-border w3-theme-border w3-margin-bottom w3-hide-small">
-        <span onclick="this.parentElement.style.display='none'" class="w3-button w3-theme-l3 w3-display-topright">
-          <i class="fa fa-remove"></i>
-        </span>
-                    <p><strong>Hey!</strong></p>
-                    <p>People are looking at your profile. Find out who.</p>
-                </div>
+                <side-bar-user-feedback-widget></side-bar-user-feedback-widget>
 
-                <!-- End Left Column -->
+            <!-- End Left Column -->
             </div>
-
 
             <!-- Middle Column -->
             <div class="w3-col m7 l8 w3-padding w3-container">
@@ -140,10 +116,12 @@
     import Navbar from '../components/navbar'
     import sideBarAccordion from '../components/sideBarAccordion';
     import UserTile from '../components/userTile';
+    import SideBarSuccessWidget from '../components/sideBarSuccessWidget'
+    import SideBarUserFeedbackWidget from '../components/sideBarUserFeedbackWidget'
 
     export default {
         name: 'app',
-        components : {UserTile, Navbar, sideBarAccordion},
+        components : {SideBarSuccessWidget, UserTile, Navbar, sideBarAccordion, SideBarUserFeedbackWidget},
         computed: {
             // mobileMenuShowed ()
             // {

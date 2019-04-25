@@ -1,37 +1,30 @@
+<style scoped>
+
+    .w3-container {
+        overflow: hidden;
+    }
+
+</style>
+
 <template>
 
     <!-- Accordion -->
     <div class="w3-card w3-round">
         <div class="w3-white">
-            <button @click="togglePreferredPartnersAccordion" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-circle-o-notch fa-fw w3-margin-right"></i> Partenaires</button>
+            <button @click="togglePreferredPartnersAccordion" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-users fa-fw w3-margin-right"></i> Partenaires</button>
             <div v-show="isPreferredPartnersAccordionOpen" class="w3-container">
-                <p>Some text..</p>
+                <p v-for="userPreferredPartner in userPreferredPartners" :key="userPreferredPartner.id">{{ userPreferredPartner.username }}</p>
             </div>
             <button @click="toggleDisponibilityAccordion" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-calendar-check-o fa-fw w3-margin-right"></i> Disponibilités</button>
             <div v-show="isDisponibilityAccordionOpen" class="w3-container">
-                <p>Some other text..</p>
+                <p v-for="userDisponibilityPattern in userDisponibilityPatterns" :key="userDisponibilityPattern.value">{{ userDisponibilityPattern.label }}</p>
             </div>
-            <button @click="togglePictureAccordion" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-users fa-fw w3-margin-right"></i> Photos</button>
+            <button @click="togglePictureAccordion" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-camera fa-fw w3-margin-right"></i> Photos</button>
             <div v-show="isPictureAccordionOpen" class="w3-container">
                 <div class="w3-row-padding">
                     <br>
-                    <div class="w3-half">
-                        <img src="/w3images/lights.jpg" style="width:100%" class="w3-margin-bottom">
-                    </div>
-                    <div class="w3-half">
-                        <img src="/w3images/nature.jpg" style="width:100%" class="w3-margin-bottom">
-                    </div>
-                    <div class="w3-half">
-                        <img src="/w3images/mountains.jpg" style="width:100%" class="w3-margin-bottom">
-                    </div>
-                    <div class="w3-half">
-                        <img src="/w3images/forest.jpg" style="width:100%" class="w3-margin-bottom">
-                    </div>
-                    <div class="w3-half">
-                        <img src="/w3images/nature.jpg" style="width:100%" class="w3-margin-bottom">
-                    </div>
-                    <div class="w3-half">
-                        <img src="/w3images/snow.jpg" style="width:100%" class="w3-margin-bottom">
+                    <div v-for="userPicture in userPictures" :key="userPicture.id" class="w3-half" >
+                        <img v-bind:src="userPicture.picture" v-bind:title="userPicture.label" style="width:100%" class="w3-margin-bottom">
                     </div>
                 </div>
             </div>
@@ -56,6 +49,10 @@
                 isPreferredPartnersAccordionOpen: 'sideBar/isPreferredPartnersAccordionOpen',
                 isDisponibilityAccordionOpen: 'sideBar/isDisponibilityAccordionOpen',
                 isPictureAccordionOpen: 'sideBar/isPictureAccordionOpen',
+                userPreferredPartners: 'user/userPreferredPartners',
+                userDisponibilityPatterns : 'user/userDisponibilityPatterns',
+                userPictures: 'user/userPictures',
+                userSuccess: 'user/userSuccess',
             })
         },
         methods: {
