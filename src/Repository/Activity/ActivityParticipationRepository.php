@@ -3,6 +3,8 @@
 namespace App\Repository\Activity;
 
 use App\Entity\Activity\ActivityParticipation;
+use App\Entity\User\User;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -17,6 +19,28 @@ class ActivityParticipationRepository extends ServiceEntityRepository
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, ActivityParticipation::class);
+    }
+
+    /**
+     * @param User $user
+     * @return mixed
+     * @throws \Exception
+     */
+    public function getNextForUser(User $user)
+    {
+        $now = new DateTime();
+        $qb = $this->createQueryBuilder('ap');
+        $lastResult = $qb
+            ->join('ap.activity', 'a')
+            ->where('a.startAt > :now')
+            ->setParameter('now', $now)
+            ->andWhere('ap.user = :user')
+            ->setParameter('user', $user)
+            ->orderBy('a.startAt', 'DESC')
+            ->getQuery()
+            ->setMaxResults(1)
+            ->getResult();
+        return $lastResult;
     }
 
     // /**

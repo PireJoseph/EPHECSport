@@ -43,16 +43,13 @@
 
             <!-- Right Column -->
             <div class="w3-col m2 l2">
-                <div class="w3-card w3-round w3-white w3-center">
-                    <div class="w3-container">
-                        <p>Upcoming Events:</p>
-                        <img src="/w3images/forest.jpg" alt="Forest" style="width:100%;">
-                        <p><strong>Holiday</strong></p>
-                        <p>Friday 15:00</p>
-                        <p><button class="w3-button w3-block w3-theme-l4">Info</button></p>
-                    </div>
-                </div>
-                <br>
+
+                <!-- Next activity participation widget -->
+                <side-bar-next-activity-participation-widget></side-bar-next-activity-participation-widget>
+
+                <br  v-if="nextActivityParticipation" />
+
+
 
                 <div class="w3-card w3-round w3-white w3-center">
                     <div class="w3-container">
@@ -113,15 +110,16 @@
 
     import TokenService from '../services/token'
 
-    import Navbar from '../components/navbar'
-    import sideBarAccordion from '../components/sideBarAccordion';
-    import UserTile from '../components/userTile';
-    import SideBarSuccessWidget from '../components/sideBarSuccessWidget'
-    import SideBarUserFeedbackWidget from '../components/sideBarUserFeedbackWidget'
+    import Navbar from '../components/common/navbar'
+    import sideBarAccordion from '../components/common/sideBarAccordion';
+    import UserTile from '../components/common/userTile';
+    import SideBarSuccessWidget from '../components/common/sideBarSuccessWidget'
+    import SideBarUserFeedbackWidget from '../components/common/sideBarUserFeedbackWidget'
+    import SideBarNextActivityParticipationWidget from '../components/common/sideBarNextActivityParticipationWidget'
 
     export default {
         name: 'app',
-        components : {SideBarSuccessWidget, UserTile, Navbar, sideBarAccordion, SideBarUserFeedbackWidget},
+        components : {SideBarSuccessWidget, UserTile, Navbar, sideBarAccordion, SideBarUserFeedbackWidget, SideBarNextActivityParticipationWidget},
         computed: {
             // mobileMenuShowed ()
             // {
@@ -129,6 +127,7 @@
             // }
             ...mapGetters({
                 mobileMenuShowed: 'mobileMenu/isMobileMenuShowed',
+                nextActivityParticipation: 'user/nextActivityParticipation'
                 // currentUserId: 'user/currentUserId'
             })
         },

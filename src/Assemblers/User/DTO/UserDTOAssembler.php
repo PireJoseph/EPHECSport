@@ -10,11 +10,16 @@ namespace App\Assemblers\User\DTO;
 
 
 use ApiPlatform\Core\Validator\Exception\ValidationException;
+use App\Assemblers\Activity\DTO\ActivityParticipationDTOAssembler;
 use App\Assemblers\Activity\DTO\UserRelatedFeedbackDTOAssembler;
 use App\Assemblers\Profile\DTO\PictureDTOAssembler;
 use App\Assemblers\Profile\DTO\SuccessDTOAssembler;
+use App\Assemblers\Promotion\DTO\CrucialMeetingDTOAssembler;
+use App\Entity\Activity\ActivityParticipation;
+use App\Entity\Activity\DTO\ActivityParticipationDTO;
 use App\Entity\Activity\UserRelatedFeedback;
 use App\Entity\Profile\Success;
+use App\Entity\Promotion\CrucialMeeting;
 use App\Entity\User\DTO\PreferredPartnerDTO;
 use App\Entity\User\DTO\UserDTO;
 use App\Entity\User\User;
@@ -33,10 +38,23 @@ class UserDTOAssembler
     private $successDTOAssembler;
     private $pictureDTOAssembler;
     private $preferredPartnerDTOAssembler;
-    private $userRelatedFeedbackAssembler;
+    private $userRelatedFeedbackDTOAssembler;
+    private $activityParticipationDTOAssembler;
+    private $crucialMeetingDTOAssembler;
     private $translator;
 
-    public function __construct(ValidatorInterface $validator, ContainerInterface $container, EntityManagerInterface $em, SuccessDTOAssembler $successDTOAssembler, PictureDTOAssembler $pictureDTOAssembler, PreferredPartnerDTOAssembler $preferredPartnerDTOAssembler, TranslatorInterface $translator, UserRelatedFeedbackDTOAssembler $userRelatedFeedbackDTOAssembler)
+    public function __construct(
+        ValidatorInterface $validator,
+        ContainerInterface $container,
+        EntityManagerInterface $em,
+        SuccessDTOAssembler $successDTOAssembler,
+        PictureDTOAssembler $pictureDTOAssembler,
+        PreferredPartnerDTOAssembler $preferredPartnerDTOAssembler,
+        TranslatorInterface $translator,
+        UserRelatedFeedbackDTOAssembler $userRelatedFeedbackDTOAssembler,
+        ActivityParticipationDTOAssembler $activityParticipationDTOAssembler,
+        CrucialMeetingDTOAssembler $crucialMeetingDTOAssembler
+    )
     {
         $this->validator = $validator;
         $this->container = $container;
@@ -45,7 +63,9 @@ class UserDTOAssembler
         $this->pictureDTOAssembler = $pictureDTOAssembler;
         $this->preferredPartnerDTOAssembler = $preferredPartnerDTOAssembler;
         $this->translator = $translator;
-        $this->userRelatedFeedbackAssembler = $userRelatedFeedbackDTOAssembler;
+        $this->userRelatedFeedbackDTOAssembler = $userRelatedFeedbackDTOAssembler;
+        $this->activityParticipationDTOAssembler = $activityParticipationDTOAssembler;
+        $this->crucialMeetingDTOAssembler = $crucialMeetingDTOAssembler;
     }
 
     /**
@@ -151,26 +171,43 @@ class UserDTOAssembler
 
         $addressedUserRelatedFeedbackDTOs = [];
         $addressedUserRelatedFeedbackArray = $this->em->getRepository(UserRelatedFeedback::class)->findBy(['user' => $user]);
+        $totalUserRelatedFeedback = count($addressedUserRelatedFeedbackArray);
         foreach ($addressedUserRelatedFeedbackArray as $addressedUserRelatedFeedback)
         {
-            $totalUserRelatedFeedback = 0;
             /** @var UserRelatedFeedback $addressedUserRelatedFeedback */
             // DTOs
-            $addressedUserRelatedFeedbackDTO = $this->userRelatedFeedbackAssembler->getFromUserRelatedFeedback($addressedUserRelatedFeedback);
+            $addressedUserRelatedFeedbackDTO = $this->userRelatedFeedbackDTOAssembler->getFromUserRelatedFeedback($addressedUserRelatedFeedback);
             $addressedUserRelatedFeedbackDTOs[] = $addressedUserRelatedFeedbackDTO;
 
             // label count
             $addressedUserRelatedFeedbackLabelsCumuled[$addressedUserRelatedFeedback->getLabel()]['count'] += 1;
-            $totalUserRelatedFeedback += 1;
 
             // label percent
-            $addressedUserRelatedFeedbackLabelsCumuled[$addressedUserRelatedFeedback->getLabel()]['percent'] = ($addressedUserRelatedFeedbackLabelsCumuled[$addressedUserRelatedFeedback->getLabel()]['count'] / $totalUserRelatedFeedback) *100;
+            $labelPercent = ($addressedUserRelatedFeedbackLabelsCumuled[$addressedUserRelatedFeedback->getLabel()]['count'] / $totalUserRelatedFeedback) * 100;
+            $addressedUserRelatedFeedbackLabelsCumuled[$addressedUserRelatedFeedback->getLabel()]['percent'] = $labelPercent;
         }
         $newUserDTO->addressedUserRelatedFeedbackDTOs = $addressedUserRelatedFeedbackDTOs;
 
         // aggregated UserRelatedFeedback
         $newUserDTO->addressedUserRelatedFeedbackLabelsCumuled = array_values($addressedUserRelatedFeedbackLabelsCumuled);
 
+        // next activityParticipation
+        $nextActivityParticipationQueryResult = $this->em->getRepository(ActivityParticipation::class)->getNextForUser($user);
+        if(!is_null($nextActivityParticipationQueryResult) && ( 0 < count($nextActivityParticipationQueryResult)))
+        {
+            $nextActivityParticipation = $nextActivityParticipationQueryResult[0];
+            $nextActivityParticipationDTO = $this->activityParticipationDTOAssembler->getFromActivityParticipationForAppCommon($nextActivityParticipation);
+            $newUserDTO->nextActivityParticipationDTO = $nextActivityParticipationDTO;
+        }
+
+        // next crucial Meeting
+        $nextCrucialMeetingQueryResult = $this->em->getRepository(CrucialMeeting::Class)->getNext();
+        if(!is_null($nextCrucialMeetingQueryResult) && ( 0 < count($nextCrucialMeetingQueryResult)))
+        {
+            $nextCrucialMeeting = $nextCrucialMeetingQueryResult[0];
+            $nextCrucialMeetingDTO = $this->crucialMeetingDTOAssembler->getFromCrucialMeetingForAppCommon($nextCrucialMeeting);
+            $newUserDTO->nextCrucialMeetingDTO = $nextCrucialMeetingDTO;
+        }
 
         if (count($errors = $this->validator->validate($newUserDTO)))
         {

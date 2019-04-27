@@ -29,7 +29,7 @@
 <script>
     import { mapGetters } from 'vuex'
     import { mapMutations } from 'vuex'
-    import TokenService from '../services/token'
+    import TokenService from '../../services/token'
 
     export default {
         name: 'navbar',

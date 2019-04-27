@@ -3,7 +3,7 @@
 namespace App\Entity\Promotion;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use App\Entity\Activity\SportClub;
+use App\Entity\Activity\Sport;
 use App\Entity\Picture;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -134,12 +134,12 @@ class OfficialTeam
         return $this;
     }
 
-    public function getSport(): ?SportClub
+    public function getSport(): ?Sport
     {
         return $this->sport;
     }
 
-    public function setSport(?SportClub $sport): self
+    public function setSport(?Sport $sport): self
     {
         $this->sport = $sport;
 

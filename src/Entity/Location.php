@@ -67,7 +67,7 @@ class Location
 
     public function __toString()
     {
-        return $this->label . ', ' . $this->city;
+        return $this->getString();
     }
 
     public function getId(): ?int
@@ -133,6 +133,11 @@ class Location
         $this->number = $number;
 
         return $this;
+    }
+
+    public function getString()
+    {
+        return $this->label . ', ' . $this->city;
     }
 
 }

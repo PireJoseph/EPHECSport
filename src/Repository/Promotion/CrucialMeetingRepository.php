@@ -3,7 +3,9 @@
 namespace App\Repository\Promotion;
 
 use App\Entity\Promotion\CrucialMeeting;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Exception;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -17,6 +19,25 @@ class CrucialMeetingRepository extends ServiceEntityRepository
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, CrucialMeeting::class);
+    }
+
+    /**
+     * @return mixed
+     * @throws Exception
+     */
+    public function getNext()
+    {
+
+        $now = new DateTime();
+        $qb = $this->createQueryBuilder('cm');
+        $lastResult = $qb
+            ->where('cm.startAt > :now')
+            ->setParameter('now', $now)
+            ->orderBy('cm.startAt', 'DESC')
+            ->getQuery()
+            ->setMaxResults(1)
+            ->getResult();
+        return $lastResult;
     }
 
     // /**

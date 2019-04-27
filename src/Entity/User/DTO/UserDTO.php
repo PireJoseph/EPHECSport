@@ -155,5 +155,19 @@ final class UserDTO extends DataTransferObject
      */
     public $addressedUserRelatedFeedbackLabelsCumuled;
 
+    /**
+     * @var array
+     *
+     * @Groups({"read", "appCommon"})
+     */
+    public $nextActivityParticipationDTO;
+
+    /**
+     * @var array
+     *
+     * @Groups({"read", "appCommon"})
+     */
+    public $nextCrucialMeetingDTO;
+
 }
 
