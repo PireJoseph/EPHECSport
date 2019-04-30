@@ -22,4 +22,13 @@ class UserController extends AbstractController
 //            'currentUserId' => $userId
         ]);
     }
+
+
+    /**
+     * @Route("/user/{section}/{subroute}", name="userRedirect" )
+     */
+    public function subRouteRedirection()
+    {
+        return $this->redirect('/user/home');
+    }
 }

@@ -49,24 +49,26 @@
 
                 <br  v-if="nextActivityParticipation" />
 
+                <side-bar-next-crucial-meeting-widget></side-bar-next-crucial-meeting-widget>
 
+                <!--<div class="w3-card w3-round w3-white w3-center">-->
+                    <!--<div class="w3-container">-->
+                        <!--<p>Friend Request</p>-->
+                        <!--<img src="/w3images/avatar6.png" alt="Avatar" style="width:50%"><br>-->
+                        <!--<span>Jane Doe</span>-->
+                        <!--<div class="w3-row w3-opacity">-->
+                            <!--<div class="w3-half">-->
+                                <!--<button class="w3-button w3-block w3-green w3-section" title="Accept"><i class="fa fa-check"></i></button>-->
+                            <!--</div>-->
+                            <!--<div class="w3-half">-->
+                                <!--<button class="w3-button w3-block w3-red w3-section" title="Decline"><i class="fa fa-remove"></i></button>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!---->
 
-                <div class="w3-card w3-round w3-white w3-center">
-                    <div class="w3-container">
-                        <p>Friend Request</p>
-                        <img src="/w3images/avatar6.png" alt="Avatar" style="width:50%"><br>
-                        <span>Jane Doe</span>
-                        <div class="w3-row w3-opacity">
-                            <div class="w3-half">
-                                <button class="w3-button w3-block w3-green w3-section" title="Accept"><i class="fa fa-check"></i></button>
-                            </div>
-                            <div class="w3-half">
-                                <button class="w3-button w3-block w3-red w3-section" title="Decline"><i class="fa fa-remove"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <br>
+                <br v-if="nextCrucialMeeting" />
 
                 <div class="w3-card w3-round w3-white w3-padding-16 w3-center">
                     <p>ADS</p>
@@ -116,10 +118,11 @@
     import SideBarSuccessWidget from '../components/common/sideBarSuccessWidget'
     import SideBarUserFeedbackWidget from '../components/common/sideBarUserFeedbackWidget'
     import SideBarNextActivityParticipationWidget from '../components/common/sideBarNextActivityParticipationWidget'
+    import SideBarNextCrucialMeetingWidget from '../components/common/sideBarNextCrucialMeetingWidget'
 
     export default {
         name: 'app',
-        components : {SideBarSuccessWidget, UserTile, Navbar, sideBarAccordion, SideBarUserFeedbackWidget, SideBarNextActivityParticipationWidget},
+        components : {SideBarSuccessWidget, UserTile, Navbar, sideBarAccordion, SideBarUserFeedbackWidget, SideBarNextActivityParticipationWidget, SideBarNextCrucialMeetingWidget},
         computed: {
             // mobileMenuShowed ()
             // {
@@ -127,7 +130,8 @@
             // }
             ...mapGetters({
                 mobileMenuShowed: 'mobileMenu/isMobileMenuShowed',
-                nextActivityParticipation: 'user/nextActivityParticipation'
+                nextActivityParticipation: 'user/nextActivityParticipation',
+                nextCrucialMeeting: 'user/nextCrucialMeeting',
                 // currentUserId: 'user/currentUserId'
             })
         },

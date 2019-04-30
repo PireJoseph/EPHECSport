@@ -19,7 +19,8 @@ export default {
         userSuccess: Array,
         addressedUserRelatedFeedbacks : Array,
         addressedUserRelatedFeedbackLabelsCumuled : Array,
-        nextActivityParticipation : Array
+        nextActivityParticipation : Array,
+        nextCrucialMeeting : Array
     },
     getters: {
         isLoading (state) {
@@ -75,6 +76,9 @@ export default {
         },
         nextActivityParticipation (state) {
             return state.nextActivityParticipation;
+        },
+        nextCrucialMeeting (state) {
+            return state.nextCrucialMeeting;
         }
     },
     mutations: {
@@ -113,6 +117,7 @@ export default {
             state.addressedUserRelatedFeedbacks = data.addressedUserRelatedFeedbackDTOs;
             state.addressedUserRelatedFeedbackLabelsCumuled = data.addressedUserRelatedFeedbackLabelsCumuled;
             state.nextActivityParticipation = data.nextActivityParticipationDTO;
+            state.nextCrucialMeeting = data.nextCrucialMeetingDTO;
             state.isLoading = false;
             state.error = null;
         },
