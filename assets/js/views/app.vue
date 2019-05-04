@@ -32,9 +32,13 @@
             </div>
 
             <!-- Middle Column -->
-            <div class="w3-col m7 l8 w3-padding w3-container">
+            <div class="w3-col m7 l8 w3-container">
 
-                <router-view name="content"></router-view>
+                <div class="w3-card w3-round w3-white w3-padding-32 w3-center w3-container">
+
+                    <router-view name="content"></router-view>
+
+                </div>
 
             <!-- End Middle Column -->
 
@@ -70,14 +74,14 @@
 
                 <br v-if="nextCrucialMeeting" />
 
-                <div class="w3-card w3-round w3-white w3-padding-16 w3-center">
-                    <p>ADS</p>
-                </div>
-                <br>
+                <!--<div class="w3-card w3-round w3-white w3-padding-16 w3-center">-->
+                    <!--<p>ADS</p>-->
+                <!--</div>-->
+                <!--<br>-->
 
-                <div class="w3-card w3-round w3-white w3-padding-32 w3-center">
-                    <p><i class="fa fa-bug w3-xxlarge"></i></p>
-                </div>
+                <!--<div class="w3-card w3-round w3-white w3-padding-32 w3-center">-->
+                    <!--<p><i class="fa fa-bug w3-xxlarge"></i></p>-->
+                <!--</div>-->
 
                 <!-- End Right Column -->
             </div>
@@ -124,24 +128,14 @@
         name: 'app',
         components : {SideBarSuccessWidget, UserTile, Navbar, sideBarAccordion, SideBarUserFeedbackWidget, SideBarNextActivityParticipationWidget, SideBarNextCrucialMeetingWidget},
         computed: {
-            // mobileMenuShowed ()
-            // {
-            //     return this.$store.getters['mobileMenu/isMobileMenuShowed']
-            // }
             ...mapGetters({
-                mobileMenuShowed: 'mobileMenu/isMobileMenuShowed',
+                mobileMenuShowed: 'navbar/isMobileMenuShowed',
                 nextActivityParticipation: 'user/nextActivityParticipation',
                 nextCrucialMeeting: 'user/nextCrucialMeeting',
                 // currentUserId: 'user/currentUserId'
             })
         },
         methods: {
-            // toggleNavMenu() {
-            //     this.$store.commit('mobileMenu/TOGGLE_MOBILE_MENU')
-            // },
-            // closeNavMenu() {
-            //     this.$store.commit('mobileMenu/CLOSE_MOBILE_MENU')
-            // },
             initApp() {
                 let accessToken = TokenService.getToken();
                 let decodedToken = jwt_decode(accessToken);
@@ -155,35 +149,11 @@
                 };
                 console.log(payload);
                 this.$store.dispatch('common/loadBaseData', payload)
-                    // .then(() => {
-                    //     if (!this.$store.getters['appCommon/hasError']) {
-                    //         if (typeof redirect !== 'undefined') {
-                    //             this.$router.push({path: redirect});
-                    //         } else {
-                    //             this.$router.push({path: '/user/home'});
-                    //         }
-                    //     }
-                    // })
-
-                // let redirect = this.$route.query.redirect;
-                // this.$store.dispatch('security/login', payload)
-                //     .then(() => {
-                //         if (!this.$store.getters['security/hasError']) {
-                //             if (typeof redirect !== 'undefined') {
-                //                 this.$router.push({path: redirect});
-                //             } else {
-                //                 this.$router.push({path: '/user/home'});
-                //             }
-                //         }
-                //     })
-                // .then(() => {
-                //     this.$store.dispatch('user/fetchCurrentUser')
-                // })
             },
 
             ...mapMutations({
-                toggleNavMenu: 'mobileMenu/TOGGLE_MOBILE_MENU',
-                closeNavMenu: 'mobileMenu/CLOSE_MOBILE_MENU'
+                toggleNavMenu: 'navbar/TOGGLE_MOBILE_MENU',
+                closeNavMenu: 'navbar/CLOSE_MOBILE_MENU'
             })
         },
         mounted: function() {

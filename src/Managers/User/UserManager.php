@@ -8,6 +8,8 @@
 
 namespace App\Managers\User;
 
+use App\Assemblers\Profile\DTO\ProfileDTOAssembler;
+use App\Entity\Profile\DTO\ProfileDTO;
 use App\Entity\Profile\Success;
 use App\Exception\EmailAddressAlreadyExistsException;
 use App\Exception\InvalidIdentifierException;
@@ -32,15 +34,17 @@ class UserManager
     private $validator;
     private $em;
     private $passwordEncoder;
+    private $profileDTOAssembler;
 
 
-    public function __construct(ValidatorInterface $validator, UserPasswordEncoderInterface $passwordEncoder, UserAssembler $userAssembler, UserDTOAssembler $userDTOAssembler, EntityManagerInterface $entityManager)
+    public function __construct(ValidatorInterface $validator, UserPasswordEncoderInterface $passwordEncoder, UserAssembler $userAssembler, UserDTOAssembler $userDTOAssembler, EntityManagerInterface $entityManager, ProfileDTOAssembler $profileDTOAssembler)
     {
         $this->validator = $validator;
         $this->em = $entityManager;
         $this->passwordEncoder = $passwordEncoder;
         $this->userAssembler = $userAssembler;
         $this->userDTOAssembler = $userDTOAssembler;
+        $this->profileDTOAssembler = $profileDTOAssembler;
     }
 
 
@@ -120,7 +124,6 @@ class UserManager
                 throw new Exception('user persisted but not retrieved :hyperthonk:');
             }
 
-            // création de la représentation du nouvel utilisateur
 
         }
         catch (Exception $e)
@@ -148,11 +151,13 @@ class UserManager
         }
         $user = $this->em->getRepository(User::class)->find($id);
 
-//        if (is_null($user))
-//        {
-//            throw new ItemNotFoundException('User does not exist');
-//        }
+        if (is_null($user))
+        {
+            throw new ItemNotFoundException('User does not exist');
+        }
+
         return $user;
+
     }
 
 
@@ -213,6 +218,51 @@ class UserManager
         $this->em->flush($newUser);
 
         return $newUser;
+    }
+
+    /**
+     * @param ProfileDTO $profileDTO
+     * @return ProfileDTO
+     * @throws Exception
+     */
+    public function updateProfileFromDTO(ProfileDTO $profileDTO)
+    {
+        $id = $profileDTO->id;
+        $username = $profileDTO->username;
+
+        $alreadyExistingUser = $this->getUser($id);
+
+        //
+        // Updating Fields Following form
+        $alreadyExistingUser->setUsername($username);
+
+        // validate the new user
+        $alreadyExistingUserValidation = $this->validator->validate($alreadyExistingUser);
+        if ($alreadyExistingUserValidation->count() > 0)
+        {
+            throw new ValidationException($alreadyExistingUserValidation);
+        }
+
+        $this->em->beginTransaction();
+        try
+        {
+            // Création de la réponse JSON
+            $newProfileDTO = $this->profileDTOAssembler->getFromUser($alreadyExistingUser);
+
+            // sauvegarde du nouvel utilisateur
+            $this->em->persist($alreadyExistingUser);
+            $this->em->flush($alreadyExistingUser);
+
+        }
+        catch (Exception $e)
+        {
+            $this->em->rollback();
+            throw $e;
+        }
+        $this->em->commit();
+
+        return $newProfileDTO;
+
     }
 
 }

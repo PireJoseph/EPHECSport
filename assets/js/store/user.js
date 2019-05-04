@@ -1,4 +1,5 @@
 import UserAPI from '../api/user';
+import ProfileAPI from '../api/profile';
 
 export default {
     namespaced: true,
@@ -8,6 +9,8 @@ export default {
         userId : Number,
         username: "Nom d'utilisateur",
         userMail: String,
+        userGender: String,
+        userPhoneNumber : String,
         userPicture: "/images/profilePictures/fallBackUserIcon.png",
         userBirthDate: Date,
         userSchoolClass : String,
@@ -20,8 +23,9 @@ export default {
         addressedUserRelatedFeedbacks : Array,
         addressedUserRelatedFeedbackLabelsCumuled : Array,
         nextActivityParticipation : Array,
-        nextCrucialMeeting : Array
-    },
+        nextCrucialMeeting : Array,
+        profileData : null,
+},
     getters: {
         isLoading (state) {
             return state.isLoading;
@@ -40,6 +44,12 @@ export default {
         },
         userMail (state) {
             return state.userMail
+        },
+        userGender (state) {
+            return state.userGender
+        },
+        userPhoneNumber(state) {
+            return state.userPhoneNumber
         },
         userPicture (state) {
             return state.userPicture
@@ -86,25 +96,43 @@ export default {
         ['SET_USER_ID'](state, id) {
             state.userId = id;
         },
-        ['FETCHING_CURRENT_USER'](state) {
+
+        ['UPDATING_PROFILE_DATA'](state){
             state.isLoading = true;
             state.error = null;
-            state.currentUser = null;
         },
-        ['FETCHING_CURRENT_USER_SUCCESS'](state, user) {
+        ['UPDATE_PROFILE_DATA_SUCCESS'](state, data){
             state.isLoading = false;
             state.error = null;
-            state.currentUser = user;
+            state.username = data.username;
         },
-        ['FETCHING_CURRENT_USER_ERROR'](state, error) {
+        ['UPDATE_PROFILE_DATA_ERROR'](state, error){
             state.isLoading = false;
             state.error = error.message;
-            state.currentUser = null;
         },
+
+        // ['FETCHING_PROFILE_DATA'](state) {
+        //     state.isLoading = true;
+        //     state.error = null;
+        //     state.profileData = null;
+        // },
+        // ['FETCHING_PROFILE_DATA_SUCCESS'](state, data) {
+        //     state.isLoading = false;
+        //     state.error = null;
+        //     state.profileData = data;
+        // },
+        // ['FETCHING_PROFILE_DATA_ERROR'](state, error) {
+        //     state.isLoading = false;
+        //     state.error = error.message;
+        //     state.profileData = null;
+        // },
+
+
         ['SET_USER_BASE_DATA'](state, data) {
             state.userId = data.id;
             state.username = data.username;
             state.userMail = data.email;
+            state.userGender = data.gender;
             state.userPicture = data.userPicture;
             state.userBirthDate = data.birthDate;
             state.userSchoolClass = data.userClass;
@@ -124,12 +152,22 @@ export default {
 
     },
     actions : {
-        fetchCurrentUser({commit}, id){
-            commit('FETCHING_CURRENT_USER');
-            return UserAPI.get(id)
-                .then(res => commit('FETCHING_CURRENT_USER_SUCCESS', res.data))
-                .catch(err => commit('FETCHING_CURRENT_USER_ERROR', err))
+
+        updateProfileData({commit, state}, data){
+            let id = state.userId;
+            commit('UPDATING_PROFILE_DATA');
+            return ProfileAPI.put(id, data)
+                .then(res => commit('UPDATE_PROFILE_DATA_SUCCESS', res.data))
+                .catch(err => commit('UPDATE_PROFILE_DATA_ERROR', err))
         }
+
+        // fetchProfileData({commit}, id){
+        //     commit('FETCHING_PROFILE_DATA');
+        //     return ProfileAPI.get(id)
+        //         .then(res => commit('FETCHING_PROFILE_DATA_SUCCESS', res.data))
+        //         .catch(err => commit('FETCHING_PROFILE_DATA_ERROR', err))
+        // },
+
     }
 
 }

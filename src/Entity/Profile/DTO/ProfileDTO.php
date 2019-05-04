@@ -1,6 +1,12 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: jpire
+ * Date: 1/05/19
+ * Time: 8:28
+ */
 
-namespace App\Entity;
+namespace App\Entity\Profile\DTO;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiProperty;
@@ -8,15 +14,19 @@ use ApiPlatform\Core\Annotation\ApiProperty;
 /**
  * @ApiResource(
  *     itemOperations={
- *        "getAppCommon" = {
+ *        "getProfile" = {
  *              "method"="GET",
- *              "path"="/app/{id}" ,
+ *              "path"="/profile/{id}" ,
  *          },
+ *        "updateProfile" = {
+ *              "method"="PUT",
+ *              "path"="/profile/{id}",
+ *         },
  *     },
  *     collectionOperations={},
  * )
  */
-class AppCommonDTO
+class ProfileDTO
 {
 
     /**
@@ -26,9 +36,6 @@ class AppCommonDTO
      */
     public $id;
 
-
-    public $userDTO;
-
-
+    public $username;
 
 }

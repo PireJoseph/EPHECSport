@@ -41,9 +41,6 @@
 
     export default {
         name: 'side-bar-accordion',
-        state: {
-
-        },
         computed: {
             ...mapGetters({
                 isPreferredPartnersAccordionOpen: 'sideBar/isPreferredPartnersAccordionOpen',

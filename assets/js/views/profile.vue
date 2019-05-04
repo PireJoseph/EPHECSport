@@ -1,3 +1,7 @@
+<style scoped>
+
+</style>
+
 <template>
     <div>
         <div class="row col">

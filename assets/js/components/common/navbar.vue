@@ -75,9 +75,14 @@
         color: white;
     }
 
-    button.dropdown:hover {
-        background-color: rgb(58, 75, 83)!important;
-        color: white!important;
+    div.dropdown button.dropbtn:hover,  a.w3-button:hover{
+        /*background-color: rgb(58, 75, 83)!important;*/
+        /*color: white!important;*/
+        color: black!important;
+        background-color: rgb(204, 204, 204)!important;
+    }
+    div.dropdown button.dropbtn {
+        cursor: pointer;
     }
 
 
@@ -89,8 +94,8 @@
 
     .dropdown-content a:hover {
         color: black!important;
+        background-color: rgb(204, 204, 204)!important;
         /*color: #ee7102!important;*/
-
     }
 
     /* Show the dropdown menu when the user moves the mouse over the dropdown button */
@@ -150,13 +155,8 @@
                 </div>
             </div>
 
-
             <a href="#" class="w3-bar-item w3-button w3-hide-small w3-right w3-padding-large w3-hover-white" @click="logout"><i class="fa fa-user-times w3-margin-right"></i>Se déconnecter</a>
 
-            <!--<router-link to="/user/profile" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Profile" ><i class="fa fa-user"></i></router-link>-->
-            <!--<router-link to="/user/activity" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Activités" ><i class="fa fa-bolt"></i></router-link>-->
-            <!--<router-link to="/user/promotion" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Promotion" ><i class="fa fa-star"></i></router-link>-->
-            <!--<router-link to="/user/information" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Information" ><i class="fa fa-search"></i></router-link>-->
         </div>
 
 
@@ -196,7 +196,8 @@
                     <router-link to="/user/information/pros" class="w3-bar-item w3-button w3-padding-large w3-hover-white" >Professionnel de la santé</router-link>
                 </div>
 
-                <a href="#" class="w3-bar-item w3-button w3-padding-large" @click="logout">Se déconnecter</a>
+                <a href="#" class="w3-bar-item w3-button w3-padding-large" @click="logout" >Se déconnecter</a>
+                <a href="#" class="w3-bar-item w3-button w3-padding-large"@click="closeNavMenu" >Fermer</a>
             </div>
         </div>
 
@@ -225,17 +226,17 @@
                 return this.$route.path.includes("information")
             },
             ...mapGetters({
-                isProfileDropDownActive: 'mobileMenu/isProfileDropDownActive',
-                isActivityDropDownActive: 'mobileMenu/isActivityDropDownActive',
-                isPromotionDropDownActive: 'mobileMenu/isPromotionDropDownActive',
-                isInformationDropDownActive: 'mobileMenu/isInformationDropDownActive',
+                isProfileDropDownActive: 'navbar/isProfileDropDownActive',
+                isActivityDropDownActive: 'navbar/isActivityDropDownActive',
+                isPromotionDropDownActive: 'navbar/isPromotionDropDownActive',
+                isInformationDropDownActive: 'navbar/isInformationDropDownActive',
 
-                mobileMenuShowed: 'mobileMenu/isMobileMenuShowed',
+                mobileMenuShowed: 'navbar/isMobileMenuShowed',
 
-                isProfileAccordionActive: 'mobileMenu/isProfileAccordionActive',
-                isActivityAccordionActive: 'mobileMenu/isActivityAccordionActive',
-                isPromotionAccordionActive: 'mobileMenu/isPromotionAccordionActive',
-                isInformationAccordionActive: 'mobileMenu/isInformationAccordionActive',
+                isProfileAccordionActive: 'navbar/isProfileAccordionActive',
+                isActivityAccordionActive: 'navbar/isActivityAccordionActive',
+                isPromotionAccordionActive: 'navbar/isPromotionAccordionActive',
+                isInformationAccordionActive: 'navbar/isInformationAccordionActive',
             })
         },
         methods: {
@@ -245,19 +246,19 @@
             },
             clickDropdownItem(event) {
                 console.log(event.target);
-                this.$store.commit('mobileMenu/DEACTIVATE_ALL_MENU_DROPDOWN');
+                this.$store.commit('navbar/DEACTIVATE_ALL_MENU_DROPDOWN');
             },
             activeDropdown(dropdownId) {
-                this.$store.commit('mobileMenu/ACTIVE_MENU_DROPDOWN', dropdownId)
+                this.$store.commit('navbar/ACTIVE_MENU_DROPDOWN', dropdownId)
             },
             activeMenuAccordion(accordionId) {
-                this.$store.commit('mobileMenu/ACTIVE_MENU_ACCORDION', accordionId)
+                this.$store.commit('navbar/ACTIVE_MENU_ACCORDION', accordionId)
             },
             ...mapMutations({
-                toggleNavMenu: 'mobileMenu/TOGGLE_MOBILE_MENU',
-                closeNavMenu: 'mobileMenu/CLOSE_MOBILE_MENU',
-                deactivateAllDropdown: 'mobileMenu/DEACTIVATE_ALL_MENU_DROPDOWN',
-                closeAllMenuAccordion: 'mobileMenu/CLOSE_ALL_MENU_ACCORDION',
+                toggleNavMenu: 'navbar/TOGGLE_MOBILE_MENU',
+                closeNavMenu: 'navbar/CLOSE_MOBILE_MENU',
+                deactivateAllDropdown: 'navbar/DEACTIVATE_ALL_MENU_DROPDOWN',
+                closeAllMenuAccordion: 'navbar/CLOSE_ALL_MENU_ACCORDION',
             })
         }
     }

@@ -92,6 +92,9 @@ class UserDTOAssembler
         $newUserDTO->id = $user->getId();
         $newUserDTO->username = $user->getUsername();
         $newUserDTO->email = $user->getEmail();
+        $newUserDTO->phoneNumber = $user->getPhoneNumber();
+
+        $newUserDTO->gender = $user->getGender();
 
         $userCreatedAt = $user->getCreatedAt();
         $newUserDTO->createdAt =  (!is_null($userCreatedAt)) ? $userCreatedAt->format('d/m/Y') : null;

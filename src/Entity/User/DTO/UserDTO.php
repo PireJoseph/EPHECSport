@@ -94,6 +94,22 @@ final class UserDTO extends DataTransferObject
     /**
      * @var string|null
      *
+     * @Groups({"read", "write", "appCommon"})
+     * @Assert\NotBlank(groups={"PostUser","GetUser"})
+     */
+    public $gender;
+
+    /**
+     * @var string|null
+     *
+     * @Groups({"read", "write", "appCommon"})
+     * @Assert\NotBlank(groups={"PostUser","GetUser"})
+     */
+    public $phoneNumber;
+
+    /**
+     * @var string|null
+     *
      * @Groups({"read", "appCommon"})
      */
     public $userPicture;
