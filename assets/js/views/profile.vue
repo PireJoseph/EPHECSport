@@ -4,10 +4,7 @@
 
 <template>
     <div>
-        <div class="row col">
-            <h1>Profile</h1>
-            <router-view name="profileContent"></router-view>
-        </div>
+        <router-view name="profileContent"></router-view>
     </div>
 </template>
 

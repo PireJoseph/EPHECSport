@@ -9,7 +9,11 @@
 namespace App\Managers\User;
 
 use App\Assemblers\Profile\DTO\ProfileDTOAssembler;
+use App\Assemblers\Profile\DTO\SportProfileDTOAssembler;
+use App\Entity\Activity\Sport;
 use App\Entity\Profile\DTO\ProfileDTO;
+use App\Entity\Profile\DTO\SportProfileDTO;
+use App\Entity\Profile\SportProfile;
 use App\Entity\Profile\Success;
 use App\Exception\EmailAddressAlreadyExistsException;
 use App\Exception\InvalidIdentifierException;
@@ -25,6 +29,8 @@ use App\Security\iHasRole;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class UserManager
@@ -35,16 +41,20 @@ class UserManager
     private $em;
     private $passwordEncoder;
     private $profileDTOAssembler;
+    private $sportProfileDTOAssembler;
+    private $security;
 
 
-    public function __construct(ValidatorInterface $validator, UserPasswordEncoderInterface $passwordEncoder, UserAssembler $userAssembler, UserDTOAssembler $userDTOAssembler, EntityManagerInterface $entityManager, ProfileDTOAssembler $profileDTOAssembler)
+    public function __construct(Security $security,ValidatorInterface $validator, UserPasswordEncoderInterface $passwordEncoder, UserAssembler $userAssembler, UserDTOAssembler $userDTOAssembler, EntityManagerInterface $entityManager, ProfileDTOAssembler $profileDTOAssembler, SportProfileDTOAssembler $sportProfileDTOAssembler)
     {
+        $this->security = $security;
         $this->validator = $validator;
         $this->em = $entityManager;
         $this->passwordEncoder = $passwordEncoder;
         $this->userAssembler = $userAssembler;
         $this->userDTOAssembler = $userDTOAssembler;
         $this->profileDTOAssembler = $profileDTOAssembler;
+        $this->sportProfileDTOAssembler = $sportProfileDTOAssembler;
     }
 
 
@@ -220,21 +230,105 @@ class UserManager
         return $newUser;
     }
 
+
     /**
      * @param ProfileDTO $profileDTO
      * @return ProfileDTO
+     * @throws ValidationException
      * @throws Exception
      */
     public function updateProfileFromDTO(ProfileDTO $profileDTO)
     {
-        $id = $profileDTO->id;
-        $username = $profileDTO->username;
 
+        $id = $profileDTO->id;
         $alreadyExistingUser = $this->getUser($id);
 
         //
+        // Restricting access
+        if (is_null($this->security->getToken())|| is_null($this->security->getToken()->getUser()||$this->security->getToken()->getUser()->getId()))
+        {
+            throw new AccessDeniedException('Restricted area');
+        }
+        $connectedUser = $this->security->getToken()->getUser();
+        $connectedUserId = $connectedUser->getId();
+        $profileDTOid = $profileDTO->id;
+        if($connectedUserId !== $profileDTOid)
+        {
+            //on ne peut modifier que sont profil
+            throw new AccessDeniedException('Restricted area');
+        }
+
+        //
         // Updating Fields Following form
+        $username = $profileDTO->username;
         $alreadyExistingUser->setUsername($username);
+
+        // updating password
+        $newPassword= $profileDTO->newPassword;
+        if(!is_null($newPassword)) {
+            $encodedNewPassword = $this->passwordEncoder->encodePassword(
+                $alreadyExistingUser,
+                $newPassword
+            );
+            $alreadyExistingUser->setPassword($encodedNewPassword);
+        }
+
+        $areSuccessUnlockedVisible = $profileDTO->areSuccessUnlockedVisible;
+        if(!is_null($areSuccessUnlockedVisible))
+        {
+            $alreadyExistingUser->setAreSuccessUnlockedVisible($areSuccessUnlockedVisible);
+        }
+
+        $areActivityParticipationVisible = $profileDTO->areActivityParticipationVisible;
+        if(!is_null($areActivityParticipationVisible)){
+            $alreadyExistingUser->setAreActivityParticipationVisible($areActivityParticipationVisible);
+        }
+
+        $isPersonalProfileVisible = $profileDTO->isPersonalProfileVisible;
+        if(!is_null($isPersonalProfileVisible)){
+            $alreadyExistingUser->setIsPersonalProfileVisible($isPersonalProfileVisible);
+        }
+
+        $description = $profileDTO->description;
+        if(!is_null($description)){
+            $alreadyExistingUser->setDescription($description);
+        }
+
+        $email = $profileDTO->email;
+        if(!is_null($email)){
+            $alreadyExistingUser->setEmail($email);
+        }
+
+        $phoneNumber = $profileDTO->phoneNumber;
+        if(!is_null($phoneNumber)){
+            $alreadyExistingUser->setPhoneNumber($phoneNumber);
+        }
+
+        $gender = $profileDTO->gender;
+        if(!is_null($gender)){
+            $alreadyExistingUser->setGender($gender);
+        }
+
+        $birthDate = $profileDTO->birthDate;
+        if(!is_null($birthDate)){
+            $birthDateDateTime = new DateTime($birthDate);
+            $alreadyExistingUser->setBirthDate($birthDateDateTime);
+        }
+
+        $canGoAway = $profileDTO->canGoAway;
+        if(!is_null($canGoAway)){
+            $alreadyExistingUser->setCanGoAway($canGoAway);
+        }
+
+        $activityCostLimit = $profileDTO->activityCostLimit;
+        if(!is_null($activityCostLimit)){
+            $alreadyExistingUser->setActivityCostLimit($activityCostLimit);
+        }
+
+        $disponibilityPatterns = $profileDTO->disponibilityPatterns;
+        if(!is_null($disponibilityPatterns)){
+            $alreadyExistingUser->setDisponibilityPatterns($disponibilityPatterns);
+        }
 
         // validate the new user
         $alreadyExistingUserValidation = $this->validator->validate($alreadyExistingUser);
@@ -262,6 +356,145 @@ class UserManager
         $this->em->commit();
 
         return $newProfileDTO;
+
+    }
+
+
+
+    public function getOtherProfiles() : ? array
+    {
+
+        //
+        // Restricting access
+        if (is_null($this->security->getToken())|| is_null($this->security->getToken()->getUser()))
+        {
+            throw new AccessDeniedException('Restricted area');
+        }
+
+        /**  @var User $connectedUser */
+        $connectedUser = $this->security->getToken()->getUser();
+
+        $profileDTOs = [];
+
+        $usersArray = $this->em->getRepository(User::Class)->getOthers($connectedUser->getId());
+
+        foreach ($usersArray as $user)
+        {
+            $profileDTO = $this->profileDTOAssembler->getFromUser($user, $connectedUser);
+            $profileDTOs[] = $profileDTO;
+        }
+
+        return $profileDTOs;
+    }
+
+    /**
+     * @param SportProfileDTO $sportProfileDTO
+     * @return SportProfileDTO|null
+     */
+    public function updateSportProfileFromDTO(SportProfileDTO $sportProfileDTO)
+    {
+
+        //
+        // Restricting access
+        if (is_null($this->security->getToken())|| is_null($this->security->getToken()->getUser()||$this->security->getToken()->getUser()->getId()))
+        {
+            throw new AccessDeniedException('Restricted area');
+        }
+        $connectedUser = $this->security->getToken()->getUser();
+        $connectedUserId = $connectedUser->getId();
+        $sportId = $sportProfileDTO->sportId;
+
+
+        $existingSportProfileQueryResult =  $this->em->getRepository(SportProfile::class)->findOneBy(['user' => $connectedUserId, 'sport' => $sportId]);
+
+        $sport = $this->em->getRepository(Sport::class)->find($sportId);
+
+        $newSportProfile = new SportProfile();
+        $newSportProfile->setUser($connectedUser);
+        $newSportProfile->setSport($sport);
+        $newSportProfile->setLevel($sportProfileDTO->level);
+        $newSportProfile->setRole($sportProfileDTO->role);
+        if(!is_null($sportProfileDTO->isAimingFun))
+        {
+            $newSportProfile->setIsAimingFun($sportProfileDTO->isAimingFun);
+        }
+        else
+        {
+            $newSportProfile->setIsAimingFun(TRUE);
+        }
+        if(!is_null($sportProfileDTO->isAimingPerf))
+        {
+            $newSportProfile->setIsAimingPerf($sportProfileDTO->isAimingPerf);
+        }
+        else
+        {
+            $newSportProfile->setIsAimingPerf(TRUE);
+
+        }
+        if(!is_null($sportProfileDTO->isVisible))
+        {
+            $newSportProfile->setIsVisible($sportProfileDTO->isVisible);
+        }
+        else
+        {
+            $newSportProfile->setIsVisible(FALSE);
+        }
+        if(!is_null($sportProfileDTO->wantedTimesPerWeek))
+        {
+            $newSportProfile->setWantedTimesPerWeek($sportProfileDTO->wantedTimesPerWeek);
+        }
+        if(!is_null($sportProfileDTO->wantToBeNotifiedAboutThisSport))
+        {
+            $newSportProfile->setWantToBeNotifiedAboutThisSport($sportProfileDTO->wantToBeNotifiedAboutThisSport);
+        }
+
+        try
+        {
+
+            // suppression de l'ancien sport profil
+            if (!is_null($existingSportProfileQueryResult))
+            {
+                $this->em->remove($existingSportProfileQueryResult);
+                $this->em->flush();
+            }
+
+            // validate the sport profile
+            $newSportProfileValidation = $this->validator->validate($newSportProfile);
+            if ($newSportProfileValidation->count() > 0)
+            {
+                if (!is_null($existingSportProfileQueryResult))
+                {
+                    $this->em->persist($existingSportProfileQueryResult);
+                    $this->em->flush();
+                }
+                throw new ValidationException($newSportProfileValidation);
+            }
+
+            // sauvegarde du nouveau sport profile
+            $this->em->persist($newSportProfile);
+            $this->em->flush();
+
+            // Création de la réponse JSON
+            $newSportProfileProfileDTO = $this->sportProfileDTOAssembler->getFromSportProfileForAppCommon($newSportProfile);
+
+        }
+        catch (Exception $e)
+        {
+            throw $e;
+        }
+
+        return $newSportProfileProfileDTO;
+
+    }
+
+    /**
+     * @param $id
+     * @return object|null
+     */
+    public function getSportProfile($id){
+
+        $sportProfile = $this->em->getRepository(SportProfile::class)->findOneBy(['id' => $id]);
+        return $sportProfile;
 
     }
 

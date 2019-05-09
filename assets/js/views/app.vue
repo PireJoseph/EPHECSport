@@ -1,112 +1,125 @@
+<style scoped>
+    #appContainer {
+        background-color: gainsboro;
+    }
+</style>
+
 <template>
 
-    <div id="appContainer">
+        <div id="appContainer">
 
-        <!-- Navbar -->
-        <Navbar></Navbar>
+            <!-- Navbar -->
+            <Navbar></Navbar>
 
-
-        <!-- Page Container -->
-        <div id="contentContainer" class="w3-container w3-row" >
-
-
-            <!-- Left Column -->
-            <div class="w3-col m3 l2">
-
-                <!-- Profile -->
-                <user-tile></user-tile>
-
-                <br>
-
-                <side-bar-accordion></side-bar-accordion>
-
-                <br>
-
-                <side-bar-success-widget></side-bar-success-widget>
-
-                <br>
-
-                <side-bar-user-feedback-widget></side-bar-user-feedback-widget>
-
-            <!-- End Left Column -->
+            <div id="loadingPage" class="w3-center" v-show="!baseDataLoaded" >
+                <h1>Chargement ...</h1>
             </div>
 
-            <!-- Middle Column -->
-            <div class="w3-col m7 l8 w3-container">
+            <!-- Page Container -->
+            <div id="contentContainer" v-show="baseDataLoaded" class="w3-container w3-row" >
 
-                <div class="w3-card w3-round w3-white w3-padding-32 w3-center w3-container">
 
-                    <router-view name="content"></router-view>
+                <!-- Left Column -->
+                <div class="w3-col w3-hide-small  m4 l2">
+
+                    <!-- Profile -->
+                    <user-tile></user-tile>
+
+                    <br>
+
+                    <side-bar-accordion></side-bar-accordion>
+
+                    <br>
+
+                    <side-bar-success-widget></side-bar-success-widget>
+
+                    <br>
+
+                    <side-bar-user-feedback-widget></side-bar-user-feedback-widget>
+
+                    <!-- End Left Column -->
+                </div>
+
+                <!-- Middle Column -->
+                <div class="w3-col m8 l8 w3-container">
+
+                    <div class="w3-center w3-container">
+
+
+                        <router-view name="content"></router-view>
+
+
+                    </div>
+
+                    <!-- End Middle Column -->
 
                 </div>
 
-            <!-- End Middle Column -->
 
-            </div>
+                <!-- Right Column -->
+                <div class="w3-col w3-hide-small w3-hide-medium l2 ">
 
+                    <!-- Next activity participation widget -->
+                    <side-bar-next-activity-participation-widget></side-bar-next-activity-participation-widget>
 
-            <!-- Right Column -->
-            <div class="w3-col m2 l2">
+                    <br  v-if="nextActivityParticipation" />
 
-                <!-- Next activity participation widget -->
-                <side-bar-next-activity-participation-widget></side-bar-next-activity-participation-widget>
+                    <side-bar-next-crucial-meeting-widget></side-bar-next-crucial-meeting-widget>
 
-                <br  v-if="nextActivityParticipation" />
-
-                <side-bar-next-crucial-meeting-widget></side-bar-next-crucial-meeting-widget>
-
-                <!--<div class="w3-card w3-round w3-white w3-center">-->
+                    <!--<div class="w3-card w3-round w3-white w3-center">-->
                     <!--<div class="w3-container">-->
-                        <!--<p>Friend Request</p>-->
-                        <!--<img src="/w3images/avatar6.png" alt="Avatar" style="width:50%"><br>-->
-                        <!--<span>Jane Doe</span>-->
-                        <!--<div class="w3-row w3-opacity">-->
-                            <!--<div class="w3-half">-->
-                                <!--<button class="w3-button w3-block w3-green w3-section" title="Accept"><i class="fa fa-check"></i></button>-->
-                            <!--</div>-->
-                            <!--<div class="w3-half">-->
-                                <!--<button class="w3-button w3-block w3-red w3-section" title="Decline"><i class="fa fa-remove"></i></button>-->
-                            <!--</div>-->
-                        <!--</div>-->
+                    <!--<p>Friend Request</p>-->
+                    <!--<img src="/w3images/avatar6.png" alt="Avatar" style="width:50%"><br>-->
+                    <!--<span>Jane Doe</span>-->
+                    <!--<div class="w3-row w3-opacity">-->
+                    <!--<div class="w3-half">-->
+                    <!--<button class="w3-button w3-block w3-green w3-section" title="Accept"><i class="fa fa-check"></i></button>-->
                     <!--</div>-->
-                <!--</div>-->
-                <!---->
+                    <!--<div class="w3-half">-->
+                    <!--<button class="w3-button w3-block w3-red w3-section" title="Decline"><i class="fa fa-remove"></i></button>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!---->
 
-                <br v-if="nextCrucialMeeting" />
+                    <br v-if="nextCrucialMeeting" />
 
-                <!--<div class="w3-card w3-round w3-white w3-padding-16 w3-center">-->
+                    <!--<div class="w3-card w3-round w3-white w3-padding-16 w3-center">-->
                     <!--<p>ADS</p>-->
-                <!--</div>-->
-                <!--<br>-->
+                    <!--</div>-->
+                    <!--<br>-->
 
-                <!--<div class="w3-card w3-round w3-white w3-padding-32 w3-center">-->
+                    <!--<div class="w3-card w3-round w3-white w3-padding-32 w3-center">-->
                     <!--<p><i class="fa fa-bug w3-xxlarge"></i></p>-->
-                <!--</div>-->
+                    <!--</div>-->
 
-                <!-- End Right Column -->
+                    <!-- End Right Column -->
+                </div>
+
+
+                <!-- End Page Container -->
             </div>
 
+            <br>
 
-            <!-- End Page Container -->
-        </div>
+            <div id="footerContainer">
+                <!-- Footer -->
+                <footer class="w3-container w3-theme-d3 w3-padding-16">
+                    <h5><img src="/images/favicon.png" style="width: 18px; height: 18px;"> EPHEC Sport </h5>
+                </footer>
 
-        <br>
+                <footer class="w3-container w3-theme-d5">
+                    <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
+                </footer>
 
-        <div id="footerContainer">
-            <!-- Footer -->
-            <footer class="w3-container w3-theme-d3 w3-padding-16">
-                <h5><img src="/images/favicon.png" style="width: 18px; height: 18px;"> EPHEC Sport </h5>
-            </footer>
-
-            <footer class="w3-container w3-theme-d5">
-                <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
-            </footer>
+            </div>
 
         </div>
-
-    </div>
 
 </template>
+
+
 
 <script>
     import { mapGetters } from 'vuex'
@@ -132,6 +145,7 @@
                 mobileMenuShowed: 'navbar/isMobileMenuShowed',
                 nextActivityParticipation: 'user/nextActivityParticipation',
                 nextCrucialMeeting: 'user/nextCrucialMeeting',
+                baseDataLoaded: 'common/baseDataLoaded'
                 // currentUserId: 'user/currentUserId'
             })
         },

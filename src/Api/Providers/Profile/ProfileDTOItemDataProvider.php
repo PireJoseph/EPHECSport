@@ -54,7 +54,7 @@ class ProfileDTOItemDataProvider implements ItemDataProviderInterface, Restricte
         {
             return null;
         }
-        $profileDTO = $this->profileDTOAssembler->getFromUser($user);
+        $profileDTO = $this->profileDTOAssembler->getFromUser($user, $user);
 
         return $profileDTO;
 

@@ -6,6 +6,14 @@
  */
 
 // any CSS you require will output into a single css file (app.css in this case)
+
+// import the styles
+require('vue-good-table/dist/vue-good-table.css');
+
+require('vue2-dropzone/dist/vue2Dropzone.min.css');
+
+require('vue-select/dist/vue-select.css');
+
 require('../css/app.css');
 
 // Need jQuery? Install it with "yarn add jquery", then uncomment to require it.

@@ -14,17 +14,20 @@ use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
 use ApiPlatform\Core\Exception\ResourceClassNotSupportedException;
 use App\Assemblers\AppCommonDTOAssembler;
 use App\Entity\AppCommonDTO;
+use App\Managers\Activity\ActivityManager;
 use App\Managers\User\UserManager;
 
 class AppCommonDTOItemDataProvider implements ItemDataProviderInterface, RestrictedDataProviderInterface
 {
     private $userManager;
+    private $activityManager;
     private $appCommonDTOAssembler;
 
-    public function __construct(UserManager $userManager, AppCommonDTOAssembler $appCommonDTOAssembler)
+    public function __construct(UserManager $userManager, AppCommonDTOAssembler $appCommonDTOAssembler, ActivityManager $activityManager)
     {
         $this->userManager = $userManager;
         $this->appCommonDTOAssembler = $appCommonDTOAssembler;
+        $this->activityManager = $activityManager;
     }
 
     public function supports(string $resourceClass, string $operationName = null, array $context = []): bool
@@ -51,7 +54,10 @@ class AppCommonDTOItemDataProvider implements ItemDataProviderInterface, Restric
         {
             return null;
         }
-        $appCommonDTO = $this->appCommonDTOAssembler->getFromUser($user);
+
+        $sports = $this->activityManager->getSports();
+
+        $appCommonDTO = $this->appCommonDTOAssembler->getFromUser($user, $sports);
 
         return $appCommonDTO;
 

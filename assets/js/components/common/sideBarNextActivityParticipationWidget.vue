@@ -14,12 +14,12 @@
 
 <template>
 
-    <div v-if="Object.keys(nextActivityParticipation).length" class="w3-card w3-round w3-white w3-center">
+    <div v-if="!!nextActivityParticipation" class="w3-card w3-round w3-white w3-center">
         <div class="w3-container">
             <h6><strong>Prochaine activité</strong></h6>
             <p id="sideBarNextActivityLabel" >{{ nextActivityParticipation.activityLabel }}</p>
-            <p id="sideBarNextActivityStartAt"  v-if="nextActivityParticipation.activityStartAt"  >le {{ nextActivityParticipation.activityStartAt }}</p>
-            <p id="sideBarNextActivityLocation" v-if="nextActivityParticipation.activityLocation" >à {{ nextActivityParticipation.activityLocation }}</p>
+            <p id="sideBarNextActivityStartAt"  v-if="!!nextActivityParticipation.activityStartAt"  >le {{ nextActivityParticipation.activityStartAt }}</p>
+            <p id="sideBarNextActivityLocation" v-if="!!nextActivityParticipation.activityLocation" >à {{ nextActivityParticipation.activityLocation }}</p>
         </div>
 
     </div>

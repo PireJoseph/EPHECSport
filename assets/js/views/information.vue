@@ -1,9 +1,10 @@
+<style scoped>
+
+</style>
+
 <template>
     <div>
-        <div class="row col">
-            <h1>Information</h1>
-            <router-view name="informationContent"></router-view>
-        </div>
+        <router-view name="informationContent"></router-view>
     </div>
 </template>
 

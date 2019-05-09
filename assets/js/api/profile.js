@@ -4,9 +4,18 @@ export default {
     put(id, data) {
         return ApiService.put(
             '/api/profile/' + id,
-            {
-                username : data.username,
-            }
+           data
         );
     },
+    getAll() {
+        return ApiService.get(
+            '/api/profile/',
+        );
+    },
+    postSportProfile(data) {
+        return ApiService.post(
+            '/api/sportprofiles/',
+            data
+        );
+    }
 }

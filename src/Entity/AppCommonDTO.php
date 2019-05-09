@@ -26,6 +26,7 @@ class AppCommonDTO
      */
     public $id;
 
+    public $sportDTOs;
 
     public $userDTO;
 

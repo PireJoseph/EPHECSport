@@ -28,31 +28,15 @@ body {
     margin: 32px 16px;
 }
 
-form {
-
-}
-
-form input {
+.vdp-datepicker {
     width: 100%;
-    padding: 12px 20px;
-    margin-bottom: 16px;
-    display: inline-block;
-    border: 0;
-    box-sizing: border-box;
-    border-bottom: 1px solid #ccc!important;
-    cursor: pointer;
+    text-align: center;
 }
 
-form input[type="submit"] {
-    margin-top: 16px;
-}
-
-form input[type="submit"]:hover {
-    background-color: #3a4b53;
-    color: white;
-}
-
-form fieldset {
-    background-color: #eeeeee;
-    margin-bottom: 15px;
+.date-picker-input {
+    width: 100%!important;
+    border: none;
+    border-bottom: 2px solid lightgray;
+    text-align: right;
+    align-self: flex-end;
 }

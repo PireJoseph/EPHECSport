@@ -59,6 +59,15 @@ class UserRepository extends ServiceEntityRepository
 
     }
 
+    public function getOthers($id)
+    {
+        $query =  $this
+            ->createQueryBuilder('u')
+            ->andWhere('u.id != :idParam')
+            ->setParameter(':idParam', $id)
+            ->getQuery();
+        return $query->getResult();
+    }
 
     // /**
     //  * @return User[] Returns an array of User objects

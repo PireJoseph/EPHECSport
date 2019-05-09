@@ -11,13 +11,17 @@ namespace App\Assemblers\User\DTO;
 
 use ApiPlatform\Core\Validator\Exception\ValidationException;
 use App\Assemblers\Activity\DTO\ActivityParticipationDTOAssembler;
+use App\Assemblers\Activity\DTO\MaterialDTOAssembler;
+use App\Assemblers\Activity\DTO\SportClubDTOAssembler;
 use App\Assemblers\Activity\DTO\UserRelatedFeedbackDTOAssembler;
 use App\Assemblers\Profile\DTO\PictureDTOAssembler;
+use App\Assemblers\Profile\DTO\SportProfileDTOAssembler;
 use App\Assemblers\Profile\DTO\SuccessDTOAssembler;
 use App\Assemblers\Promotion\DTO\CrucialMeetingDTOAssembler;
 use App\Entity\Activity\ActivityParticipation;
 use App\Entity\Activity\DTO\ActivityParticipationDTO;
 use App\Entity\Activity\UserRelatedFeedback;
+use App\Entity\Profile\SportProfile;
 use App\Entity\Profile\Success;
 use App\Entity\Promotion\CrucialMeeting;
 use App\Entity\User\DTO\PreferredPartnerDTO;
@@ -41,6 +45,7 @@ class UserDTOAssembler
     private $userRelatedFeedbackDTOAssembler;
     private $activityParticipationDTOAssembler;
     private $crucialMeetingDTOAssembler;
+    private $sportProfileDTOAssembler;
     private $translator;
 
     public function __construct(
@@ -53,7 +58,8 @@ class UserDTOAssembler
         TranslatorInterface $translator,
         UserRelatedFeedbackDTOAssembler $userRelatedFeedbackDTOAssembler,
         ActivityParticipationDTOAssembler $activityParticipationDTOAssembler,
-        CrucialMeetingDTOAssembler $crucialMeetingDTOAssembler
+        CrucialMeetingDTOAssembler $crucialMeetingDTOAssembler,
+        SportProfileDTOAssembler $sportProfileDTOAssembler
     )
     {
         $this->validator = $validator;
@@ -66,6 +72,7 @@ class UserDTOAssembler
         $this->userRelatedFeedbackDTOAssembler = $userRelatedFeedbackDTOAssembler;
         $this->activityParticipationDTOAssembler = $activityParticipationDTOAssembler;
         $this->crucialMeetingDTOAssembler = $crucialMeetingDTOAssembler;
+        $this->sportProfileDTOAssembler = $sportProfileDTOAssembler;
     }
 
     /**
@@ -93,15 +100,15 @@ class UserDTOAssembler
         $newUserDTO->username = $user->getUsername();
         $newUserDTO->email = $user->getEmail();
         $newUserDTO->phoneNumber = $user->getPhoneNumber();
-
+        $newUserDTO->description = $user->getDescription();
         $newUserDTO->gender = $user->getGender();
 
         $userCreatedAt = $user->getCreatedAt();
-        $newUserDTO->createdAt =  (!is_null($userCreatedAt)) ? $userCreatedAt->format('d/m/Y') : null;
+        $newUserDTO->createdAt =  (!is_null($userCreatedAt)) ? $userCreatedAt->format('Y-m-d') : null;
 
         // 'Age'
         $userBirthDate = $user->getBirthDate();
-        $newUserDTO->birthDate = (!is_null($userBirthDate)) ? $userBirthDate->format('d/m/Y') : null;
+        $newUserDTO->birthDate = (!is_null($userBirthDate)) ? $userBirthDate->format('Y-m-d') : null;
 
         // Password --> we don't give it until its specified in the method
         $newUserDTO->password = $plainTextPassWord;
@@ -119,6 +126,8 @@ class UserDTOAssembler
             }
         }
 
+        $newUserDTO->areSuccessUnlockedVisible = $user->getAreSuccessUnlockedVisible();
+
         $successDTOs = [];
         $userSuccessCollection = $this->em->getRepository(Success::class)->findBy(['user' => $user]);
 
@@ -129,6 +138,9 @@ class UserDTOAssembler
         }
         $newUserDTO->successDTOs = $successDTOs;
 
+        $newUserDTO->areActivityParticipationVisible = $user->getAreActivityParticipationVisible();
+        $newUserDTO->isPersonalProfileVisible = $user->getIsPersonalProfileVisible();
+
         $picturesDTOs = [];
         $profilePictures = $user->getPictures();
         foreach ($profilePictures as $picture)
@@ -137,6 +149,9 @@ class UserDTOAssembler
             $picturesDTOs[] = $pictureDTO;
         }
         $newUserDTO->pictureDTOs = $picturesDTOs;
+
+        $newUserDTO->canGoAway = $user->getCanGoAway();
+        $newUserDTO->activityCostLimit = $user->getActivityCostLimit();
 
         $preferredPartnerDTOs = [];
         $preferredPartners = $user->getPreferredPartners();
@@ -211,6 +226,18 @@ class UserDTOAssembler
             $nextCrucialMeetingDTO = $this->crucialMeetingDTOAssembler->getFromCrucialMeetingForAppCommon($nextCrucialMeeting);
             $newUserDTO->nextCrucialMeetingDTO = $nextCrucialMeetingDTO;
         }
+
+        // sport profiles
+        $sportProfileDTOs = [];
+        $sportProfilesQueryResult = $this->em->getRepository(SportProfile::class)->findBy(['user' => $user]);
+        if(!is_null($sportProfilesQueryResult) && (0 < count($sportProfilesQueryResult)))
+        {
+            foreach ($sportProfilesQueryResult as $sportProfile)
+            {
+                $sportProfileDTOs[] = $this->sportProfileDTOAssembler->getFromSportProfileForAppCommon($sportProfile);
+            }
+        }
+        $newUserDTO->sportProfileDTOs = $sportProfileDTOs;
 
         if (count($errors = $this->validator->validate($newUserDTO)))
         {

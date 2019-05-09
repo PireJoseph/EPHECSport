@@ -12,8 +12,21 @@ import VueRouter from 'vue-router'
 import router from './router';
 import store from './store';
 
-require('../css/user.css');
+import VueGoodTablePlugin from 'vue-good-table';
 
+import vSelect from 'vue-select'
+
+import Datepicker from 'vuejs-datepicker';
+
+
+import VeeValidate from 'vee-validate';
+const veeValidateConfig = {
+    errorBagName: 'errors', // change if property conflicts
+    locale: 'fr',
+    events: 'change'
+};
+
+require('../css/user.css');
 
 // Set the base URL of the API
 ApiService.init(process.env.VUE_APP_ROOT_API);
@@ -26,7 +39,11 @@ if (TokenService.getToken()) {
 
 Vue.use(VueRouter);
 Vue.use(Vuex);
+Vue.use(VeeValidate, veeValidateConfig);
+Vue.use(VueGoodTablePlugin);
 
+Vue.component('v-select', vSelect);
+Vue.component('vuejs-datepicker',Datepicker);
 
 new Vue({
     el: '#root',

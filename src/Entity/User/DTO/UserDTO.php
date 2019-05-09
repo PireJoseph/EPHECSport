@@ -103,9 +103,15 @@ final class UserDTO extends DataTransferObject
      * @var string|null
      *
      * @Groups({"read", "write", "appCommon"})
-     * @Assert\NotBlank(groups={"PostUser","GetUser"})
      */
     public $phoneNumber;
+
+    /**
+     * @var string|null
+     *
+     * @Groups({"read","write",  "appCommon"})
+     */
+    public $description;
 
     /**
      * @var string|null
@@ -113,6 +119,27 @@ final class UserDTO extends DataTransferObject
      * @Groups({"read", "appCommon"})
      */
     public $userPicture;
+
+    /**
+     * @var string|null
+     *
+     * @Groups({"read","write", "appCommon"})
+     */
+    public $areSuccessUnlockedVisible;
+
+    /**
+     * @var string|null
+     *
+     * @Groups({"read","write",  "appCommon"})
+     */
+    public $areActivityParticipationVisible;
+
+    /**
+     * @var string|null
+     *
+     * @Groups({"read","write", "appCommon"})
+     */
+    public $isPersonalProfileVisible;
 
     /**
      * @var string|null
@@ -133,14 +160,22 @@ final class UserDTO extends DataTransferObject
      *
      * @Groups({"read", "appCommon"})
      */
-    public $successDTOs;
+    public $pictureDTOs;
 
     /**
-     * @var array
+     * @var string|null
      *
-     * @Groups({"read", "appCommon"})
+     * @Groups({"read","write", "appCommon"})
      */
-    public $pictureDTOs;
+    public $canGoAway;
+
+    /**
+     * @var string|null
+     *
+     * @Groups({"read","write", "appCommon"})
+     */
+    public $activityCostLimit;
+
 
     /**
      * @var array
@@ -163,13 +198,19 @@ final class UserDTO extends DataTransferObject
      */
     public $addressedUserRelatedFeedbackDTOs;
 
-
     /**
      * @var array
      *
      * @Groups({"read", "appCommon"})
      */
     public $addressedUserRelatedFeedbackLabelsCumuled;
+
+    /**
+     * @var array
+     *
+     * @Groups({"read", "appCommon"})
+     */
+    public $successDTOs;
 
     /**
      * @var array
@@ -184,6 +225,13 @@ final class UserDTO extends DataTransferObject
      * @Groups({"read", "appCommon"})
      */
     public $nextCrucialMeetingDTO;
+
+    /**
+     * @var array
+     *
+     * @Groups({"read", "appCommon"})
+     */
+    public $sportProfileDTOs;
 
 }
 

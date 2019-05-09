@@ -6,6 +6,7 @@ import securityModule from './security'
 import NavbarModule from './navbar'
 import AppCommonModule from './appCommon'
 import SideBarModule from './sideBar'
+import ActivityModule from './activity'
 
 Vue.use(Vuex);
 
@@ -15,6 +16,7 @@ export default new Vuex.Store({
         navbar: NavbarModule,
         security: securityModule,
         common: AppCommonModule,
-        sideBar: SideBarModule
+        sideBar: SideBarModule,
+        activity: ActivityModule,
     }
 });

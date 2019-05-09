@@ -48,7 +48,7 @@ export default {
                     res => {
                         commit('GETTING_BASE_DATA_SUCCESS', res.data);
                         commit('user/SET_USER_BASE_DATA', res.data.userDTO, { root: true });
-
+                        commit('activity/SET_SPORT_DTOS', res.data.sportDTOs, {root: true})
                     }
                 )
                 .catch(
