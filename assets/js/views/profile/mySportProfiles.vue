@@ -143,7 +143,7 @@
 
                 <fieldset class="w3-container w3-card w3-round w3-white w3-padding-32 w3-margin-top">
                     <button type="button" class="w3-button w3-red" @click="clear" >Réinitialiser</button>
-                    <button type="button" class="w3-button w3-green"  @click="submit" >(re)Créer profil pour ce sport</button>
+                    <button type="button" class="w3-button w3-green"  @click="dispatchRequest" >(re)Créer profil pour ce sport</button>
                 </fieldset>
 
 
@@ -198,12 +198,12 @@
                 formRole : '',
                 formSport : 0,
                 formLevel : 'AMATEUR',
-                formIsAimingFun : Boolean,
-                formIsAimingPerf : Boolean,
+                formIsAimingFun : false,
+                formIsAimingPerf : false,
 
                 formWantedTimesPerWeek : 0,
-                formWantToBeNotifiedAboutThisSport : Boolean,
-                formIsVisible : Boolean,
+                formWantToBeNotifiedAboutThisSport : false,
+                formIsVisible : false,
 
                 levelSelectArray : [
                     {
@@ -261,6 +261,7 @@
         methods: {
             clear () {
                 this.formRole = '';
+                this.formSport = 0;
                 this.formLevel = 'AMATEUR';
                 this.formIsAimingFun = false;
                 this.formIsAimingPerf = false;
@@ -268,9 +269,27 @@
                 this.formWantToBeNotifiedAboutThisSport = false;
                 this.formIsVisible = false;
             },
-            submit () {
-                let payload = {};
 
+            dispatchRequest() {
+                let sportProfilesDTO = this.$store.state.user.sportProfileDTOs
+                let formSport = this.formSport;
+                let alreadyExistingSportProfileId;
+
+                sportProfilesDTO.map(function (e) {
+                    if (e.sportId === formSport){
+                        alreadyExistingSportProfileId = e.id
+                    }
+                })
+
+                if (!!alreadyExistingSportProfileId) {
+                    this.putSportProfile(alreadyExistingSportProfileId)
+                } else {
+                    this.postSportProfile()
+                }
+            },
+            postSportProfile(){
+                console.log('créer SportProfile')
+                let payload = {};
                 payload.role = this.formRole;
                 payload.sportId = this.formSport;
                 payload.level = this.formLevel;
@@ -280,7 +299,6 @@
                 payload.wantToBeNotifiedAboutThisSport = this.formWantToBeNotifiedAboutThisSport;
                 payload.isVisible = this.formIsVisible;
 
-                console.log(payload);
                 this.$validator.validateAll().then(()=> {
                     this.$store.dispatch('user/postSportProfile', payload)
                         .then(() => {
@@ -293,7 +311,32 @@
                                 })
                         })
                 })
+            },
+            putSportProfile(alreadyExistingSportProfileId){
+                console.log('modifier SportProfile')
+                let payload = {};
+                payload.id = alreadyExistingSportProfileId;
+                payload.role = this.formRole;
+                payload.sportId = this.formSport;
+                payload.level = this.formLevel;
+                payload.isAimingFun = this.formIsAimingFun;
+                payload.isAimingPerf = this.formIsAimingPerf;
+                payload.wantedTimesPerWeek = this.formWantedTimesPerWeek;
+                payload.wantToBeNotifiedAboutThisSport = this.formWantToBeNotifiedAboutThisSport;
+                payload.isVisible = this.formIsVisible;
 
+                this.$validator.validateAll().then(()=> {
+                    this.$store.dispatch('user/putSportProfile', payload)
+                        .then(() => {
+                            let payload = {
+                                userId: this.$store.getters['user/userId'],
+                            };
+                            this.$store.dispatch('common/loadBaseData', payload)
+                                .then(() => {
+                                    this.clear();
+                                })
+                        })
+                })
             },
             getLevelLabelFromToken (token) {
                 switch (token){

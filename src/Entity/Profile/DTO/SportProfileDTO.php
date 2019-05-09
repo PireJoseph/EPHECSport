@@ -11,15 +11,22 @@ namespace App\Entity\Profile\DTO;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use Symfony\Component\Serializer\Annotation\Groups;
+use App\Controller\Actions\Profile\CreateSportProfile;
 
 /**
+ *
+ * @see http://schema.org/Thing Documentation on Schema.org
+ *
  * @ApiResource(
  *     itemOperations={
  *           "getSportProfile" = {
- *              "method"="Get",
+ *              "method"="GET",
+ *         },
+ *        "updateSportProfile" = {
+ *              "method"="PUT",
  *              "path"="/sportprofiles/{id}",
- *              "denormalization_context"={"groups"={"read"} },
- *              "normalization_context"={"groups"={"read"} }
+ *              "denormalization_context"={"groups"={"write"} },
+ *              "normalization_context"={"groups"={"write"} }
  *         },
  *     },
  *     collectionOperations={
@@ -27,7 +34,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *              "method"="POST",
  *              "path"="/sportprofiles/",
  *              "denormalization_context"={"groups"={"write"} },
- *              "normalization_context"={"groups"={"write"} }
+ *              "normalization_context"={"groups"={"write"} },
+ *              "controller"=CreateSportProfile::class,
  *         },
  *     },
  * )
@@ -37,7 +45,7 @@ class SportProfileDTO
 
     /**
      * @Groups({"write", "read"})
-     * @ApiProperty(identifier=true)
+     * @ApiProperty(identifier=true, iri="https://schema.org/identifier", )
      */
     public $id;
 
@@ -70,23 +78,15 @@ class SportProfileDTO
      */
     public $isVisible;
 
-    public $sportClubDTO;
-
     /**
-     * @Groups({"write","read"})
+     * @Groups({"write"})
      */
     public $sportId;
     /**
-     * @Groups({"read","read"})
+     * @Groups({"read"})
      */
     public $sportDTO;
 
-
-
-    public function getId()
-    {
-        return $this->id;
-    }
 
 
 

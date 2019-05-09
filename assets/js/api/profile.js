@@ -17,5 +17,11 @@ export default {
             '/api/sportprofiles/',
             data
         );
+    },
+    putSportProfile(id, data) {
+        return ApiService.put(
+            '/api/sportprofiles/' + id,
+            data
+        );
     }
 }

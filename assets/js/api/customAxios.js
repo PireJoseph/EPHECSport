@@ -58,40 +58,6 @@ customAxiosInstance.interceptors.response.use(
         throw error
     }
 
-    // (response) => {
-    //     console.log("customAxiosInstance success");
-    //     return response;
-    // },
-    // async (error) => {
-    //     const originalRequest = error.config;
-    //
-    //     console.log("customAxiosInstance error");
-    //
-    //     if (error.code !== "ECONNABORTED" && error.response.status === 401) {
-    //         if (!originalRequest._retry) {
-    //             originalRequest._retry = true;
-    //             return customAxiosInstance
-    //                 .post("/tokens/auth", {
-    //                     refreshToken: getRefreshToken(),
-    //                     grantType: "refresh_token",
-    //                     clientId : "website"
-    //                 })
-    //                 .then(response => {
-    //                     localStorage.authentication = JSON.stringify(response.data);
-    //                     updateAuthInstant();
-    //                     return axiosInstance(originalRequest);
-    //                 });
-    //         } else {
-    //             localStorage.removeItem("authentication")
-    //             console.log("fafaf")
-    //             browserHistory.push({
-    //                 pathname: '/login',
-    //             });
-    //         }
-    //
-    //     }
-    //     return Promise.reject(error);
-    // }
 );
 
 

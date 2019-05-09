@@ -389,7 +389,6 @@ class UserManager
 
     /**
      * @param SportProfileDTO $sportProfileDTO
-     * @return SportProfileDTO|null
      */
     public function updateSportProfileFromDTO(SportProfileDTO $sportProfileDTO)
     {
@@ -484,6 +483,98 @@ class UserManager
         }
 
         return $newSportProfileProfileDTO;
+
+    }
+
+    /**
+     * @param SportProfileDTO $sportProfileDTO
+     * @return SportProfileDTO
+     * @throws itemAlreadyExistsException
+     */
+    public function createSportProfileFromDTO(SportProfileDTO $sportProfileDTO)
+    {
+        //
+        // Restricting access
+        if (is_null($this->security->getToken())|| is_null($this->security->getToken()->getUser()||$this->security->getToken()->getUser()->getId()))
+        {
+            throw new AccessDeniedException('Restricted area');
+        }
+        $connectedUser = $this->security->getToken()->getUser();
+        $connectedUserId = $connectedUser->getId();
+        $sportId = $sportProfileDTO->sportId;
+
+        $existingSportProfileQueryResult =  $this->em->getRepository(SportProfile::class)->findOneBy(['user' => $connectedUserId, 'sport' => $sportId]);
+        if(!is_null($existingSportProfileQueryResult))
+        {
+            throw new itemAlreadyExistsException('Profil sportif existant');
+        }
+
+        $sport = $this->em->getRepository(Sport::class)->find($sportId);
+
+        $newSportProfile = new SportProfile();
+        $newSportProfile->setUser($connectedUser);
+        $newSportProfile->setSport($sport);
+        $newSportProfile->setLevel($sportProfileDTO->level);
+        $newSportProfile->setRole($sportProfileDTO->role);
+        if(!is_null($sportProfileDTO->isAimingFun))
+        {
+            $newSportProfile->setIsAimingFun($sportProfileDTO->isAimingFun);
+        }
+        else
+        {
+            $newSportProfile->setIsAimingFun(TRUE);
+        }
+        if(!is_null($sportProfileDTO->isAimingPerf))
+        {
+            $newSportProfile->setIsAimingPerf($sportProfileDTO->isAimingPerf);
+        }
+        else
+        {
+            $newSportProfile->setIsAimingPerf(TRUE);
+
+        }
+        if(!is_null($sportProfileDTO->isVisible))
+        {
+            $newSportProfile->setIsVisible($sportProfileDTO->isVisible);
+        }
+        else
+        {
+            $newSportProfile->setIsVisible(FALSE);
+        }
+        if(!is_null($sportProfileDTO->wantedTimesPerWeek))
+        {
+            $newSportProfile->setWantedTimesPerWeek($sportProfileDTO->wantedTimesPerWeek);
+        }
+        if(!is_null($sportProfileDTO->wantToBeNotifiedAboutThisSport))
+        {
+            $newSportProfile->setWantToBeNotifiedAboutThisSport($sportProfileDTO->wantToBeNotifiedAboutThisSport);
+        }
+
+        try
+        {
+
+            // validate the sport profile
+            $newSportProfileValidation = $this->validator->validate($newSportProfile);
+            if ($newSportProfileValidation->count() > 0)
+            {
+                throw new ValidationException($newSportProfileValidation);
+            }
+
+            // sauvegarde du nouveau sport profile
+            $this->em->persist($newSportProfile);
+            $this->em->flush();
+
+            // Création de la réponse JSON
+            $newSportProfileProfileDTO = $this->sportProfileDTOAssembler->getFromSportProfileForAppCommon($newSportProfile);
+
+        }
+        catch (Exception $e)
+        {
+            throw $e;
+        }
+
+        return $newSportProfileProfileDTO;
+
 
     }
 

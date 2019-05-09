@@ -10,6 +10,7 @@ namespace App\Api\Persisters\Profile;
 
 
 use ApiPlatform\Core\DataPersister\DataPersisterInterface;
+use App\Entity\Profile\DTO\ProfileDTO;
 use App\Entity\Profile\DTO\SportProfileDTO;
 use App\Managers\User\UserManager;
 
@@ -38,12 +39,21 @@ class SportProfileDTODataPersister implements DataPersisterInterface
      * Persists the data.
      *
      * @param $data
-     * @return object
+     * @return SportProfileDTO $sportProfileDTO
      * @throws \Exception
      */
     public function persist($data)
     {
-        return $this->userManager->updateSportProfileFromDTO($data);
+        $dataId = $data->id;
+        if(!is_null($dataId))
+        {
+            $sportProfileDTO = $this->userManager->updateSportProfileFromDTO($data);
+        }
+        else
+        {
+            $sportProfileDTO = $this->userManager->createSportProfileFromDTO($data);
+        }
+        return $sportProfileDTO;
     }
 
     /**

@@ -27,6 +27,7 @@ class SportProfileDTOAssembler
         $sportProfileDTO = new SportProfileDTO();
 
         $sportProfileDTO->id = $sportProfile->getId();
+
         $sport = $sportProfile->getSport();
         if(!is_null($sport))
         {

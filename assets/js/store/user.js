@@ -155,6 +155,18 @@ export default {
             state.isLoading = false;
             state.error = error.message;
         },
+        ['PUTTING_SPORT_PROFILE_DATA'](state){
+            state.isLoading = true;
+            state.error = null;
+        },
+        ['PUT_SPORT_PROFILE_DATA_SUCCESS'](state){
+            state.isLoading = false;
+            state.error = null;
+        },
+        ['PUT_SPORT_PROFILE_DATA_ERROR'](state, error){
+            state.isLoading = false;
+            state.error = error.message;
+        },
         ['REFRESHING_OTHER_PROFILE_DATA'](state){
             state.isLoading = true;
             state.error = null;
@@ -229,7 +241,6 @@ export default {
         },
 
         postSportProfile({commit}, data){
-            console.log(data);
             commit('POSTING_SPORT_PROFILE_DATA');
             return ProfileAPI.postSportProfile(data)
                 .then(
@@ -238,7 +249,19 @@ export default {
                     }
                 )
                 .catch(err => commit('POST_SPORT_PROFILE_DATA_ERROR', err))
-        }
+        },
+
+        putSportProfile({commit}, data){
+            let id = data.id;
+            commit('PUTTING_SPORT_PROFILE_DATA');
+            return ProfileAPI.putSportProfile(id, data)
+                .then(
+                    function(){
+                        commit('PUT_SPORT_PROFILE_DATA_SUCCESS')
+                    }
+                )
+                .catch(err => commit('PUT_SPORT_PROFILE_DATA_ERROR', err))
+        },
 
     }
 
