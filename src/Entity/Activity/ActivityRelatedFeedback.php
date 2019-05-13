@@ -7,9 +7,35 @@ use App\Entity\User\User;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use ApiPlatform\Core\Annotation\ApiProperty;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     itemOperations={
+ *         "get",
+ *         "getActivityHistoryFeedback" = {
+ *              "method"="GET",
+ *              "path"="/activities/{id}/feedbacks/" ,
+ *              "denormalization_context"={"groups"={"activity-history-feedback"} },
+ *              "normalization_context"={"groups"={"activity-history-feedback"} }
+ *          },
+ *          "put" ={
+ *              "method"="PUT",
+ *              "path"="/activity_related_feedbacks/{id}" ,
+ *              "denormalization_context"={"groups"={"activity-history-feedback"} },
+ *              "normalization_context"={"groups"={"activity-history-feedback"} }
+ *           }
+ *     },
+ *     collectionOperations = {
+ *        "post" = {
+ *              "method"="POST",
+ *              "path"="/activity_related_feedbacks" ,
+ *              "denormalization_context"={"groups"={"activity-history-feedback"} },
+ *              "normalization_context"={"groups"={"activity-history-feedback"} },
+ *         }
+ *     }
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\Activity\ActivityRelatedFeedbackRepository")
  * @UniqueEntity(
  *     fields={"activity", "author"},
@@ -47,6 +73,7 @@ class ActivityRelatedFeedback
     private $id;
 
     /**
+     * @Groups({"activity-history-feedback"})
      * @ORM\Column(type="integer")
      * @Assert\Range(
      *      min = 0,
@@ -58,6 +85,7 @@ class ActivityRelatedFeedback
     private $activityRatingOutOfFive;
 
     /**
+     * @Groups({"activity-history-feedback"})
      * @Assert\NotNull
      * @Assert\NotBlank
      * @Assert\Type(type="string")
@@ -66,6 +94,7 @@ class ActivityRelatedFeedback
     private $label;
 
     /**
+     * @Groups({"activity-history-feedback"})
      * @Assert\NotNull
      * @ORM\ManyToOne(targetEntity="App\Entity\Activity\Activity")
      * @ORM\JoinColumn(nullable=false)
@@ -79,6 +108,7 @@ class ActivityRelatedFeedback
     private $createdBy;
 
     /**
+     * @Groups({"activity-history-feedback"})
      * @Assert\NotNull
      * @ORM\ManyToOne(targetEntity="App\Entity\User\User")
      * @ORM\JoinColumn(nullable=false)
@@ -86,6 +116,7 @@ class ActivityRelatedFeedback
     private $author;
 
     /**
+     * @Groups({"activity-history-feedback"})
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255, nullable=true)
      */

@@ -13,6 +13,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Serializable;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 
 /**
  * @ApiResource()
@@ -29,13 +31,14 @@ class Picture implements Serializable
     private $id;
 
     /**
+     * @Groups({"activity-history"})
      * @ORM\Column(type="string", length=255)
      */
     private $label;
 
     /**
      * @var string
-     *
+     * @Groups({"activity-history"})
      * @ORM\Column(type="string", length=255)
      */
     private $image;

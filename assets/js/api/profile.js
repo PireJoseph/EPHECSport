@@ -23,5 +23,17 @@ export default {
             '/api/sportprofiles/' + id,
             data
         );
+    },
+    addPreferredPartner(id, data) {
+        return ApiService.put(
+            '/api/profile/' + id  + '/partner/add',
+            data
+        );
+    },
+    removePreferredPartner(id, data) {
+        return ApiService.put(
+            '/api/profile/' + id + '/partner/remove',
+            data
+        );
     }
 }

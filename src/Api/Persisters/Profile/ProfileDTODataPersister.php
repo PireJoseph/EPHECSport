@@ -40,6 +40,10 @@ class ProfileDTODataPersister implements DataPersisterInterface
      */
     public function persist($data)
     {
+        if (!is_null($data->preferredPartnerId)) // si on est dans le cas d'ajout ou de suppression d'un partenaire sportif
+        {
+            return $data;
+        }
         return $this->userManager->updateProfileFromDTO($data);
     }
 

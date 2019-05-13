@@ -3,6 +3,8 @@
 namespace App\Repository\Activity;
 
 use App\Entity\Activity\Activity;
+use App\Entity\User\User;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -18,6 +20,24 @@ class ActivityRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Activity::class);
     }
+
+    public function getHistoryForUser(User $user)
+    {
+        $now = new DateTime();
+        $qb = $this->createQueryBuilder('a');
+        $query = $qb
+            ->join('App\Entity\Activity\ActivityParticipation', 'ap', 'WITH', 'ap.activity = a')
+            ->where('a.startAt < :now')
+            ->setParameter('now', $now)
+            ->andWhere('ap.user = :user')
+            ->setParameter('user', $user)
+            ->orderBy('a.startAt', 'DESC')
+            ->getQuery();
+
+        $result = $query->getResult();
+        return $result;
+    }
+
 
     // /**
     //  * @return Activity[] Returns an array of Activity objects

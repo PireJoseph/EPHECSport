@@ -3,6 +3,8 @@
 namespace App\Entity\Activity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiProperty;
+use Symfony\Component\Serializer\Annotation\Groups;
 use App\Entity\Location;
 use App\Entity\Picture;
 use App\Entity\User\User;
@@ -15,7 +17,15 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ApiResource(
- *      attributes={"access_control"="is_granted('ROLE_ADMIN')"},
+ *     collectionOperations={
+ *         "get",
+ *         "getActivityHistory" = {
+ *              "method"="GET",
+ *              "path"="/activities/history/" ,
+ *              "denormalization_context"={"groups"={"activity-history"} },
+ *              "normalization_context"={"groups"={"activity-history"} }
+ *          },
+ *     },
  *     )
  * @ORM\Entity(repositoryClass="App\Repository\Activity\ActivityRepository")
  * @UniqueEntity("label")
@@ -25,6 +35,7 @@ class Activity
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
+     * @Groups({"activity-history"})
      * @ORM\Column(type="integer")
      */
     private $id;
@@ -32,6 +43,7 @@ class Activity
     /**
      * @Assert\NotBlank
      * @Assert\Type(type="string")
+     * @Groups({"activity-history"})
      * @ORM\Column(type="string", length=255)
      */
     private $label;
@@ -55,6 +67,7 @@ class Activity
     private $startAt;
 
     /**
+     * @Groups({"activity-history"})
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $endAt;
@@ -84,6 +97,7 @@ class Activity
     private $isPublished;
 
     /**
+     * @Groups({"activity-history"})
      * @ORM\ManyToOne(targetEntity="App\Entity\Location")
      */
     private $location;
@@ -94,6 +108,7 @@ class Activity
     private $material;
 
     /**
+     * @Groups({"activity-history"})
      * @ORM\ManyToOne(targetEntity="App\Entity\Activity\Sport")
      * @ORM\JoinColumn(nullable=true)
      */
@@ -106,6 +121,7 @@ class Activity
     private $createdBy;
 
     /**
+     * @Groups({"activity-history"})
      * @ORM\ManyToMany(targetEntity="App\Entity\Picture" , cascade={"persist"})
      * @ORM\JoinTable(name="activity_pictures",
      *      joinColumns={@ORM\JoinColumn(name="activity_id", referencedColumnName="id")},

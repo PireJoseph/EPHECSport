@@ -6,6 +6,8 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 
 /**
  * @ApiResource()
@@ -24,6 +26,7 @@ class Material
     /**
      * @Assert\NotBlank
      * @Assert\Type(type="string")
+     * @Groups({"activity-history"})
      * @ORM\Column(type="string", length=255)
      */
     private $label;

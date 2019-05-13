@@ -5,6 +5,8 @@ namespace App\Entity\Activity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 
 
 /**
@@ -24,6 +26,7 @@ class Sport
      * @Assert\NotBlank
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
+     * @Groups({"activity-history"})
      */
     private $label;
 

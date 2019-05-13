@@ -341,7 +341,7 @@ class UserManager
         try
         {
             // Création de la réponse JSON
-            $newProfileDTO = $this->profileDTOAssembler->getFromUser($alreadyExistingUser);
+            $newProfileDTO = $this->profileDTOAssembler->getFromUser($alreadyExistingUser, $connectedUser);
 
             // sauvegarde du nouvel utilisateur
             $this->em->persist($alreadyExistingUser);
@@ -587,6 +587,99 @@ class UserManager
         $sportProfile = $this->em->getRepository(SportProfile::class)->findOneBy(['id' => $id]);
         return $sportProfile;
 
+    }
+
+    /**
+     * @param ProfileDTO $data
+     * @return ProfileDTO
+     * @throws Exception
+     */
+    public function addPreferredPartner(ProfileDTO $data)
+    {
+
+        $preferredPartnerId = $data->preferredPartnerId;
+        $providedUserId = $data->id;
+
+        //
+        // Restricting access
+        if (is_null($this->security->getToken())|| is_null($this->security->getToken()->getUser()||$this->security->getToken()->getUser()->getId()))
+        {
+            throw new AccessDeniedException('Restricted area');
+        }
+        $connectedUser = $this->security->getToken()->getUser();
+        $connectedUserId = $connectedUser->getId();
+        if($connectedUserId !== $providedUserId)
+        {
+            //on ne peut modifier que sont profil
+            throw new AccessDeniedException('Restricted area');
+        }
+
+        /** @var User $preferredPartner */
+        $preferredPartner = $this->em->getRepository(User::class)->find($preferredPartnerId);
+        /** @var User $userToModify */
+        $userToModify = $this->em->getRepository(User::class)->find($providedUserId);
+
+        if(is_null($preferredPartner) || is_null($userToModify))
+        {
+            throw new ItemNotFoundException('User not found');
+        }
+
+        if (!$userToModify->getPreferredPartners()->contains($preferredPartner))
+        {
+            $userToModify->getPreferredPartners()->add($preferredPartner);
+        }
+
+        $this->em->persist($userToModify);
+        $this->em->flush();
+
+        return $data;
+    }
+
+
+    /**
+     * @param ProfileDTO $data
+     * @return ProfileDTO
+     * @throws Exception
+     */
+    public function removePreferredPartner(ProfileDTO $data)
+    {
+
+        $preferredPartnerId = $data->preferredPartnerId;
+        $providedUserId = $data->id;
+
+        //
+        // Restricting access
+        if (is_null($this->security->getToken())|| is_null($this->security->getToken()->getUser()||$this->security->getToken()->getUser()->getId()))
+        {
+            throw new AccessDeniedException('Restricted area');
+        }
+        $connectedUser = $this->security->getToken()->getUser();
+        $connectedUserId = $connectedUser->getId();
+        if($connectedUserId !== $providedUserId)
+        {
+            //on ne peut modifier que sont profil
+            throw new AccessDeniedException('Restricted area');
+        }
+
+        /** @var User $preferredPartner */
+        $preferredPartner = $this->em->getRepository(User::class)->find($preferredPartnerId);
+        /** @var User $userToModify */
+        $userToModify = $this->em->getRepository(User::class)->find($providedUserId);
+
+        if(is_null($preferredPartner) || is_null($userToModify))
+        {
+            throw new ItemNotFoundException('User not found');
+        }
+
+        if ($userToModify->getPreferredPartners()->contains($preferredPartner))
+        {
+            $userToModify->getPreferredPartners()->removeElement($preferredPartner);
+        }
+
+        $this->em->persist($userToModify);
+        $this->em->flush();
+
+        return $data;
     }
 
 }

@@ -167,6 +167,30 @@ export default {
             state.isLoading = false;
             state.error = error.message;
         },
+        ['ADDING_PREFERRED_PARTNER'](state){
+            state.isLoading = true;
+            state.error = null;
+        },
+        ['ADD_PREFERRED_PARTNER_SUCCESS'](state){
+            state.isLoading = false;
+            state.error = null;
+        },
+        ['ADD_PREFERRED_PARTNER_ERROR'](state, error){
+            state.isLoading = false;
+            state.error = error.message;
+        },
+        ['REMOVING_PREFERRED_PARTNER'](state){
+            state.isLoading = true;
+            state.error = null;
+        },
+        ['REMOVE_PREFERRED_PARTNER'](state){
+            state.isLoading = false;
+            state.error = null;
+        },
+        ['REMOVE_PREFERRED_PARTNER'](state, error){
+            state.isLoading = false;
+            state.error = error.message;
+        },
         ['REFRESHING_OTHER_PROFILE_DATA'](state){
             state.isLoading = true;
             state.error = null;
@@ -262,6 +286,32 @@ export default {
                 )
                 .catch(err => commit('PUT_SPORT_PROFILE_DATA_ERROR', err))
         },
+
+        addPreferredPartner({commit, state}, data){
+            commit('ADDING_PREFERRED_PARTNER');
+            let payload = state.userId;
+            return ProfileAPI.addPreferredPartner(payload, data)
+                .then(
+                    function(){
+                        commit('ADD_PREFERRED_PARTNER_SUCCESS');
+                    }
+                )
+                .catch(err => commit('ADD_PREFERRED_PARTNER_ERROR', err))
+        },
+
+        removePreferredPartner({commit, state}, data){
+            commit('REMOVING_PREFERRED_PARTNER');
+            let payload = state.userId;
+            return ProfileAPI.removePreferredPartner(payload, data)
+                .then(
+                    function(){
+                        commit('REMOVE_PREFERRED_PARTNER')
+                    }
+                )
+                .catch(err => commit('REMOVE_PREFERRED_PARTNER', err))
+        },
+
+
 
     }
 

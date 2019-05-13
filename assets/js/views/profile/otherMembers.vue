@@ -9,7 +9,7 @@
         <div class="w3-card w3-round w3-white w3-padding-32 w3-margin-top w3-container">
             <vue-good-table
                     :columns="header"
-                    :rows="itemsArray"
+                    :rows="otherProfiles"
                     :fixed-header="true"
                     :rtl="true"
                     :search-options="{
@@ -75,18 +75,6 @@
             }
         },
         computed: {
-            itemsArray() {
-                let editedArray = [];
-
-                this.$store.state.user.otherProfiles.map(function(e) {
-                        e['action'] = '';
-                        editedArray.push(e);
-                    }
-                )
-
-                console.log(editedArray)
-                return editedArray
-            },
             ...mapGetters({
                 otherProfiles: 'user/otherProfiles',
             })
@@ -95,10 +83,33 @@
         methods: {
 
             addToPreferredPartners(id) {
-                console.log(id)
+                let payload = {};
+                let userId = {
+                    userId: this.$store.getters['user/userId'],
+                };
+                payload.preferredPartnerId = id;
+                this.$store.dispatch('user/addPreferredPartner', payload)
+                .then(() => {
+                    this.$store.dispatch('common/loadBaseData', userId)
+                })
+                .then(()=> {
+                    this.$store.dispatch('user/getOtherMembers')
+                })
+
             },
             removeFromPreferredPartners(id) {
-                console.log(id)
+                let payload = {};
+                let userId = {
+                    userId: this.$store.getters['user/userId'],
+                };
+                payload.preferredPartnerId = id;
+                this.$store.dispatch('user/removePreferredPartner', payload)
+                .then(() => {
+                    this.$store.dispatch('common/loadBaseData', userId)
+                })
+                .then(()=> {
+                    this.$store.dispatch('user/getOtherMembers')
+                })
             },
             getOtherMemberData() {
                 this.$store.dispatch('user/getOtherMembers')

@@ -11,6 +11,8 @@ namespace App\Entity\Profile\DTO;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use Symfony\Component\Serializer\Annotation\Groups;
+use App\Controller\Actions\Profile\RemovePreferredPartner;
+use App\Controller\Actions\Profile\AddPreferredPartner;
 
 /**
  * @ApiResource(
@@ -26,6 +28,20 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *              "path"="/profile/{id}",
  *              "denormalization_context"={"groups"={"write"} },
  *              "normalization_context"={"groups"={"write"} }
+ *         },
+ *        "addPreferredPartner" = {
+ *              "method"="PUT",
+ *              "path"="/profile/{id}/partner/add",
+ *              "denormalization_context"={"groups"={"partner"} },
+ *              "normalization_context"={"groups"={"partner"} },
+ *              "controller"=AddPreferredPartner::class,
+ *         },
+ *        "removePreferredPartner" = {
+ *              "method"="PUT",
+ *              "path"="/profile/{id}/partner/remove",
+ *              "denormalization_context"={"groups"={"partner"} },
+ *              "normalization_context"={"groups"={"partner"} },
+ *              "controller"=RemovePreferredPartner::class,
  *         },
  *     },
  *     collectionOperations={
@@ -130,5 +146,10 @@ class ProfileDTO
      * @Groups({"all"})
      */
     public $isMyPartner;
+
+    /**
+     * @Groups({"partner"})
+     */
+    public $preferredPartnerId;
 
 }
