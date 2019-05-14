@@ -38,6 +38,26 @@ class ActivityRepository extends ServiceEntityRepository
         return $result;
     }
 
+    public function getAvailable($activityIdsArray)
+    {
+        $now = new DateTime();
+        $qb = $this->createQueryBuilder('a');
+        $query = $qb
+            ->select('a')
+            ->andWhere('a.isVisible = true')
+            ->andWhere('a.isPublished = true')
+            ->andWhere('a.startAt > :now')
+            ->setParameter('now', $now)
+
+            ->andWhere('a.id NOT in (:activityIdsArray)')
+            ->setParameter('activityIdsArray', $activityIdsArray)
+
+            ->getQuery();
+
+        $result = $query->getResult();
+        return $result;
+    }
+
 
     // /**
     //  * @return Activity[] Returns an array of Activity objects

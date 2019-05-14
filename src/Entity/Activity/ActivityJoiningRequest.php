@@ -7,9 +7,30 @@ use App\Entity\User\User;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use ApiPlatform\Core\Annotation\ApiProperty;
+use Symfony\Component\Serializer\Annotation\Groups;
+use App\Controller\Actions\Activity\MakeActivityJoiningRequest;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     itemOperations={
+ *          "get" = {
+ *              "method"="GET",
+ *              "path"= "/activities/requests/{id}",
+ *              "denormalization_context"={"groups"={"get-request"} },
+ *              "normalization_context"={"groups"={"get-request"} }
+ *           }
+ *     },
+ *     collectionOperations={
+ *          "makeRequest" = {
+ *              "method"="POST",
+ *              "path"="/activities/requests/",
+ *              "denormalization_context"={"groups"={"make-request"} },
+ *              "normalization_context"={"groups"={"make-request"} },
+ *              "validation_groups"={"makeRequestValidation"}
+ *          }
+ *     },
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\Activity\ActivityJoiningRequestRepository")
  * @UniqueEntity(
  *     fields={"activity", "recipitent"},
@@ -27,18 +48,21 @@ class ActivityJoiningRequest
     private $id;
 
     /**
+     * @Groups({"get-request"})
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
 
     /**
+     * @Groups({"get-request"})
      * @Assert\Type(type="bool")
      * @ORM\Column(type="boolean")
      */
     private $isAccepted;
 
     /**
-     * @Assert\NotNull
+     * @Groups({"get-request", "make-request"})
+     * @Assert\NotNull(groups={"Default, makeRequestValidation"})
      * @ORM\ManyToOne(targetEntity="App\Entity\Activity\Activity")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -51,6 +75,7 @@ class ActivityJoiningRequest
     private $createdBy;
 
     /**
+     * @Groups({"get-request"})
      * @Assert\NotNull
      * @ORM\ManyToOne(targetEntity="App\Entity\User\User")
      * @ORM\JoinColumn(nullable=false)

@@ -13,6 +13,9 @@ export default {
         isActivityHistoryFeedbackLoading : false,
         activityHistoryFeedbackLoadingError : false,
         activityHistoryFeedback : null,
+        availableActivities : [],
+        activityJoiningRequestLoading : false,
+        activityJoiningRequestError : null
     },
     getters: {
 
@@ -48,6 +51,15 @@ export default {
         },
         activityHistoryFeedbackLoadingError (state) {
             return state.activityHistoryFeedbackLoadingError;
+        },
+        availableActivities (state) {
+            return state.availableActivities
+        },
+        activityJoiningRequestLoading (state) {
+            return state.activityJoiningRequestLoading;
+        },
+        activityJoiningRequestError (state) {
+            return state.activityJoiningRequestError
         }
 
     },
@@ -107,6 +119,31 @@ export default {
             state.isActivityHistoryFeedbackLoading = false;
             state.activityHistoryFeedbackLoadingError = error.message;
         },
+        ['GETTING_AVAILABLE_ACTIVITIES_DATA'](state){
+            state.isLoading = true;
+            state.error = null;
+        },
+        ['GET_AVAILABLE_ACTIVITIES_DATA_SUCCESS'](state, availableActivities){
+            state.isLoading = false;
+            state.error = null;
+            state.availableActivities = availableActivities;
+        },
+        ['GET_AVAILABLE_ACTIVITIES_DATA_ERROR'](state, error){
+            state.isLoading = false;
+            state.error = error.message;
+        },
+        ['MAKING_ACTIVITY_JOINING_REQUEST'](state){
+            state.activityJoiningRequestLoading = true;
+            state.activityJoiningRequestError = null;
+        },
+        ['MAKE_ACTIVITY_JOINING_REQUEST_SUCCESS'](state){
+            state.activityJoiningRequestLoading = false;
+            state.activityJoiningRequestError = null;
+        },
+        ['MAKE_ACTIVITY_JOINING_REQUEST_ERROR'](state, error){
+            state.activityJoiningRequestLoading = false;
+            state.activityJoiningRequestError = error.message;
+        },
     },
     actions : {
 
@@ -161,6 +198,23 @@ export default {
                 )
                 .catch(err => commit('PUT_ACTIVITY_HISTORY_FEEDBACK_ERROR', err))
         },
+        getAvailableActivities({commit}) {
+            commit('GETTING_AVAILABLE_ACTIVITIES_DATA');
+            return ActivityAPI.getAvailableActivities()
+                .then(
+                    function(res){
+                        console.log(res.data);
+                        commit('GET_AVAILABLE_ACTIVITIES_DATA_SUCCESS', res.data['hydra:member'])
+                    }
+                )
+                .catch(err => commit('GET_AVAILABLE_ACTIVITIES_DATA_ERROR', err))
+        },
+        makeActivityJoiningRequest({commit}, payload) {
+            commit('MAKING_ACTIVITY_JOINING_REQUEST');
+            return ActivityAPI.makeActivityJoiningRequest(payload)
+                .then(res => commit('MAKE_ACTIVITY_JOINING_REQUEST_SUCCESS'))
+                .catch(err => commit('MAKE_ACTIVITY_JOINING_REQUEST_ERROR', err))
+        }
 
     }
 

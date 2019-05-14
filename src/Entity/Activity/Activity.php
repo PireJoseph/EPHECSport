@@ -13,6 +13,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use App\Controller\Actions\Activity\GetAvailableActivities;
 
 
 /**
@@ -25,6 +26,12 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *              "denormalization_context"={"groups"={"activity-history"} },
  *              "normalization_context"={"groups"={"activity-history"} }
  *          },
+ *         "getAvailableActivities" = {
+ *              "method"="GET",
+ *              "path"="/activities/available/" ,
+ *              "denormalization_context"={"groups"={"activity-available"} },
+ *              "normalization_context"={"groups"={"activity-available"} },
+ *          },
  *     },
  *     )
  * @ORM\Entity(repositoryClass="App\Repository\Activity\ActivityRepository")
@@ -35,7 +42,7 @@ class Activity
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
-     * @Groups({"activity-history"})
+     * @Groups({"activity-history", "activity-available"})
      * @ORM\Column(type="integer")
      */
     private $id;
@@ -43,12 +50,13 @@ class Activity
     /**
      * @Assert\NotBlank
      * @Assert\Type(type="string")
-     * @Groups({"activity-history"})
+     * @Groups({"activity-history", "activity-available"})
      * @ORM\Column(type="string", length=255)
      */
     private $label;
 
     /**
+     * @Groups({"activity-available"})
      * @Assert\Type(type="integer")
      * @ORM\Column(type="integer", nullable=true)
      */
@@ -62,6 +70,7 @@ class Activity
     private $createdAt;
 
     /**
+     * @Groups({"activity-available"})
      * @ORM\Column(type="datetime")
      */
     private $startAt;
@@ -79,6 +88,7 @@ class Activity
     private $maxNumberOfPlayer;
 
     /**
+     * @Groups({"activity-available"})
      * @Assert\Type(type="bool")
      * @ORM\Column(type="boolean")
      */
@@ -97,18 +107,19 @@ class Activity
     private $isPublished;
 
     /**
-     * @Groups({"activity-history"})
+     * @Groups({"activity-history", "activity-available"})
      * @ORM\ManyToOne(targetEntity="App\Entity\Location")
      */
     private $location;
 
     /**
+     * @Groups({"activity-available"})
      * @ORM\ManyToMany(targetEntity="App\Entity\Activity\Material")
      */
     private $material;
 
     /**
-     * @Groups({"activity-history"})
+     * @Groups({"activity-history", "activity-available"})
      * @ORM\ManyToOne(targetEntity="App\Entity\Activity\Sport")
      * @ORM\JoinColumn(nullable=true)
      */

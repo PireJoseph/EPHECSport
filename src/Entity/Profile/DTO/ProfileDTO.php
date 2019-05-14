@@ -20,7 +20,7 @@ use App\Controller\Actions\Profile\AddPreferredPartner;
  *        "getProfile" = {
  *              "method"="GET",
  *              "path"="/profile/{id}" ,
-*               "denormalization_context"={"groups"={"read"} },
+ *               "denormalization_context"={"groups"={"read"} },
  *              "normalization_context"={"groups"={"read"} }
  *          },
  *        "updateProfile" = {

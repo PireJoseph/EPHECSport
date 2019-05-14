@@ -22,5 +22,16 @@ export default {
             '/api/activity_related_feedbacks/' + id,
             payload
         )
+    },
+    getAvailableActivities() {
+        return ApiService.get(
+            '/api/activities/available'
+        );
+    },
+    makeActivityJoiningRequest(payload) {
+        return ApiService.post(
+            '/api/activities/requests/',
+            payload
+        )
     }
 }

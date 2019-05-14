@@ -26,7 +26,7 @@ class Material
     /**
      * @Assert\NotBlank
      * @Assert\Type(type="string")
-     * @Groups({"activity-history"})
+     * @Groups({"activity-history","activity-available"})
      * @ORM\Column(type="string", length=255)
      */
     private $label;

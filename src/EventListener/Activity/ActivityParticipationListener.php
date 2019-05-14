@@ -62,8 +62,9 @@ class ActivityParticipationListener
         {
             $concernedUser = $entity->getRecipitent();
             $concernedActivity = $entity->getActivity();
+            $activityJoinableByAnyone = $concernedActivity->getIsJoinableByAnyone();
             $joiningRequestAccepted = $entity->getIsAccepted();
-            if(TRUE === $joiningRequestAccepted)
+            if( (TRUE === $activityJoinableByAnyone) || (TRUE === $joiningRequestAccepted) )
             {
                 // vérifier s'il existe déja une participation pour cette activité
                 $alreadyExistingActivityParticipation = $em->getRepository(ActivityParticipation::class)->findOneBy([

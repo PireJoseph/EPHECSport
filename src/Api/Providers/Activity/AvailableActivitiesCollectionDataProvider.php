@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: jpire
- * Date: 9/05/19
- * Time: 23:50
+ * Date: 13/05/19
+ * Time: 17:37
  */
 
 namespace App\Api\Providers\Activity;
@@ -15,7 +15,7 @@ use ApiPlatform\Core\Exception\ResourceClassNotSupportedException;
 use App\Entity\Activity\Activity;
 use App\Managers\Activity\ActivityManager;
 
-class ActivityCollectionDataProvider  implements CollectionDataProviderInterface, RestrictedDataProviderInterface
+class AvailableActivitiesCollectionDataProvider implements  CollectionDataProviderInterface, RestrictedDataProviderInterface
 {
 
     private $activityManager;
@@ -27,21 +27,26 @@ class ActivityCollectionDataProvider  implements CollectionDataProviderInterface
 
     public function supports(string $resourceClass, string $operationName = null, array $context = []): bool
     {
-        return (( Activity::class === $resourceClass) && ($operationName !== 'getAvailableActivities'));
+        return ( (Activity::class === $resourceClass) && ( ("getAvailableActivities" === $operationName) ));
     }
 
     /**
      * Retrieves a collection.
      *
-     * @throws ResourceClassNotSupportedException
-     *
+     * @param string $resourceClass
+     * @param string|null $operationName
      * @return array|\Traversable
      */
     public function getCollection(string $resourceClass, string $operationName = null)
     {
-        foreach ($this->activityManager->getActivityHistory() as $activity)
+        $test = 'hehe';
+        foreach ($this->activityManager->getAvailableActivities() as $availableActivity)
         {
-            yield $activity;
+            yield $availableActivity;
         }
+
     }
+
+
+
 }
