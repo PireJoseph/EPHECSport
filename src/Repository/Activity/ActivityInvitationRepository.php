@@ -3,6 +3,7 @@
 namespace App\Repository\Activity;
 
 use App\Entity\Activity\ActivityInvitation;
+use App\Entity\User\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -17,6 +18,19 @@ class ActivityInvitationRepository extends ServiceEntityRepository
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, ActivityInvitation::class);
+    }
+
+    public function getNonAnsweredForThisUser(User $user)
+    {
+        $qb = $this->createQueryBuilder('ai');
+        $query = $qb
+            ->where('ai.recipitent = :user')
+            ->setParameter('user', $user)
+            ->andWhere('ai.answeredAt is NULL')
+            ->getQuery();
+
+        $result = $query->getResult();
+        return $result;
     }
 
     // /**

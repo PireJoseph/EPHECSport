@@ -7,10 +7,35 @@ use App\Entity\User\User;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-
+use ApiPlatform\Core\Annotation\ApiProperty;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     itemOperations={
+ *          "getInvitation" = {
+ *              "method"="GET",
+ *              "path"= "/activities/invitations/{id}",
+ *              "denormalization_context"={"groups"={"get-invitation"} },
+ *              "normalization_context"={"groups"={"get-invitation"} }
+ *           },
+ *          "putInvitation" = {
+ *              "method"="PUT",
+ *              "path"="/activities/invitations/{id}",
+ *              "denormalization_context"={"groups"={"put-invitation"} },
+ *              "normalization_context"={"groups"={"put-invitation"} },
+ *              "validation_groups"={"putInvitationValidation"}
+ *          }
+ *     },
+ *     collectionOperations={
+ *          "getInvitations" = {
+ *              "method"="GET",
+ *              "path"="/activities/invitations/",
+ *              "denormalization_context"={"groups"={"get-invitations"} },
+ *              "normalization_context"={"groups"={"get-invitations"} },
+ *          }
+ *     }
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\Activity\ActivityInvitationRepository")
  * @UniqueEntity(
  *     fields={"activity", "recipitent"},
@@ -21,6 +46,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 class ActivityInvitation
 {
     /**
+     * @Groups({"get-invitation","get-invitations"})
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -28,24 +54,28 @@ class ActivityInvitation
     private $id;
 
     /**
+     * @Groups({"get-invitation","get-invitations"})
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
 
     /**
-     * @Assert\Type(type="bool")
+     * @Groups({"get-invitation","get-invitations"})
+     * @Assert\Type(type="bool",groups={"Default, putInvitationValidation"})
      * @ORM\Column(type="boolean")
      */
     private $isAccepted;
 
     /**
-     * @Assert\NotNull
+     * @Groups({"get-invitation","get-invitations"})
+     * @Assert\NotNull(groups={"Default, putInvitationValidation"})
      * @ORM\ManyToOne(targetEntity="App\Entity\Activity\Activity")
      * @ORM\JoinColumn(nullable=false)
      */
     private $activity;
 
     /**
+     * @Groups({"get-invitation","get-invitations"})
      * @ORM\ManyToOne(targetEntity="App\Entity\User\User")
      * @ORM\JoinColumn(nullable=false)
      */

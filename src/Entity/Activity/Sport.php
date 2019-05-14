@@ -26,7 +26,7 @@ class Sport
      * @Assert\NotBlank
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
-     * @Groups({"activity-history","activity-available"})
+     * @Groups({"activity-history","activity-available","get-invitation","get-invitations"})
      */
     private $label;
 

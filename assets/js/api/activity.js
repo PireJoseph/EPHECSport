@@ -33,5 +33,16 @@ export default {
             '/api/activities/requests/',
             payload
         )
+    },
+    getActivityInvitations() {
+        return ApiService.get(
+            '/api/activities/invitations/'
+        );
+    },
+    answerActivityInvitation(id, payload) {
+        return ApiService.put(
+            '/api/activities/invitations/' + id,
+            payload
+        )
     }
 }

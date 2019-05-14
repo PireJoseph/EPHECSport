@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: jpire
- * Date: 13/05/19
- * Time: 17:37
+ * Date: 15/05/19
+ * Time: 0:12
  */
 
 namespace App\Api\Providers\Activity;
@@ -11,13 +11,11 @@ namespace App\Api\Providers\Activity;
 
 use ApiPlatform\Core\DataProvider\CollectionDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
-use ApiPlatform\Core\Exception\ResourceClassNotSupportedException;
-use App\Entity\Activity\Activity;
+use App\Entity\Activity\ActivityInvitation;
 use App\Managers\Activity\ActivityManager;
 
-class AvailableActivitiesCollectionDataProvider implements  CollectionDataProviderInterface, RestrictedDataProviderInterface
+class ActivityInvitationCollectionDataProvider implements CollectionDataProviderInterface, RestrictedDataProviderInterface
 {
-
     private $activityManager;
 
     public function __construct(ActivityManager $activityManager)
@@ -27,7 +25,7 @@ class AvailableActivitiesCollectionDataProvider implements  CollectionDataProvid
 
     public function supports(string $resourceClass, string $operationName = null, array $context = []): bool
     {
-        return ( (Activity::class === $resourceClass) && ( ("getAvailableActivities" === $operationName) ));
+        return ( (ActivityInvitation::class === $resourceClass) && ( ("getInvitations" === $operationName) ));
     }
 
     /**
@@ -39,13 +37,11 @@ class AvailableActivitiesCollectionDataProvider implements  CollectionDataProvid
      */
     public function getCollection(string $resourceClass, string $operationName = null)
     {
-        foreach ($this->activityManager->getAvailableActivities() as $availableActivity)
+        foreach ($this->activityManager->getActivityInvitations() as $activityInvitation)
         {
-            yield $availableActivity;
+            yield $activityInvitation;
         }
 
     }
-
-
 
 }

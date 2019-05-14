@@ -119,12 +119,14 @@ easy_admin:
                     - 'activity'
                     - 'recipitent'
                     - 'isAccepted'
+                    - 'answeredAt'
             list:
                 fields:
                     - 'activity'
                     - 'recipitent'
                     - 'isAccepted'
                     - 'createdAt'
+                    - 'answeredAt'
 
         ActivityJoiningRequest:
             class: App\Entity\Activity\ActivityJoiningRequest

@@ -18,6 +18,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\User\UserRepository")
@@ -51,6 +53,7 @@ class User implements UserInterface, iHasRole
      * @Assert\NotBlank()
      * @Assert\NotNull()
      * @Assert\Type(type="string")
+     * @Groups({"get-invitation","get-invitations"})
      * @ORM\Column(type="string", length=180, unique=true)
      */
     private $username;

@@ -15,7 +15,10 @@ export default {
         activityHistoryFeedback : null,
         availableActivities : [],
         activityJoiningRequestLoading : false,
-        activityJoiningRequestError : null
+        activityJoiningRequestError : null,
+        activityInvitations : [],
+        activityInvitationAnswerLoading : false,
+        activityInvitationAnswerError : null
     },
     getters: {
 
@@ -60,6 +63,15 @@ export default {
         },
         activityJoiningRequestError (state) {
             return state.activityJoiningRequestError
+        },
+        activityInvitations (state) {
+            return state.activityInvitations
+        },
+        activityInvitationAnswerLoading (state) {
+            return state.activityInvitationAnswerLoading
+        },
+        activityInvitationAnswerError (state) {
+            return state.activityInvitationAnswerError
         }
 
     },
@@ -144,6 +156,32 @@ export default {
             state.activityJoiningRequestLoading = false;
             state.activityJoiningRequestError = error.message;
         },
+        ['GETTING_ACTIVITY_INVITATIONS_DATA'](state){
+            state.isLoading = true;
+            state.error = null;
+        },
+        ['GET_ACTIVITY_INVITATIONS_DATA_SUCCESS'](state, activityInvitations){
+            state.isLoading = false;
+            state.error = null;
+            state.activityInvitations = activityInvitations;
+        },
+        ['GET_ACTIVITY_INVITATIONS_DATA_ERROR'](state, error){
+            state.isLoading = false;
+            state.error = error.message;
+        },
+        ['ANSWERING_ACTIVITY_INVITATION'](state){
+            state.activityInvitationAnswerLoading = true;
+            state.activityInvitationAnswerError = null;
+        },
+        ['ANSWER_ACTIVITY_INVITATION_SUCCESS'](state){
+            state.activityInvitationAnswerLoading = false;
+            state.activityInvitationAnswerError = null;
+        },
+        ['ANSWER_ACTIVITY_INVITATION_ERROR'](state, error){
+            state.activityInvitationAnswerLoading = false;
+            state.activityInvitationAnswerError = error.message;
+        },
+
     },
     actions : {
 
@@ -189,7 +227,6 @@ export default {
         putActivityHistoryFeedback({commit}, payload) {
             commit('PUTTING_ACTIVITY_HISTORY_FEEDBACK');
             let id = payload.activityRelatedFeedbackId;
-            console.log(payload)
             return ActivityAPI.putActivityHistoryFeedback(id, payload)
                 .then(
                     function(res){
@@ -214,6 +251,19 @@ export default {
             return ActivityAPI.makeActivityJoiningRequest(payload)
                 .then(res => commit('MAKE_ACTIVITY_JOINING_REQUEST_SUCCESS'))
                 .catch(err => commit('MAKE_ACTIVITY_JOINING_REQUEST_ERROR', err))
+        },
+        getActivityInvitations({commit}, payload) {
+            commit('GETTING_ACTIVITY_INVITATIONS_DATA');
+            return ActivityAPI.getActivityInvitations(payload)
+                .then(res => commit('GET_ACTIVITY_INVITATIONS_DATA_SUCCESS',res.data['hydra:member']))
+                .catch(err => commit('GET_ACTIVITY_INVITATIONS_DATA_ERROR', err))
+        },
+        answerActivityInvitation({commit}, payload) {
+            commit('ANSWERING_ACTIVITY_INVITATION');
+            let id = payload.id;
+            return ActivityAPI.answerActivityInvitation(id, payload)
+                .then(res => commit('ANSWER_ACTIVITY_INVITATION_SUCCESS'))
+                .catch(err => commit('ANSWER_ACTIVITY_INVITATION_ERROR', err))
         }
 
     }

@@ -70,7 +70,7 @@
                         globalSearchDisabled: true,
                     },
                     {
-                        label: 'Terminée à',
+                        label: 'Commence à',
                         field: 'startAt',
                         filterable: true,
                         type: 'date',

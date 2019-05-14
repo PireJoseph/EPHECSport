@@ -167,6 +167,43 @@ class ActivityManager
 
     }
 
+    public function getActivityInvitations()
+    {
+        //
+        // Restricting access
+        if (is_null($this->security->getToken()) || is_null($this->security->getToken()->getUser() || $this->security->getToken()->getUser()->getId())) {
+            throw new AccessDeniedException('Restricted area');
+        }
+        $connectedUser = $this->security->getToken()->getUser();
+
+        $activityInvitations = $this->em->getRepository(ActivityInvitation::class)->getNonAnsweredForThisUser($connectedUser);
+
+        return $activityInvitations;
+
+    }
+
+    /**
+     * @param ActivityInvitation $activityInvitation
+     * @return ActivityInvitation
+     * @throws Exception
+     */
+    public function answerActivityInvitation(ActivityInvitation $activityInvitation)
+    {
+        //
+        // Restricting access
+        if (is_null($this->security->getToken()) || is_null($this->security->getToken()->getUser() || $this->security->getToken()->getUser()->getId())) {
+            throw new AccessDeniedException('Restricted area');
+        }
+
+        $now = new DateTime();
+
+        $activityInvitation->setAnsweredAt($now);
+        $this->em->persist($activityInvitation);
+        $this->em->flush();
+
+        return $activityInvitation;
+
+    }
 
 
 }

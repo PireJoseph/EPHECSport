@@ -9,7 +9,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use Symfony\Component\Serializer\Annotation\Groups;
-use App\Controller\Actions\Activity\MakeActivityJoiningRequest;
 
 /**
  * @ApiResource(
@@ -29,7 +28,7 @@ use App\Controller\Actions\Activity\MakeActivityJoiningRequest;
  *              "normalization_context"={"groups"={"make-request"} },
  *              "validation_groups"={"makeRequestValidation"}
  *          }
- *     },
+ *     }
  * )
  * @ORM\Entity(repositoryClass="App\Repository\Activity\ActivityJoiningRequestRepository")
  * @UniqueEntity(

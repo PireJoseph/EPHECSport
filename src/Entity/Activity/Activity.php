@@ -18,8 +18,14 @@ use App\Controller\Actions\Activity\GetAvailableActivities;
 
 /**
  * @ApiResource(
+ *     itemOperations = {
+ *          "get" = {
+ *              "method"="GET",
+ *              "path"="/activities/{id}",
+ *              "requirements"={"id"="\d+"}
+ *          }
+ *     },
  *     collectionOperations={
- *         "get",
  *         "getActivityHistory" = {
  *              "method"="GET",
  *              "path"="/activities/history/" ,
@@ -50,7 +56,7 @@ class Activity
     /**
      * @Assert\NotBlank
      * @Assert\Type(type="string")
-     * @Groups({"activity-history", "activity-available"})
+     * @Groups({"activity-history", "activity-available", "get-invitation","get-invitations"})
      * @ORM\Column(type="string", length=255)
      */
     private $label;
@@ -70,7 +76,7 @@ class Activity
     private $createdAt;
 
     /**
-     * @Groups({"activity-available"})
+     * @Groups({"activity-available","get-invitation","get-invitations"})
      * @ORM\Column(type="datetime")
      */
     private $startAt;
@@ -107,7 +113,7 @@ class Activity
     private $isPublished;
 
     /**
-     * @Groups({"activity-history", "activity-available"})
+     * @Groups({"activity-history", "activity-available", "get-invitation","get-invitations"})
      * @ORM\ManyToOne(targetEntity="App\Entity\Location")
      */
     private $location;
@@ -119,7 +125,7 @@ class Activity
     private $material;
 
     /**
-     * @Groups({"activity-history", "activity-available"})
+     * @Groups({"activity-history", "activity-available","get-invitation","get-invitations"})
      * @ORM\ManyToOne(targetEntity="App\Entity\Activity\Sport")
      * @ORM\JoinColumn(nullable=true)
      */
