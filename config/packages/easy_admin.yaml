@@ -164,6 +164,7 @@ easy_admin:
                     - 'activity'
                     - 'user'
                     - 'isConfirmed'
+                    - 'answeredAt'
             list:
                 fields:
                     - 'activity'

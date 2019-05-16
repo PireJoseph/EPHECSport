@@ -56,13 +56,13 @@ class Activity
     /**
      * @Assert\NotBlank
      * @Assert\Type(type="string")
-     * @Groups({"activity-history", "activity-available", "get-invitation","get-invitations"})
+     * @Groups({"activity-history", "activity-available", "get-invitation","get-invitations","get-participation","get-participations"})
      * @ORM\Column(type="string", length=255)
      */
     private $label;
 
     /**
-     * @Groups({"activity-available"})
+     * @Groups({"activity-available","get-participation","get-participations","get-participation","get-participations"})
      * @Assert\Type(type="integer")
      * @ORM\Column(type="integer", nullable=true)
      */
@@ -76,13 +76,13 @@ class Activity
     private $createdAt;
 
     /**
-     * @Groups({"activity-available","get-invitation","get-invitations"})
+     * @Groups({"activity-available","get-invitation","get-invitations","get-participation","get-participations"})
      * @ORM\Column(type="datetime")
      */
     private $startAt;
 
     /**
-     * @Groups({"activity-history"})
+     * @Groups({"activity-history","get-participation","get-participations"})
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $endAt;
@@ -113,19 +113,19 @@ class Activity
     private $isPublished;
 
     /**
-     * @Groups({"activity-history", "activity-available", "get-invitation","get-invitations"})
+     * @Groups({"activity-history", "activity-available", "get-invitation","get-invitations","get-participation","get-participations"})
      * @ORM\ManyToOne(targetEntity="App\Entity\Location")
      */
     private $location;
 
     /**
-     * @Groups({"activity-available"})
+     * @Groups({"activity-available", "get-invitation","get-invitations","get-participation","get-participations"})
      * @ORM\ManyToMany(targetEntity="App\Entity\Activity\Material")
      */
     private $material;
 
     /**
-     * @Groups({"activity-history", "activity-available","get-invitation","get-invitations"})
+     * @Groups({"activity-history", "activity-available","get-invitation","get-invitations","get-participation","get-participations"})
      * @ORM\ManyToOne(targetEntity="App\Entity\Activity\Sport")
      * @ORM\JoinColumn(nullable=true)
      */

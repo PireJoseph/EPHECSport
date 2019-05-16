@@ -10,6 +10,7 @@ namespace App\Managers\Activity;
 
 
 use App\Entity\Activity\Activity;
+use App\Entity\Activity\ActivityCancellation;
 use App\Entity\Activity\ActivityInvitation;
 use App\Entity\Activity\ActivityJoiningRequest;
 use App\Entity\Activity\ActivityParticipation;
@@ -203,6 +204,73 @@ class ActivityManager
 
         return $activityInvitation;
 
+    }
+
+    public function getActivityParticipations()
+    {
+
+        //
+        // Restricting access
+        if (is_null($this->security->getToken())|| is_null($this->security->getToken()->getUser()||$this->security->getToken()->getUser()->getId()))
+        {
+            throw new AccessDeniedException('Restricted area');
+        }
+        $connectedUser = $this->security->getToken()->getUser();
+
+        $activityParticipationArray = [];
+        $itemArray = [];
+        $activityParticipationQueryResult = $this->em->getRepository(ActivityParticipation::class)->getNextsForUserWithRelatedCancellation($connectedUser);
+        foreach ($activityParticipationQueryResult as $entity) {
+            if ($entity instanceof ActivityParticipation) {
+                $itemArray['participation'] = $entity;
+            }
+            else {
+                $itemArray['cancellation'] = $entity;
+                $activityParticipationArray[] = $itemArray;
+                $itemArray = [];
+            }
+        }
+
+
+
+        return $activityParticipationArray;
+
+
+    }
+
+    public function persistActivityParticipation(ActivityParticipation $activityParticipation)
+    {
+        //
+        // Restricting access
+        if (is_null($this->security->getToken())|| is_null($this->security->getToken()->getUser()||$this->security->getToken()->getUser()->getId()))
+        {
+            throw new AccessDeniedException('Restricted area');
+        }
+        $connectedUser = $this->security->getToken()->getUser();
+
+        $this->em->persist($activityParticipation);
+        $this->em->flush();
+
+        return $activityParticipation;
+    }
+
+    public function persistActivityCancellation(ActivityCancellation $activityCancellation)
+    {
+        //
+        // Restricting access
+        if (is_null($this->security->getToken())|| is_null($this->security->getToken()->getUser()||$this->security->getToken()->getUser()->getId()))
+        {
+            throw new AccessDeniedException('Restricted area');
+        }
+        $connectedUser = $this->security->getToken()->getUser();
+
+        $activityCancellation->setCreatedBy($connectedUser);
+        $activityCancellation->setCancellingUser($connectedUser);
+
+        $this->em->persist($activityCancellation);
+        $this->em->flush();
+
+        return $activityCancellation;
     }
 
 

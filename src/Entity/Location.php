@@ -34,7 +34,7 @@ class Location
      * @Assert\NotNull()
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
-     * @Groups({"activity-history","activity-available", "get-invitation","get-invitations"})
+     * @Groups({"activity-history","activity-available", "get-invitation","get-invitations","get-participation","get-participations"})
      */
     private $label;
 
@@ -43,7 +43,7 @@ class Location
      * @Assert\NotNull()
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
-     * @Groups({"activity-history","activity-available", "get-invitation","get-invitations"})
+     * @Groups({"activity-history","activity-available", "get-invitation","get-invitations","get-participation","get-participations"})
      */
     private $city;
 

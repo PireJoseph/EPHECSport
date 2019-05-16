@@ -19,6 +19,7 @@ class Material
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
+     * @Groups({"activity-available", "get-invitation","get-invitations","get-participation","get-participations"})
      * @ORM\Column(type="integer")
      */
     private $id;
@@ -26,7 +27,7 @@ class Material
     /**
      * @Assert\NotBlank
      * @Assert\Type(type="string")
-     * @Groups({"activity-history","activity-available"})
+     * @Groups({"activity-available", "get-invitation","get-invitations","get-participation","get-participations"})
      * @ORM\Column(type="string", length=255)
      */
     private $label;

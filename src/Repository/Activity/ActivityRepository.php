@@ -31,7 +31,8 @@ class ActivityRepository extends ServiceEntityRepository
             ->setParameter('now', $now)
             ->andWhere('ap.user = :user')
             ->setParameter('user', $user)
-            ->orderBy('a.startAt', 'DESC')
+            ->orderBy('a.endAt', 'DESC')
+            ->addOrderBy('a.startAt', 'DESC')
             ->getQuery();
 
         $result = $query->getResult();
@@ -51,6 +52,9 @@ class ActivityRepository extends ServiceEntityRepository
 
             ->andWhere('a.id NOT in (:activityIdsArray)')
             ->setParameter('activityIdsArray', $activityIdsArray)
+
+            ->orderBy('a.endAt', 'ASC')
+            ->addOrderBy('a.startAt', 'ASC')
 
             ->getQuery();
 

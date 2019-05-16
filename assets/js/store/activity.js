@@ -18,7 +18,13 @@ export default {
         activityJoiningRequestError : null,
         activityInvitations : [],
         activityInvitationAnswerLoading : false,
-        activityInvitationAnswerError : null
+        activityInvitationAnswerError : null,
+        activityParticipations : [],
+        activityParticipationConfirmationLoading : false,
+        activityParticipationConfirmationError: null,
+        activityCancellationLoading: false,
+        activityCancellationError: null
+
     },
     getters: {
 
@@ -72,7 +78,22 @@ export default {
         },
         activityInvitationAnswerError (state) {
             return state.activityInvitationAnswerError
-        }
+        },
+        activityParticipations (state) {
+            return state.activityParticipations
+        },
+        activityParticipationConfirmationLoading (state) {
+            return state.activityParticipationConfirmationLoading
+        },
+        activityParticipationConfirmationError (state) {
+            return state.activityParticipationConfirmationError
+        },
+        activityCancellationLoading (state) {
+            return state.activityCancellationLoading
+        },
+        activityCancellationError (state) {
+            return state.activityCancellationError
+        },
 
     },
     mutations: {
@@ -181,6 +202,43 @@ export default {
             state.activityInvitationAnswerLoading = false;
             state.activityInvitationAnswerError = error.message;
         },
+        ['GETTING_ACTIVITY_PARTICIPATIONS_DATA'](state){
+            state.isLoading = true;
+            state.error = null;
+        },
+        ['GET_ACTIVITY_PARTICIPATIONS_DATA_SUCCESS'](state, activityParticipations){
+            state.isLoading = false;
+            state.error = null;
+            state.activityParticipations = activityParticipations;
+        },
+        ['GET_ACTIVITY_PARTICIPATIONS_DATA_ERROR'](state, error){
+            state.isLoading = false;
+            state.error = error.message;
+        },
+        ['CONFIRMING_ACTIVITY_PARTICIPATION'](state){
+            state.activityParticipationConfirmationLoading = true;
+            state.activityParticipationConfirmationError = null;
+        },
+        ['CONFIRM_ACTIVITY_PARTICIPATION_SUCCESS'](state){
+            state.activityParticipationConfirmationLoading = false;
+            state.activityParticipationConfirmationError = null;
+        },
+        ['CONFIRM_ACTIVITY_PARTICIPATION_ERROR'](state, error){
+            state.activityParticipationConfirmationLoading = false;
+            state.activityParticipationConfirmationError = error.message;
+        },
+        ['POSTING_ACTIVITY_CANCELLATION'](state){
+            state.activityCancellationLoading = true;
+            state.activityCancellationError = null;
+        },
+        ['POST_ACTIVITY_CANCELLATION_SUCCESS'](state){
+            state.activityCancellationLoading = false;
+            state.activityCancellationError = null;
+        },
+        ['POST_ACTIVITY_CANCELLATION_ERROR'](state, error){
+            state.activityCancellationLoading = false;
+            state.activityCancellationError = error.message;
+        },
 
     },
     actions : {
@@ -264,6 +322,25 @@ export default {
             return ActivityAPI.answerActivityInvitation(id, payload)
                 .then(res => commit('ANSWER_ACTIVITY_INVITATION_SUCCESS'))
                 .catch(err => commit('ANSWER_ACTIVITY_INVITATION_ERROR', err))
+        },
+        getActivityParticipations({commit}, payload) {
+            commit('GETTING_ACTIVITY_PARTICIPATIONS_DATA');
+            return ActivityAPI.getActivityParticipations(payload)
+                .then(res => commit('GET_ACTIVITY_PARTICIPATIONS_DATA_SUCCESS',res.data['hydra:member']))
+                .catch(err => commit('GET_ACTIVITY_PARTICIPATIONS_DATA_ERROR', err))
+        },
+        confirmActivityParticipation({commit}, payload) {
+            commit('CONFIRMING_ACTIVITY_PARTICIPATION');
+            let id = payload.id;
+            return ActivityAPI.confirmActivityParticipation(id, payload)
+                .then(res => commit('CONFIRM_ACTIVITY_PARTICIPATION_SUCCESS'))
+                .catch(err => commit('CONFIRM_ACTIVITY_PARTICIPATION_ERROR', err))
+        },
+        postActivityCancellation({commit}, payload) {
+            commit('POSTING_ACTIVITY_CANCELLATION');
+            return ActivityAPI.postActivityCancellation(payload)
+                .then(res => commit('POST_ACTIVITY_CANCELLATION_SUCCESS'))
+                .catch(err => commit('POST_ACTIVITY_CANCELLATION_ERROR', err))
         }
 
     }

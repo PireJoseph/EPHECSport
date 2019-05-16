@@ -32,15 +32,47 @@ class ActivityParticipationRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('ap');
         $lastResult = $qb
             ->join('ap.activity', 'a')
+            ->leftjoin('App\Entity\Activity\ActivityCancellation', 'ac', 'WITH', 'ac.activity = ap.activity')
+
             ->where('a.startAt > :now')
             ->setParameter('now', $now)
             ->andWhere('ap.user = :user')
             ->setParameter('user', $user)
-            ->orderBy('a.startAt', 'DESC')
+            ->andWhere('ac is Null')
+
+            ->orderBy('a.startAt', 'ASC')
+            ->addOrderBy('a.endAt', 'ASC')
+
             ->getQuery()
             ->setMaxResults(1)
             ->getResult();
         return $lastResult;
+    }
+
+    public function getNextsForUserWithRelatedCancellation(User $user)
+    {
+        $now = new DateTime();
+
+        $query =  $this->createQueryBuilder('ap')
+            ->join('ap.activity', 'a')
+            ->leftjoin('App\Entity\Activity\ActivityCancellation', 'ac', 'WITH', 'ac.activity = ap.activity')
+
+            ->select('ap')
+            ->addSelect(' ac')
+
+            ->where('a.startAt > :now')
+            ->setParameter('now', $now)
+            ->andWhere('ap.user = :user')
+            ->setParameter('user', $user)
+
+            ->orderBy('a.startAt', 'ASC')
+            ->addOrderBy('a.endAt', 'ASC')
+            ->getQuery();
+
+        $result = $query->getResult();
+
+        return $result;
+
     }
 
     // /**

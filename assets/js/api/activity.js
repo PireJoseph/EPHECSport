@@ -44,5 +44,22 @@ export default {
             '/api/activities/invitations/' + id,
             payload
         )
+    },
+    getActivityParticipations() {
+        return ApiService.get(
+            '/api/activities/participations/'
+        );
+    },
+    confirmActivityParticipation(id, payload) {
+        return ApiService.put(
+            '/api/activities/participations/' + id,
+            payload
+        )
+    },
+    postActivityCancellation(payload) {
+        return ApiService.post(
+            '/api/activities/cancellations/',
+            payload
+        )
     }
 }

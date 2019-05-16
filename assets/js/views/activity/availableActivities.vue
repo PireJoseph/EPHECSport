@@ -24,6 +24,7 @@
                   }">
                 >
                 <template slot="table-row" slot-scope="props">
+
                     <span v-if="props.column.field == 'after'">
 
                         <button v-if="((!props.row.relatedRequest) && (!props.row.isJoinableByAnyone))" class="w3-button w3-black w3-small" :disabled="activityJoiningRequestLoading" @click="makeJoiningRequest(props.row['@id'])">Demander pour rejoindre</button>
@@ -31,11 +32,19 @@
                         <button v-if="(props.row.relatedRequest)" class="w3-button w3-grey w3-small"  disabled>En attente d'admission</button>
 
                     </span>
-                    <span v-if="props.column.field == 'location'">
+
+                    <span v-else-if="props.column.field == 'location'">
 
                         {{props.row.location.label}} - {{props.row.location.city}}
 
                     </span>
+
+                    <div v-else-if="props.column.field == 'material'">
+                        <ul v-if="(props.row.material.length > 0)" class="w3-ul w3-small">
+                            <li v-for="material in props.row.material" :key="material.id" >{{material.label}}</li>
+                        </ul>
+                    </div>
+
                     <span v-else>
 
                         {{props.formattedRow[props.column.field]}}
@@ -80,6 +89,11 @@
                     {
                         label: 'Lieu',
                         field: 'location',
+                        filterable: true,
+                    },
+                    {
+                        label: 'Matériel',
+                        field: 'material',
                         filterable: true,
                     },
                     {

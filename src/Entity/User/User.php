@@ -53,7 +53,7 @@ class User implements UserInterface, iHasRole
      * @Assert\NotBlank()
      * @Assert\NotNull()
      * @Assert\Type(type="string")
-     * @Groups({"get-invitation","get-invitations"})
+     * @Groups({"get-invitation","get-invitations","get-cancellation","get-cancellations","post-cancellation"})
      * @ORM\Column(type="string", length=180, unique=true)
      */
     private $username;

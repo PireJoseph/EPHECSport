@@ -2,6 +2,24 @@
     #appContainer {
         background-color: gainsboro;
     }
+
+    #contentContainer {
+        margin-top: 16px;
+    }
+
+    @media only screen and (min-width: 993px) {
+        #centerColumn {
+            padding: 0 32px
+        }
+    }
+
+    @media only screen and (min-width: 1200px) {
+
+        #contentContainer {
+            margin: 16px 32px 0 32px;
+        }
+    }
+
 </style>
 
 <template>
@@ -16,11 +34,11 @@
             </div>
 
             <!-- Page Container -->
-            <div id="contentContainer" v-show="baseDataLoaded" class="w3-container w3-row" >
+            <div id="contentContainer" v-show="baseDataLoaded" class="w3-row" >
 
 
                 <!-- Left Column -->
-                <div class="w3-col w3-hide-small  m4 l2">
+                <div class="w3-col w3-hide-small w3-hide-medium l2">
 
                     <!-- Profile -->
                     <user-tile></user-tile>
@@ -41,9 +59,9 @@
                 </div>
 
                 <!-- Middle Column -->
-                <div class="w3-col m8 l8 w3-container">
+                <div id="centerColumn" class="w3-col m12 l8">
 
-                    <div class="w3-center w3-container">
+                    <div class="w3-center">
 
 
                         <router-view name="content"></router-view>

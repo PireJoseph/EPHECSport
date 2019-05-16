@@ -24,9 +24,6 @@ body {
     justify-content: space-between;
 }
 
-#contentContainer {
-    margin: 32px 16px;
-}
 
 .vdp-datepicker {
     width: 100%;

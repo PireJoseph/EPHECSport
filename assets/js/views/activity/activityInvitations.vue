@@ -34,7 +34,14 @@
                         <!--<button v-if="(props.row.relatedRequest)" class="w3-button w3-grey w3-small"  disabled>En attente d'admission</button>-->
 
                     </div>
-                    <span v-if="props.column.field == 'activity.location'">
+
+                    <div v-else-if="props.column.field == 'activity.material'">
+                        <ul v-if="(props.row.activity.material.length > 0)" class="w3-ul w3-small">
+                            <li v-for="material in props.row.activity.material" :key="material.id" >{{material.label}}</li>
+                        </ul>
+                    </div>
+
+                    <span v-else-if="props.column.field == 'activity.location'">
 
                         {{props.row.activity.location.label}} - {{props.row.activity.location.city}}
 
@@ -87,6 +94,11 @@
                         filterable: true,
                     },
                     {
+                        label: 'Matériel',
+                        field: 'activity.material',
+                        filterable: true,
+                    },
+                    {
                         label: 'Sport',
                         field: 'activity.sport.label',
                         filterable: true,
@@ -109,17 +121,7 @@
             ...mapGetters({
                 activityInvitations : 'activity/activityInvitations',
                 activityInvitationAnswerLoading : 'activity/activityInvitationAnswerLoading'
-                // activityJoiningRequestLoading : 'activity/activityJoiningRequestLoading'
             }),
-
-            // transformedAvailableActivities() {
-            //     let arrayTransformed;
-            //     arrayTransformed =  this.availableActivities.map(function(e){
-            //         e.activity['relatedRequest'] =  e['relatedRequest'];
-            //         return e.activity;
-            //     })
-            //     return arrayTransformed;
-            // }
 
         },
         methods: {

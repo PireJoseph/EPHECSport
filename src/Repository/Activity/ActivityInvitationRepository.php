@@ -4,6 +4,7 @@ namespace App\Repository\Activity;
 
 use App\Entity\Activity\ActivityInvitation;
 use App\Entity\User\User;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -22,11 +23,19 @@ class ActivityInvitationRepository extends ServiceEntityRepository
 
     public function getNonAnsweredForThisUser(User $user)
     {
+        $now = new DateTime();
         $qb = $this->createQueryBuilder('ai');
         $query = $qb
+            ->join('App\Entity\Activity\Activity', 'a', 'WITH', 'ai.activity = a')
             ->where('ai.recipitent = :user')
             ->setParameter('user', $user)
+            ->andWhere('a.startAt > :now')
+            ->setParameter('now', $now)
             ->andWhere('ai.answeredAt is NULL')
+
+            ->orderBy('a.endAt', 'ASC')
+            ->addOrderBy('a.startAt', 'ASC')
+
             ->getQuery();
 
         $result = $query->getResult();
