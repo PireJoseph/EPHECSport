@@ -25,10 +25,9 @@ export default {
         ['GETTING_BASE_DATA'](state) {
             state.isLoading = true;
             state.error = null;
-            state.baseDataLoaded = false;
+            // state.baseDataLoaded = false;
         },
         ['GETTING_BASE_DATA_SUCCESS'](state, data) {
-            console.log(data);
             // commit changement dans useStore
             state.isLoading = false;
             state.error = null;

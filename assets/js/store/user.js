@@ -7,7 +7,7 @@ export default {
     state: {
         isLoading: false,
         error: null,
-        userId : Number,
+        userId : 0,
         username: "Nom d'utilisateur",
         userMail: String,
         userGender: String,
@@ -23,6 +23,10 @@ export default {
         userCreatedAt : Date,
         canGoAway :  Boolean,
         activityCostLimit : Number,
+        profileLoading : false,
+        profileError : null,
+        sportProfileLoading : false,
+        sportProfileError : null,
         userPreferredPartners: Array,
         userDisponibilityPatterns : Array,
         userPictures: Array,
@@ -93,6 +97,18 @@ export default {
         activityCostLimit (state) {
             return state.activityCostLimit
         },
+        profileLoading (state) {
+            return state.profileLoading
+        },
+        profileError (state) {
+            return state.profileError
+        },
+        sportProfileLoading (state) {
+            return state.sportProfileLoading
+        },
+        sportProfileError (state) {
+            return state.sportProfileError
+        },
         userPreferredPartners (state) {
             return state.userPreferredPartners
         },
@@ -134,38 +150,56 @@ export default {
         ['UPDATING_PROFILE_DATA'](state){
             state.isLoading = true;
             state.error = null;
+            state.profileLoading = true;
+            state.profileError = null
         },
         ['UPDATE_PROFILE_DATA_SUCCESS'](state){
             state.isLoading = false;
             state.error = null;
+            state.profileLoading = false;
+            state.profileError = null
         },
         ['UPDATE_PROFILE_DATA_ERROR'](state, error){
             state.isLoading = false;
             state.error = error.message;
+            state.profileLoading = false;
+            state.profileError = error.message;
         },
         ['POSTING_SPORT_PROFILE_DATA'](state){
             state.isLoading = true;
             state.error = null;
+            state.sportProfileLoading = true;
+            state.sportProfileError = null;
         },
         ['POST_SPORT_PROFILE_DATA_SUCCESS'](state){
             state.isLoading = false;
             state.error = null;
+            state.sportProfileLoading = false;
+            state.sportProfileError = null;
         },
         ['POST_SPORT_PROFILE_DATA_ERROR'](state, error){
             state.isLoading = false;
             state.error = error.message;
+            state.sportProfileLoading = false;
+            state.sportProfileError = error.message;
         },
         ['PUTTING_SPORT_PROFILE_DATA'](state){
             state.isLoading = true;
             state.error = null;
+            state.sportProfileLoading = true;
+            state.sportProfileError = null;
         },
         ['PUT_SPORT_PROFILE_DATA_SUCCESS'](state){
             state.isLoading = false;
             state.error = null;
+            state.sportProfileLoading = false;
+            state.sportProfileError = null;
         },
         ['PUT_SPORT_PROFILE_DATA_ERROR'](state, error){
             state.isLoading = false;
             state.error = error.message;
+            state.sportProfileLoading = false;
+            state.sportProfileError = error.message;
         },
         ['ADDING_PREFERRED_PARTNER'](state){
             state.isLoading = true;

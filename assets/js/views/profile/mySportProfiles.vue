@@ -56,7 +56,7 @@
 
                 <fieldset class="w3-container w3-card w3-round w3-white w3-padding-32 w3-margin-top">
 
-                    <h4>Nouveau profil sportif</h4>
+                    <h4>Formulaire profil sportif</h4>
 
                     <div class="formInputContainer w3-center w3-margin ">
                         <label class="formInputLabel">Sport :</label>
@@ -64,6 +64,7 @@
                                 :options="sportSelectArray"
                                 v-model="formSport"
                                 :reduce="e => e.value"
+                                @input="setFormDataFromSport"
                                 :clearable="false"
                                 label="label"
                         ></v-select>
@@ -142,8 +143,9 @@
                 </fieldset>
 
                 <fieldset class="w3-container w3-card w3-round w3-white w3-padding-32 w3-margin-top">
-                    <button type="button" class="w3-button w3-red" @click="clear" >Réinitialiser</button>
-                    <button type="button" class="w3-button w3-green"  @click="dispatchRequest" >(re)Créer profil pour ce sport</button>
+                    <button type="button" class="w3-button w3-red" @click="setFormDataFromSport(formSport)" >Réinitialiser</button>
+                    <button v-show="correspondingSportProfileExisting" type="button" class="w3-button w3-green"  @click="dispatchRequest" :disabled="sportProfileLoading">Modifier profil pour ce sport</button>
+                    <button v-show="!correspondingSportProfileExisting" type="button" class="w3-button w3-green"  @click="dispatchRequest" :disabled="sportProfileLoading">Créer profil pour ce sport</button>
                 </fieldset>
 
 
@@ -194,6 +196,8 @@
         data() {
             return {
                 formValid : false,
+
+                correspondingSportProfileExisting : false,
 
                 formRole : '',
                 formSport : 0,
@@ -246,28 +250,54 @@
                         }
                     )
                 })
-                console.log(sportSelectArray);
-                this.formSport = sportSelectArray[0].value;
-                console.log(sportSelectArray[0].value);
+                if(0 ===this.formSport) {
+                    let sportId = sportSelectArray[0].value
+                    this.formSport = sportId;
+                    this.setFormDataFromSport(sportId);
+                }
                 return sportSelectArray;
             },
             ...mapGetters({
                 // otherProfiles: 'user/otherProfiles',
+                sportProfileLoading : 'user/sportProfileLoading',
                 sportProfiles: 'user/sportProfileDTOs'
             })
 
 
         },
         methods: {
+
             clear () {
                 this.formRole = '';
-                this.formSport = 0;
                 this.formLevel = 'AMATEUR';
                 this.formIsAimingFun = false;
                 this.formIsAimingPerf = false;
                 this.formWantedTimesPerWeek = 0;
                 this.formWantToBeNotifiedAboutThisSport = false;
                 this.formIsVisible = false;
+            },
+
+            setFormDataFromSport (selectedSportId) {
+                let sportProfileCorrespondingFound = false;
+                this.formSport = selectedSportId;
+
+                this.sportProfiles.forEach((sportProfile) => {
+                    if(selectedSportId === sportProfile.sportId) {
+                        this.formRole = sportProfile.role;
+                        this.formLevel = sportProfile.level;
+                        this.formIsAimingFun = sportProfile.isAimingFun;
+                        this.formIsAimingPerf = sportProfile.isAimingPerf;
+                        this.formWantedTimesPerWeek = sportProfile.wantedTimesPerWeek;
+                        this.formWantToBeNotifiedAboutThisSport = sportProfile.wantToBeNotifiedAboutThisSport;
+                        this.formIsVisible = sportProfile.isVisible;
+                        sportProfileCorrespondingFound = true;
+                    }
+                });
+                this.correspondingSportProfileExisting = sportProfileCorrespondingFound;
+                if (!this.correspondingSportProfileExisting){
+                    this.clear();
+                }
+
             },
 
             dispatchRequest() {
@@ -288,7 +318,6 @@
                 }
             },
             postSportProfile(){
-                console.log('créer SportProfile')
                 let payload = {};
                 payload.role = this.formRole;
                 payload.sportId = this.formSport;
@@ -306,14 +335,10 @@
                                 userId: this.$store.getters['user/userId'],
                             };
                             this.$store.dispatch('common/loadBaseData', payload)
-                                .then(() => {
-                                    this.clear();
-                                })
                         })
                 })
             },
             putSportProfile(alreadyExistingSportProfileId){
-                console.log('modifier SportProfile')
                 let payload = {};
                 payload.id = alreadyExistingSportProfileId;
                 payload.role = this.formRole;
@@ -332,9 +357,6 @@
                                 userId: this.$store.getters['user/userId'],
                             };
                             this.$store.dispatch('common/loadBaseData', payload)
-                                .then(() => {
-                                    this.clear();
-                                })
                         })
                 })
             },
@@ -354,6 +376,7 @@
         },
         mounted() {
             this.$validator.localize('fr', this.dictionary);
+
         },
     }
 </script>

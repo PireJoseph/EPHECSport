@@ -230,11 +230,11 @@
                            id="activityCostLimitInput"
                            name="activityCostLimitInput"
                            v-model="formActivityCostLimit"
-                           v-validate="'min:0'"
+                           v-validate="'required|min:0'"
                            min="0"
                            required
                     />
-                    <span v-show="!!errors.first('activityCostLimitInput')" class="w3-tag w3-tiny w3-padding w3-red formInputErrors" >{{ errors.first('usernameInput') }}</span>
+                    <span v-show="!!errors.first('activityCostLimitInput')" class="w3-tag w3-tiny w3-padding w3-red formInputErrors" >{{ errors.first('activityCostLimitInput') }}</span>
                 </div>
 
 
@@ -245,7 +245,7 @@
 
             <fieldset class="w3-container w3-card w3-round w3-white w3-padding-32 w3-margin-top">
                 <button type="button" class="w3-button w3-red" @click="clear" >Réinitialiser</button>
-                <button type="button" class="w3-button w3-green"  @click="submit" >Soumettre</button>
+                <button type="button" class="w3-button w3-green"  @click="submit" :disabled="profileLoading" >Soumettre</button>
             </fieldset>
 
         </form>
@@ -343,7 +343,8 @@
                             required : 'Email requis'
                         },
                         activityCostLimitInput : {
-                            min: 'Nombre négatifs non autorisés',
+                            required : 'veuillez indiquer une valeur',
+                            min: 'Nombre négatifs non autorisés'
                         }
 
                     }
@@ -367,7 +368,9 @@
             }
         },
         computed: {
-
+            ...mapGetters({
+                profileLoading : 'user/profileLoading',
+            }),
         },
         methods: {
 
@@ -407,12 +410,13 @@
 
                 validation = this.$validator.validateAll();
 
-                console.log(validation);
-                    validation.then(function(e){
-                        console.log("pas d'erreur")
-
+                    validation.then(
+                        (isValid) =>{
+                        if(isValid) {
+                            this.updateProfile()
+                        }
                     });
-                this.updateProfile()
+
 
             },
             clear(){
@@ -426,7 +430,7 @@
                     payload.newPassword = this.formNewPassword;
                 }
 
-                payload.gender = this.formGender.value;
+                payload.gender = this.formGender;
                 payload.areSuccessUnlockedVisible = this.formAreSuccessUnlockedVisible;
                 payload.areActivityParticipationVisible = this.formAreActivityParticipationVisible;
                 payload.isPersonalProfileVisible = this.formIsPersonalProfileVisible
