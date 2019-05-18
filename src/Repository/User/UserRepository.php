@@ -65,6 +65,9 @@ class UserRepository extends ServiceEntityRepository
             ->createQueryBuilder('u')
             ->andWhere('u.id != :idParam')
             ->setParameter(':idParam', $id)
+            ->andWhere('u.roles not LIKE :roles')
+//            on ne prends pas les admins
+            ->setParameter(':roles', '%"ROLE_ADMIN"%')
             ->getQuery();
         return $query->getResult();
     }
