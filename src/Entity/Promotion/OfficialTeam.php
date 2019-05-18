@@ -10,6 +10,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Core\Annotation\ApiProperty;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 
 /**
@@ -23,6 +25,7 @@ class OfficialTeam
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"get-meeting","get-meetings"})
      */
     private $id;
 
@@ -31,18 +34,21 @@ class OfficialTeam
      * @Assert\NotNull()
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
+     * @Groups({"get-meeting","get-meetings"})
      */
     private $name;
 
     /**
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"get-meeting","get-meetings"})
      */
     private $shortName;
 
     /**
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"get-meeting","get-meetings"})
      */
     private $nickName;
 
@@ -51,6 +57,7 @@ class OfficialTeam
      * @Assert\NotNull()
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
+     * @Groups({"get-meeting","get-meetings"})
      */
     private $label;
 
@@ -58,6 +65,7 @@ class OfficialTeam
      * @Assert\NotNull()
      * @ORM\ManyToOne(targetEntity="App\Entity\Activity\Sport")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"get-meeting","get-meetings"})
      */
     private $sport;
 

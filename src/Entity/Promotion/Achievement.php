@@ -3,6 +3,8 @@
 namespace App\Entity\Promotion;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -11,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\Promotion\AchievementRepository")
  * @UniqueEntity(
- *     fields={"label", "emeritusSportMan", "officialTeam", "acquiredAt"},
+ *     fields={"label","acquiredAt"},
  *     errorPath="label",
  *     message="ACHIEVEMENT_ALREADY_EXISTING_TOKEN"
  * )
@@ -47,15 +49,22 @@ class Achievement
      */
     private $acquiredAt;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Promotion\EmeritusSportMan")
-     */
-    private $emeritusSportMan;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Promotion\OfficialTeam")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Promotion\EmeritusSportMan")
      */
-    private $officialTeam;
+    private $emeritusSportMen;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Promotion\OfficialTeam")
+     */
+    private $officialTeams;
+
+    public function __construct()
+    {
+        $this->emeritusSportMen = new ArrayCollection();
+        $this->officialTeams = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -98,26 +107,55 @@ class Achievement
         return $this;
     }
 
-    public function getEmeritusSportMan(): ?EmeritusSportMan
+
+    /**
+     * @return Collection|EmeritusSportMan[]
+     */
+    public function getEmeritusSportMen(): Collection
     {
-        return $this->emeritusSportMan;
+        return $this->emeritusSportMen;
     }
 
-    public function setEmeritusSportMan(?EmeritusSportMan $EmeritusSportMan): self
+    public function addEmeritusSportMan(EmeritusSportMan $emeritusSportMan): self
     {
-        $this->emeritusSportMan = $EmeritusSportMan;
+        if (!$this->emeritusSportMen->contains($emeritusSportMan)) {
+            $this->emeritusSportMen[] = $emeritusSportMan;
+        }
 
         return $this;
     }
 
-    public function getOfficialTeam(): ?OfficialTeam
+    public function removeEmeritusSportMan(EmeritusSportMan $emeritusSportMan): self
     {
-        return $this->officialTeam;
+        if ($this->emeritusSportMen->contains($emeritusSportMan)) {
+            $this->emeritusSportMen->removeElement($emeritusSportMan);
+        }
+
+        return $this;
     }
 
-    public function setOfficialTeam(?OfficialTeam $officialTeam): self
+    /**
+     * @return Collection|OfficialTeam[]
+     */
+    public function getOfficialTeams(): Collection
     {
-        $this->officialTeam = $officialTeam;
+        return $this->officialTeams;
+    }
+
+    public function addOfficialTeam(OfficialTeam $officialTeam): self
+    {
+        if (!$this->officialTeams->contains($officialTeam)) {
+            $this->officialTeams[] = $officialTeam;
+        }
+
+        return $this;
+    }
+
+    public function removeOfficialTeam(OfficialTeam $officialTeam): self
+    {
+        if ($this->officialTeams->contains($officialTeam)) {
+            $this->officialTeams->removeElement($officialTeam);
+        }
 
         return $this;
     }

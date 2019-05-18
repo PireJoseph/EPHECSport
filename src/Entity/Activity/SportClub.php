@@ -6,6 +6,8 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use ApiPlatform\Core\Annotation\ApiProperty;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource()
@@ -18,6 +20,7 @@ class SportClub
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"get-meeting","get-meetings"})
      */
     private $id;
 
@@ -26,6 +29,7 @@ class SportClub
      * @Assert\NotNull()
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
+     * @Groups({"get-meeting","get-meetings"})
      */
     private $label;
 
@@ -33,6 +37,7 @@ class SportClub
      * @Assert\NotNull()
      * @ORM\ManyToOne(targetEntity="App\Entity\Activity\Sport")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"get-meeting","get-meetings"})
      */
     private $sport;
 

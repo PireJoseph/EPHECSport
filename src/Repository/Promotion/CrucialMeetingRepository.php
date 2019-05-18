@@ -33,11 +33,29 @@ class CrucialMeetingRepository extends ServiceEntityRepository
         $lastResult = $qb
             ->where('cm.startAt > :now')
             ->setParameter('now', $now)
-            ->orderBy('cm.startAt', 'DESC')
+            ->orderBy('cm.startAt', 'ASC')
             ->getQuery()
             ->setMaxResults(1)
             ->getResult();
         return $lastResult;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getNexts()
+    {
+        $now = new DateTime();
+
+        $query = $this->createQueryBuilder('cm')
+            ->where('cm.startAt > :now')
+            ->setParameter('now', $now)
+            ->orderBy('cm.startAt', 'ASC')
+            ->getQuery();
+
+        $result = $query->getResult();
+
+        return $result;
     }
 
     // /**

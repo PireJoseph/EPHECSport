@@ -18,6 +18,8 @@ import vSelect from 'vue-select'
 
 import Datepicker from 'vuejs-datepicker';
 
+import moment from 'moment';
+
 
 import VeeValidate from 'vee-validate';
 const veeValidateConfig = {
@@ -25,6 +27,8 @@ const veeValidateConfig = {
     locale: 'fr',
     events: 'change'
 };
+
+moment.locale("fr");
 
 require('../css/user.css');
 
