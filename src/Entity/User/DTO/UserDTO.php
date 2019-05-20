@@ -5,38 +5,17 @@ declare(strict_types=1);
 namespace App\Entity\User\DTO;
 
 use App\Entity\DataTransferObject;
-use ApiPlatform\Core\Annotation\ApiProperty;
-use ApiPlatform\Core\Annotation\ApiResource;
-use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert; // Symfony's built-in constraints
 use Symfony\Component\Validator\Constraints\DateTime; // serialization groups
+use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Core\Annotation\ApiProperty;
+use ApiPlatform\Core\Annotation\ApiResource;
 
 
 
 /**
- * The most generic type of item.
+
  *
- * @see http://schema.org/Person Documentation on Schema.org
- *
- * @ApiResource(
- *     routePrefix="/user",
- *     itemOperations={
- *        "getUser" = {
- *              "method"="GET",
- *              "path"="/{id}" ,
- *              "denormalization_context"={"groups"={"read"} },
- *              "normalization_context"={"groups"={"read"} }
- *          },
- *     },
- *     collectionOperations={
- *         "postUser" = {
- *              "method"="POST",
- *              "path"="/" ,
- *              "denormalization_context"={"groups"={"write"} },
- *              "normalization_context"={"groups"={"write"} }
- *          },
- *     },
- * )
  */
 final class UserDTO extends DataTransferObject
 {
@@ -44,7 +23,6 @@ final class UserDTO extends DataTransferObject
     /**
      * @var string|null
      *
-     * @ApiProperty(identifier=true)
      * @Groups({"read", "appCommon"})
      * @Assert\NotBlank(groups={"GetUser"})
      */

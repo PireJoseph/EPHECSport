@@ -2,6 +2,7 @@
 
 namespace App\Repository\Activity;
 
+use App\Entity\Activity\Activity;
 use App\Entity\Activity\ActivityParticipation;
 use App\Entity\User\User;
 use DateTime;
@@ -73,6 +74,26 @@ class ActivityParticipationRepository extends ServiceEntityRepository
 
         return $result;
 
+    }
+
+    public function getNextsForAnActivityThatAreNotCancelled(Activity $activity)
+    {
+        $query =  $this->createQueryBuilder('ap')
+            ->join('ap.activity', 'a')
+            ->leftjoin('App\Entity\Activity\ActivityCancellation', 'ac', 'WITH', 'ac.activity = ap.activity AND ac.cancellingUser = ap.user')
+
+            ->andWhere('ap.activity = :activity')
+            ->setParameter('activity', $activity)
+            ->andWhere('ac is NULL')
+
+
+            ->orderBy('a.startAt', 'ASC')
+            ->addOrderBy('a.endAt', 'ASC')
+            ->getQuery();
+
+        $result = $query->getResult();
+
+        return $result;
     }
 
     // /**

@@ -15,7 +15,24 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     itemOperations={
+ *          "getTeam" = {
+ *              "method"="GET",
+ *              "path"= "/teams/{id}",
+ *              "denormalization_context"={"groups"={"get-team"} },
+ *              "normalization_context"={"groups"={"get-team"} }
+ *           },
+ *     },
+ *     collectionOperations={
+ *          "getTeams" = {
+ *              "method"="GET",
+ *              "path"="/teams/",
+ *              "denormalization_context"={"groups"={"get-teams"} },
+ *              "normalization_context"={"groups"={"get-teams"} },
+ *          }
+ *     }
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\Promotion\OfficialTeamRepository")
  * @UniqueEntity("name")
  */
@@ -25,7 +42,7 @@ class OfficialTeam
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"get-meeting","get-meetings"})
+     * @Groups({"get-team","get-teams","get-meeting","get-meetings"})
      */
     private $id;
 
@@ -34,21 +51,21 @@ class OfficialTeam
      * @Assert\NotNull()
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
-     * @Groups({"get-meeting","get-meetings"})
+     * @Groups({"get-team","get-teams","get-meeting","get-meetings"})
      */
     private $name;
 
     /**
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"get-meeting","get-meetings"})
+     * @Groups({"get-team","get-teams","get-meeting","get-meetings"})
      */
     private $shortName;
 
     /**
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"get-meeting","get-meetings"})
+     * @Groups({"get-team","get-teams","get-meeting","get-meetings"})
      */
     private $nickName;
 
@@ -57,7 +74,7 @@ class OfficialTeam
      * @Assert\NotNull()
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
-     * @Groups({"get-meeting","get-meetings"})
+     * @Groups({"get-team","get-teams","get-meeting","get-meetings"})
      */
     private $label;
 
@@ -65,7 +82,7 @@ class OfficialTeam
      * @Assert\NotNull()
      * @ORM\ManyToOne(targetEntity="App\Entity\Activity\Sport")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"get-meeting","get-meetings"})
+     * @Groups({"get-team","get-teams","get-meeting","get-meetings"})
      */
     private $sport;
 
@@ -75,13 +92,21 @@ class OfficialTeam
      *      joinColumns={@ORM\JoinColumn(name="official_team_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="picture_id", referencedColumnName="id", unique=true)}
      * )
+     * @Groups({"get-team","get-teams"})
      */
     private $pictures;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Promotion\Achievement", mappedBy="teams")
+     * @Groups({"get-team","get-teams","get-meeting","get-meetings"})
+     */
+    private $achievements;
 
 
     public function __construct()
     {
         $this->pictures = new ArrayCollection();
+        $this->achievements = new ArrayCollection();
     }
 
     public function __toString()
@@ -175,6 +200,34 @@ class OfficialTeam
     {
         if ($this->pictures->contains($picture)) {
             $this->pictures->removeElement($picture);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Achievement[]
+     */
+    public function getAchievements(): Collection
+    {
+        return $this->achievements;
+    }
+
+    public function addAchievement(Achievement $achievement): self
+    {
+        if (!$this->achievements->contains($achievement)) {
+            $this->achievements[] = $achievement;
+            $achievement->addTeam($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAchievement(Achievement $achievement): self
+    {
+        if ($this->achievements->contains($achievement)) {
+            $this->achievements->removeElement($achievement);
+            $achievement->removeTeam($this);
         }
 
         return $this;

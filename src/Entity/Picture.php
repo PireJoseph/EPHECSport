@@ -17,7 +17,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 
 /**
- * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\PictureRepository")
  * @Vich\Uploadable
  */
@@ -31,14 +30,14 @@ class Picture implements Serializable
     private $id;
 
     /**
-     * @Groups({"activity-history"})
+     * @Groups({"activity-history","get-team","get-teams","get-sportsman", "get-sportsmen", "get-link","get-links", "get-professional","get-professionals"})
      * @ORM\Column(type="string", length=255)
      */
     private $label;
 
     /**
      * @var string
-     * @Groups({"activity-history"})
+     * @Groups({"activity-history","get-team","get-teams","get-sportsman", "get-sportsmen", "get-link", "get-links", "get-professional","get-professionals"})
      * @ORM\Column(type="string", length=255)
      */
     private $image;

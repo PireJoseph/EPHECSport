@@ -16,7 +16,9 @@ use App\Entity\Activity\ActivityJoiningRequest;
 use App\Entity\Activity\ActivityParticipation;
 use App\Entity\Activity\ActivityRelatedFeedback;
 use App\Entity\Activity\Sport;
+use App\Entity\Activity\UserRelatedFeedback;
 use App\Entity\User\User;
+use App\Exception\ItemNotFoundException;
 use App\Form\Activity\ActivityRelatedFeedbackLabelType;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -127,7 +129,10 @@ class ActivityManager
             $item = [];
             $item['activity'] = $availableActivity;
             /** @var Activity $availableActivity */
-            $activityJoiningRequest = $this->em->getRepository(ActivityJoiningRequest::class)->findOneBy(['activity' => $availableActivity->getId()]);
+            $activityJoiningRequest = $this->em->getRepository(ActivityJoiningRequest::class)->findOneBy([
+                'activity' => $availableActivity->getId(),
+                'recipitent' => $connectedUser
+            ]);
             $item['relatedRequest'] = $activityJoiningRequest;
             $availableActivitiesArray[] = $item;
         }
@@ -206,7 +211,7 @@ class ActivityManager
 
     }
 
-    public function getActivityParticipations()
+    public function getActivityParticipationsForAUser()
     {
 
         //
@@ -237,6 +242,54 @@ class ActivityManager
 
 
     }
+
+
+    /**
+     * @param $activityId
+     * @return array
+     * @throws ItemNotFoundException
+     */
+    public function getActivityParticipationsForAnActivity($activityId)
+    {
+
+        //
+        // Restricting access
+        if (is_null($this->security->getToken())|| is_null($this->security->getToken()->getUser()||$this->security->getToken()->getUser()->getId()))
+        {
+            throw new AccessDeniedException('Restricted area');
+        }
+        $connectedUser = $this->security->getToken()->getUser();
+
+        $activityParticipationArray = [];
+        $itemArray = [];
+
+        $activity = $this->em->getRepository(Activity::class)->find($activityId);
+        if (is_null($activity)) {
+            throw new ItemNotFoundException('Specified activity not found');
+        }
+
+        $activityParticipationQueryResult = $this->em->getRepository(ActivityParticipation::class)->getNextsForAnActivityThatAreNotCancelled($activity);
+
+
+//
+//        foreach ($activityParticipationQueryResult as $entity) {
+//            if ($entity instanceof ActivityParticipation) {
+//                $itemArray['participation'] = $entity;
+//            }
+//            else {
+//                $itemArray['cancellation'] = $entity;
+//                $activityParticipationArray[] = $itemArray;
+//                $itemArray = [];
+//            }
+//        }
+
+
+
+        return $activityParticipationQueryResult;
+
+
+    }
+
 
     public function persistActivityParticipation(ActivityParticipation $activityParticipation)
     {
@@ -271,6 +324,24 @@ class ActivityManager
         $this->em->flush();
 
         return $activityCancellation;
+    }
+
+    public function persistUserRelatedFeedback(UserRelatedFeedback $userRelatedFeedback)
+    {
+        //
+        // Restricting access
+        if (is_null($this->security->getToken())|| is_null($this->security->getToken()->getUser()||$this->security->getToken()->getUser()->getId()))
+        {
+            throw new AccessDeniedException('Restricted area');
+        }
+        $connectedUser = $this->security->getToken()->getUser();
+
+        $userRelatedFeedback->setCreatedBy($connectedUser);
+
+        $this->em->persist($userRelatedFeedback);
+        $this->em->flush();
+
+        return $userRelatedFeedback;
     }
 
 

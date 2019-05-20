@@ -14,7 +14,7 @@ use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
 use App\Entity\Activity\ActivityParticipation;
 use App\Managers\Activity\ActivityManager;
 
-class ActivityParticipationCollectionDataProvider  implements CollectionDataProviderInterface, RestrictedDataProviderInterface
+class ActivityParticipationForAUserCollectionDataProvider  implements CollectionDataProviderInterface, RestrictedDataProviderInterface
 {
 
 
@@ -27,7 +27,7 @@ class ActivityParticipationCollectionDataProvider  implements CollectionDataProv
 
     public function supports(string $resourceClass, string $operationName = null, array $context = []): bool
     {
-        return ( (ActivityParticipation::class === $resourceClass) && ( ("getParticipations" === $operationName) ));
+        return ( (ActivityParticipation::class === $resourceClass) && ( ("getParticipationsForAUser" === $operationName) ));
     }
 
     /**
@@ -39,7 +39,7 @@ class ActivityParticipationCollectionDataProvider  implements CollectionDataProv
      */
     public function getCollection(string $resourceClass, string $operationName = null)
     {
-        foreach ($this->activityManager->getActivityParticipations() as $activityParticipation)
+        foreach ($this->activityManager->getActivityParticipationsForAUser() as $activityParticipation)
         {
             yield $activityParticipation;
         }

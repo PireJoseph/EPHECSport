@@ -13,7 +13,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use App\Controller\Actions\Activity\GetAvailableActivities;
 
 
 /**
@@ -48,7 +47,7 @@ class Activity
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
-     * @Groups({"activity-history", "activity-available"})
+     * @Groups({"activity-history", "activity-available",  "get-participations-for-an-activity"})
      * @ORM\Column(type="integer")
      */
     private $id;
@@ -56,7 +55,7 @@ class Activity
     /**
      * @Assert\NotBlank
      * @Assert\Type(type="string")
-     * @Groups({"activity-history", "activity-available", "get-invitation","get-invitations","get-participation","get-participations"})
+     * @Groups({"activity-history", "activity-available", "get-invitation","get-invitations","get-participation","get-participations", "get-user-feedback", "get-user-feedbacks",  "get-participations-for-an-activity"})
      * @ORM\Column(type="string", length=255)
      */
     private $label;
@@ -76,7 +75,7 @@ class Activity
     private $createdAt;
 
     /**
-     * @Groups({"activity-available","get-invitation","get-invitations","get-participation","get-participations"})
+     * @Groups({"activity-available","get-invitation","get-invitations","get-participation","get-participations", "get-user-feedback", "get-user-feedbacks",  "get-participations-for-an-activity"})
      * @ORM\Column(type="datetime")
      */
     private $startAt;
@@ -113,7 +112,7 @@ class Activity
     private $isPublished;
 
     /**
-     * @Groups({"activity-history", "activity-available", "get-invitation","get-invitations","get-participation","get-participations"})
+     * @Groups({"activity-history", "activity-available", "get-invitation","get-invitations","get-participation","get-participations", "get-user-feedback", "get-user-feedbacks",  "get-participations-for-an-activity"})
      * @ORM\ManyToOne(targetEntity="App\Entity\Location")
      */
     private $location;
@@ -125,7 +124,7 @@ class Activity
     private $material;
 
     /**
-     * @Groups({"activity-history", "activity-available","get-invitation","get-invitations","get-participation","get-participations"})
+     * @Groups({"activity-history", "activity-available","get-invitation","get-invitations","get-participation","get-participations", "get-user-feedback", "get-user-feedbacks",  "get-participations-for-an-activity"})
      * @ORM\ManyToOne(targetEntity="App\Entity\Activity\Sport")
      * @ORM\JoinColumn(nullable=true)
      */

@@ -3,7 +3,6 @@
 namespace App\Entity\User;
 
 use App\Entity\Picture;
-use App\Entity\Profile\DisponibilityPattern;
 use App\Entity\Profile\ProfilePicture;
 use DateTime;
 use Symfony\Component\HttpFoundation\File\File;
@@ -19,6 +18,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Core\Annotation\ApiProperty;
+use ApiPlatform\Core\Annotation\ApiResource;
 
 
 /**
@@ -26,6 +27,26 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @Vich\Uploadable
  * @UniqueEntity(fields={"username"}, message="Il existe déja un compte avec ce nom d'utilisatateur")
  * @UniqueEntity(fields={"email"}, message="Il existe déja un compte avec cet emial")
+ * @see http://schema.org/Person Documentation on Schema.org
+ * @ApiResource(
+ *     routePrefix="/user",
+ *     itemOperations={
+ *        "getUser" = {
+ *              "method"="GET",
+ *              "path"="/{id}" ,
+ *              "denormalization_context"={"groups"={"get-user"} },
+ *              "normalization_context"={"groups"={"get-user"} }
+ *          },
+ *     },
+ *     collectionOperations={
+ *         "getUsers" = {
+ *              "method"="POST",
+ *              "path"="/" ,
+ *              "denormalization_context"={"groups"={"get-users"} },
+ *              "normalization_context"={"groups"={"get-users"} }
+ *          },
+ *     },
+ * )
  */
 class User implements UserInterface, iHasRole
 {
@@ -44,8 +65,11 @@ class User implements UserInterface, iHasRole
 
     /**
      * @ORM\Id()
+     *
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @ApiProperty(identifier=true)
+     * @Groups({"get-user","get-users","get-invitation","get-invitations","get-cancellation","get-cancellations","post-cancellation", "get-user-feedback", "get-user-feedbacks","get-participations-for-an-activity"})
      */
     private $id;
 
@@ -53,7 +77,7 @@ class User implements UserInterface, iHasRole
      * @Assert\NotBlank()
      * @Assert\NotNull()
      * @Assert\Type(type="string")
-     * @Groups({"get-invitation","get-invitations","get-cancellation","get-cancellations","post-cancellation"})
+     * @Groups({"get-user","get-users","get-invitation","get-invitations","get-cancellation","get-cancellations","post-cancellation", "get-user-feedback", "get-user-feedbacks","get-participations-for-an-activity"})
      * @ORM\Column(type="string", length=180, unique=true)
      */
     private $username;

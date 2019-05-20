@@ -10,7 +10,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 
 /**
- * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\Profile\SuccessRepository")
  * @UniqueEntity(
  *     fields={"label", "user"},

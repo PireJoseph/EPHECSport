@@ -27,7 +27,7 @@ class ActivityHistoryRelatedFeedbackItemDataProvider implements ItemDataProvider
 
     public function supports(string $resourceClass, string $operationName = null, array $context = []): bool
     {
-       return ( (ActivityRelatedFeedback::class === $resourceClass) && ( ("post" === $operationName) || ("getActivityHistoryFeedback" === $operationName) ));
+       return ( (ActivityRelatedFeedback::class === $resourceClass) && ( "getActivityHistoryFeedback" === $operationName) );
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace App\Repository\Promotion;
 
 use App\Entity\Promotion\Achievement;
+use App\Entity\Promotion\OfficialTeam;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 

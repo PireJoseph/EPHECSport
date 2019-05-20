@@ -1,4 +1,3 @@
-import UserAPI from '../api/user';
 import ProfileAPI from '../api/profile';
 import {arrayDiff} from "vuetify/lib/util/helpers";
 

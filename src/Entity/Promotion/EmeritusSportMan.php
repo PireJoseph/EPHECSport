@@ -15,7 +15,24 @@ use ApiPlatform\Core\Annotation\ApiProperty;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     itemOperations={
+ *          "getSportMen" = {
+ *              "method"="GET",
+ *              "path"= "/sportsmen/{id}",
+ *              "denormalization_context"={"groups"={"get-sportsman"} },
+ *              "normalization_context"={"groups"={"get-sportsman"} }
+ *           },
+ *     },
+ *     collectionOperations={
+ *          "getSportMens" = {
+ *              "method"="GET",
+ *              "path"="/sportsmen/",
+ *              "denormalization_context"={"groups"={"get-sportsmen"} },
+ *              "normalization_context"={"groups"={"get-sportsmen"} },
+ *          }
+ *     }
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\Promotion\EmeritusSportManRepository")
  * @UniqueEntity(
  *     fields={"firstName", "lastName"},
@@ -29,7 +46,7 @@ class EmeritusSportMan
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"get-meeting","get-meetings"})
+     * @Groups({"get-meeting","get-meetings", "get-sportsman", "get-sportsmen"})
      */
     private $id;
 
@@ -38,7 +55,7 @@ class EmeritusSportMan
      * @Assert\NotNull()
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
-     * @Groups({"get-meeting","get-meetings"})
+     * @Groups({"get-meeting","get-meetings", "get-sportsman", "get-sportsmen"})
      */
     private $firstName;
 
@@ -47,20 +64,20 @@ class EmeritusSportMan
      * @Assert\NotNull()
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
-     * @Groups({"get-meeting","get-meetings"})
+     * @Groups({"get-meeting","get-meetings", "get-sportsman", "get-sportsmen"})
      */
     private $lastName;
 
     /**
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"get-meeting","get-meetings"})
+     * @Groups({"get-meeting","get-meetings", "get-sportsman", "get-sportsmen"})
      */
     private $nickName;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"get-meeting","get-meetings"})
+     * @Groups({"get-meeting","get-meetings", "get-sportsman", "get-sportsmen"})
      */
     private $gender;
 
@@ -69,7 +86,7 @@ class EmeritusSportMan
      * @Assert\NotNull()
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
-     * @Groups({"get-meeting","get-meetings"})
+     * @Groups({"get-meeting","get-meetings", "get-sportsman", "get-sportsmen"})
      */
     private $role;
 
@@ -77,14 +94,14 @@ class EmeritusSportMan
      * @Assert\NotNull()
      * @ORM\ManyToOne(targetEntity="App\Entity\Activity\Sport")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"get-meeting","get-meetings"})
+     * @Groups({"get-meeting","get-meetings", "get-sportsman", "get-sportsmen"})
      */
     private $sport;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Activity\SportClub")
      * @ORM\JoinColumn(nullable=true)
-     * @Groups({"get-meeting","get-meetings"})N
+     * @Groups({"get-meeting","get-meetings", "get-sportsman", "get-sportsmen"})
      */
     private $sportClub;
 
@@ -94,12 +111,20 @@ class EmeritusSportMan
      *      joinColumns={@ORM\JoinColumn(name="emeritus_sport_man_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="picture_id", referencedColumnName="id", unique=true)}
      * )
+     * @Groups({"get-meeting","get-meetings", "get-sportsman", "get-sportsmen"})
      */
     private $pictures;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Promotion\Achievement", mappedBy="sportMen")
+     * @Groups({"get-meeting","get-meetings", "get-sportsman", "get-sportsmen"})
+     */
+    private $achievements;
 
     public function __construct()
     {
         $this->pictures = new ArrayCollection();
+        $this->achievements = new ArrayCollection();
     }
 
     public function __toString()
@@ -217,6 +242,34 @@ class EmeritusSportMan
     {
         if ($this->pictures->contains($picture)) {
             $this->pictures->removeElement($picture);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Achievement[]
+     */
+    public function getAchievements(): Collection
+    {
+        return $this->achievements;
+    }
+
+    public function addAchievement(Achievement $achievement): self
+    {
+        if (!$this->achievements->contains($achievement)) {
+            $this->achievements[] = $achievement;
+            $achievement->addSportMan($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAchievement(Achievement $achievement): self
+    {
+        if ($this->achievements->contains($achievement)) {
+            $this->achievements->removeElement($achievement);
+            $achievement->removeSportMan($this);
         }
 
         return $this;

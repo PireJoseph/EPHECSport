@@ -355,16 +355,16 @@ easy_admin:
                     - 'label'
                     - { property: 'comment', type: 'textarea' }
                     - 'acquiredAt'
-                    - 'emeritusSportMen'
-                    - 'officialTeams'
+                    - 'sportMen'
+                    - 'teams'
 
             list:
                 fields:
                     - 'label'
                     - 'comment'
                     - 'acquiredAt'
-                    - 'emeritusSportMen'
-                    - 'officialTeams'
+                    - 'sportMen'
+                    - 'teams'
 
         CrucialMeeting:
             class: App\Entity\Promotion\CrucialMeeting

@@ -10,7 +10,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 
 /**
- * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\LocationRepository")
  * @UniqueEntity(
  *     fields={"postCode", "city","streetOrPlace","number"},
@@ -26,7 +25,7 @@ class Location
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"activity-history","activity-available", "get-invitation","get-invitations","get-participation","get-participations", "get-meeting","get-meetings" })
+     * @Groups({"activity-history","activity-available", "get-invitation","get-invitations","get-participation","get-participations", "get-meeting","get-meetings",  "get-participations-for-an-activity" })
      */
     private $id;
 
@@ -35,7 +34,7 @@ class Location
      * @Assert\NotNull()
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
-     * @Groups({"activity-history","activity-available", "get-invitation","get-invitations","get-participation","get-participations", "get-meeting","get-meetings" })
+     * @Groups({"activity-history","activity-available", "get-invitation","get-invitations","get-participation","get-participations", "get-meeting","get-meetings",  "get-participations-for-an-activity" })
      */
     private $label;
 
@@ -44,7 +43,7 @@ class Location
      * @Assert\NotNull()
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
-     * @Groups({"activity-history","activity-available", "get-invitation","get-invitations","get-participation","get-participations", "get-meeting","get-meetings"})
+     * @Groups({"activity-history","activity-available", "get-invitation","get-invitations","get-participation","get-participations", "get-meeting","get-meetings",  "get-participations-for-an-activity"})
      */
     private $city;
 

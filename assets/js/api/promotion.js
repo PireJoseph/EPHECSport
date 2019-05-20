@@ -5,5 +5,10 @@ export default {
         return ApiService.get(
             '/api/meetings/',
         );
+    },
+    getOfficialTeamsData(){
+        return ApiService.get(
+            '/api/teams/',
+        );
     }
 }

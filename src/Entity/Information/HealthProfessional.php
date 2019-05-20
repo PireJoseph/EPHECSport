@@ -7,9 +7,28 @@ use App\Entity\picture;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Core\Annotation\ApiProperty;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     itemOperations={
+ *          "getProfessional" = {
+ *              "method"="GET",
+ *              "path"= "/professionals/{id}",
+ *              "denormalization_context"={"groups"={"get-professional"} },
+ *              "normalization_context"={"groups"={"get-professional"} }
+ *           },
+ *     },
+ *     collectionOperations={
+ *          "getProfessionals" = {
+ *              "method"="GET",
+ *              "path"="/professionals/",
+ *              "denormalization_context"={"groups"={"get-professionals"} },
+ *              "normalization_context"={"groups"={"get-professionals"} },
+ *          }
+ *     }
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\Information\HealthProfessionalRepository")
  * @UniqueEntity(
  *     fields={"firstName", "lastName"},
@@ -26,6 +45,7 @@ class HealthProfessional
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"get-professional","get-professionals"})
      */
     private $id;
 
@@ -34,6 +54,7 @@ class HealthProfessional
      * @Assert\NotNull()
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
+     * @Groups({"get-professional","get-professionals"})
      */
     private $firstName;
 
@@ -42,6 +63,7 @@ class HealthProfessional
      * @Assert\NotNull()
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
+     * @Groups({"get-professional","get-professionals"})
      */
     private $lastName;
 
@@ -50,6 +72,7 @@ class HealthProfessional
      * @Assert\NotNull()
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
+     * @Groups({"get-professional","get-professionals"})
      */
     private $email;
 
@@ -58,6 +81,7 @@ class HealthProfessional
      * @Assert\NotNull()
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
+     * @Groups({"get-professional","get-professionals"})
      */
     private $phoneNumber;
 
@@ -66,11 +90,13 @@ class HealthProfessional
      * @Assert\NotNull()
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
+     * @Groups({"get-professional","get-professionals"})
      */
     private $title;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\picture", cascade={"persist", "remove"})
+     * @Groups({"get-professional","get-professionals"})
      */
     private $picture;
 
@@ -79,6 +105,7 @@ class HealthProfessional
      * @Assert\NotNull()
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
+     * @Groups({"get-professional","get-professionals"})
      */
     private $presentation;
 

@@ -8,9 +8,10 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Core\Annotation\ApiProperty;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\Promotion\AchievementRepository")
  * @UniqueEntity(
  *     fields={"label","acquiredAt"},
@@ -24,6 +25,7 @@ class Achievement
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"get-team","get-teams","get-sportsman", "get-sportsmen"})
      */
     private $id;
 
@@ -32,6 +34,7 @@ class Achievement
      * @Assert\NotNull()
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
+     * @Groups({"get-team","get-teams","get-sportsman", "get-sportsmen"})
      */
     private $label;
 
@@ -40,30 +43,32 @@ class Achievement
      * @Assert\NotNull()
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
+     * @Groups({"get-team","get-teams","get-sportsman", "get-sportsmen"})
      */
     private $comment;
 
     /**
      * @Assert\NotNull()
      * @ORM\Column(type="datetime")
+     * @Groups({"get-team","get-teams","get-sportsman", "get-sportsmen"})
      */
     private $acquiredAt;
 
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Promotion\EmeritusSportMan")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Promotion\OfficialTeam", inversedBy="achievements")
      */
-    private $emeritusSportMen;
+    private $teams;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Promotion\OfficialTeam")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Promotion\EmeritusSportMan", inversedBy="achievements")
      */
-    private $officialTeams;
+    private $sportMen;
 
     public function __construct()
     {
-        $this->emeritusSportMen = new ArrayCollection();
-        $this->officialTeams = new ArrayCollection();
+        $this->teams = new ArrayCollection();
+        $this->sportMen = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -107,54 +112,53 @@ class Achievement
         return $this;
     }
 
+    /**
+     * @return Collection|OfficialTeam[]
+     */
+    public function getTeams(): Collection
+    {
+        return $this->teams;
+    }
+
+    public function addTeam(OfficialTeam $team): self
+    {
+        if (!$this->teams->contains($team)) {
+            $this->teams[] = $team;
+        }
+
+        return $this;
+    }
+
+    public function removeTeam(OfficialTeam $team): self
+    {
+        if ($this->teams->contains($team)) {
+            $this->teams->removeElement($team);
+        }
+
+        return $this;
+    }
 
     /**
      * @return Collection|EmeritusSportMan[]
      */
-    public function getEmeritusSportMen(): Collection
+    public function getSportMen(): Collection
     {
-        return $this->emeritusSportMen;
+        return $this->sportMen;
     }
 
-    public function addEmeritusSportMan(EmeritusSportMan $emeritusSportMan): self
+    public function addSportMan(EmeritusSportMan $sportMan): self
     {
-        if (!$this->emeritusSportMen->contains($emeritusSportMan)) {
-            $this->emeritusSportMen[] = $emeritusSportMan;
+        if (!$this->sportMen->contains($sportMan)) {
+            $this->sportMen[] = $sportMan;
         }
 
         return $this;
     }
 
-    public function removeEmeritusSportMan(EmeritusSportMan $emeritusSportMan): self
+    public function removeSportMan(EmeritusSportMan $sportMan): self
     {
-        if ($this->emeritusSportMen->contains($emeritusSportMan)) {
-            $this->emeritusSportMen->removeElement($emeritusSportMan);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|OfficialTeam[]
-     */
-    public function getOfficialTeams(): Collection
-    {
-        return $this->officialTeams;
-    }
-
-    public function addOfficialTeam(OfficialTeam $officialTeam): self
-    {
-        if (!$this->officialTeams->contains($officialTeam)) {
-            $this->officialTeams[] = $officialTeam;
-        }
-
-        return $this;
-    }
-
-    public function removeOfficialTeam(OfficialTeam $officialTeam): self
-    {
-        if ($this->officialTeams->contains($officialTeam)) {
-            $this->officialTeams->removeElement($officialTeam);
+        if ($this->sportMen->contains($sportMan)) {
+            $this->sportMen->removeElement($sportMan);
         }
 
         return $this;

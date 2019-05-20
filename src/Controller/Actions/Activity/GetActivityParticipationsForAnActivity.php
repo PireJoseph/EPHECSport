@@ -2,16 +2,17 @@
 /**
  * Created by PhpStorm.
  * User: jpire
- * Date: 13/05/19
- * Time: 22:07
+ * Date: 19/05/19
+ * Time: 13:17
  */
 
 namespace App\Controller\Actions\Activity;
 
 
 use App\Managers\Activity\ActivityManager;
+use Exception;
 
-class GetAvailableActivities
+class GetActivityParticipationsForAnActivity
 {
     private $activityManager;
 
@@ -21,12 +22,14 @@ class GetAvailableActivities
     }
 
     /**
-     * @return
-     * @throws Exception
+     * @param $data
+     * @param $id
+     * @return array
+     * @throws \App\Exception\ItemNotFoundException
      */
-    public function __invoke($data)
+    public function __invoke($data, $id)
     {
-        $availableActivities = $this->activityManager->getAvailableActivities();
+        $availableActivities = $this->activityManager->getActivityParticipationsForAnActivity($id);
 
         return $availableActivities;
     }

@@ -10,6 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use Symfony\Component\Serializer\Annotation\Groups;
+use App\Controller\Actions\Activity\GetActivityParticipationsForAnActivity;
 
 
 /**
@@ -30,11 +31,18 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *          }
  *     },
  *     collectionOperations={
- *          "getParticipations" = {
+ *          "getParticipationsForAUser" = {
  *              "method"="GET",
  *              "path"="/activities/participations/",
- *              "denormalization_context"={"groups"={"get-participation"} },
- *              "normalization_context"={"groups"={"get-participation"} },
+ *              "denormalization_context"={"groups"={"get-participations"} },
+ *              "normalization_context"={"groups"={"get-participations"} },
+ *          },
+ *          "getParticipationsForAnActivity" = {
+ *              "method"="GET",
+ *              "path"="/activities/{id}/participations/",
+ *              "denormalization_context"={"groups"={"get-participations-for-an-activity"} },
+ *              "normalization_context"={"groups"={"get-participations-for-an-activity"} },
+ *              "controller"=GetActivityParticipationsForAnActivity::class,
  *          }
  *     }
  * )
@@ -48,7 +56,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class ActivityParticipation
 {
     /**
-     * @Groups({"get-participation","get-participations"})
+     * @Groups({"get-participation","get-participations", "get-participations-for-an-activity"})
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -56,7 +64,7 @@ class ActivityParticipation
     private $id;
 
     /**
-     * @Groups({"get-participation","get-participations"})
+     * @Groups({"get-participation","get-participations", "get-participations-for-an-activity"})
      * @Assert\NotNull(groups={"putParticipationValidation"})
      * @Assert\Type(type="bool")
      * @ORM\Column(type="boolean")
@@ -64,7 +72,7 @@ class ActivityParticipation
     private $isConfirmed;
 
     /**
-     * @Groups({"get-participation","get-participations"})
+     * @Groups({"get-participation","get-participations", "get-participations-for-an-activity"})
      * @Assert\NotNull
      * @ORM\ManyToOne(targetEntity="App\Entity\Activity\Activity")
      * @ORM\JoinColumn(nullable=false)
@@ -72,6 +80,7 @@ class ActivityParticipation
     private $activity;
 
     /**
+     * @Groups({"get-participations-for-an-activity"})
      * @Assert\NotNull
      * @ORM\ManyToOne(targetEntity="App\Entity\User\User")
      * @ORM\JoinColumn(nullable=false)
@@ -79,7 +88,7 @@ class ActivityParticipation
     private $user;
 
     /**
-     * @Groups({"get-participation","get-participations"})
+     * @Groups({"get-participation","get-participations", "get-participations-for-an-activity"})
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $answeredAt;
