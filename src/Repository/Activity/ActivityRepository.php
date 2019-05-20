@@ -3,10 +3,13 @@
 namespace App\Repository\Activity;
 
 use App\Entity\Activity\Activity;
+use App\Entity\Activity\ActivityParticipation;
 use App\Entity\User\User;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Exception;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+
 
 /**
  * @method Activity|null find($id, $lockMode = null, $lockVersion = null)
@@ -39,6 +42,11 @@ class ActivityRepository extends ServiceEntityRepository
         return $result;
     }
 
+    /**
+     * @param $activityIdsArray
+     * @return mixed
+     * @throws Exception
+     */
     public function getAvailable($activityIdsArray)
     {
         $now = new DateTime();
@@ -61,6 +69,7 @@ class ActivityRepository extends ServiceEntityRepository
         $result = $query->getResult();
         return $result;
     }
+
 
 
     // /**

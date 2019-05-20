@@ -245,7 +245,6 @@
                 this.$router.push({path: '/user/login'});
             },
             clickDropdownItem(event) {
-                console.log(event.target);
                 this.$store.commit('navbar/DEACTIVATE_ALL_MENU_DROPDOWN');
             },
             activeDropdown(dropdownId) {

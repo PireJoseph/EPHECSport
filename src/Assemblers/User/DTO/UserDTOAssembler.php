@@ -18,6 +18,7 @@ use App\Assemblers\Profile\DTO\PictureDTOAssembler;
 use App\Assemblers\Profile\DTO\SportProfileDTOAssembler;
 use App\Assemblers\Profile\DTO\SuccessDTOAssembler;
 use App\Assemblers\Promotion\DTO\CrucialMeetingDTOAssembler;
+use App\Entity\Activity\ActivityCancellation;
 use App\Entity\Activity\ActivityParticipation;
 use App\Entity\Activity\DTO\ActivityParticipationDTO;
 use App\Entity\Activity\UserRelatedFeedback;
@@ -210,10 +211,25 @@ class UserDTOAssembler
         $newUserDTO->addressedUserRelatedFeedbackLabelsCumuled = array_values($addressedUserRelatedFeedbackLabelsCumuled);
 
         // next activityParticipation
-        $nextActivityParticipationQueryResult = $this->em->getRepository(ActivityParticipation::class)->getNextForUser($user);
-        if(!is_null($nextActivityParticipationQueryResult) && ( 0 < count($nextActivityParticipationQueryResult)))
+        $nextActivityParticipationQueryResult = $this->em->getRepository(ActivityParticipation::class)->getNextsForUser($user);
+        $nextActivityParticipation = null;
+        foreach ($nextActivityParticipationQueryResult as $activityParticipation)
         {
-            $nextActivityParticipation = $nextActivityParticipationQueryResult[0];
+            if (is_null($nextActivityParticipation)) {
+                /**@var ActivityParticipation $activityParticipation */
+                $relatedActivity = $activityParticipation->getActivity();
+                $relatedActivityCancellation = $this->em->getRepository(ActivityCancellation::class)->findOneBy([
+                    'cancellingUser' => $user,
+                    'activity' => $relatedActivity
+                ]);
+                if (is_null($relatedActivityCancellation)) {
+                    $nextActivityParticipation = $activityParticipation;
+                }
+            }
+
+        }
+        if(!is_null($nextActivityParticipation))
+        {
             $nextActivityParticipationDTO = $this->activityParticipationDTOAssembler->getFromActivityParticipationForAppCommon($nextActivityParticipation);
             $newUserDTO->nextActivityParticipationDTO = $nextActivityParticipationDTO;
         }

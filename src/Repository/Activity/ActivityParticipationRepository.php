@@ -22,32 +22,45 @@ class ActivityParticipationRepository extends ServiceEntityRepository
         parent::__construct($registry, ActivityParticipation::class);
     }
 
-    /**
-     * @param User $user
-     * @return mixed
-     * @throws \Exception
-     */
-    public function getNextForUser(User $user)
+    public function getPastsForUser(User $user)
     {
         $now = new DateTime();
-        $qb = $this->createQueryBuilder('ap');
-        $lastResult = $qb
-            ->join('ap.activity', 'a')
-            ->leftjoin('App\Entity\Activity\ActivityCancellation', 'ac', 'WITH', 'ac.activity = ap.activity')
 
+        $query =  $this->createQueryBuilder('ap')
+            ->join('ap.activity', 'a')
+            ->where('a.startAt < :now')
+            ->setParameter('now', $now)
+            ->andWhere('ap.user = :user')
+            ->setParameter('user', $user)
+
+            ->orderBy('a.startAt', 'ASC')
+            ->addOrderBy('a.endAt', 'ASC')
+            ->getQuery();
+
+        $result = $query->getResult();
+
+        return $result;
+    }
+
+    public function getNextsForUser(User $user)
+    {
+
+        $now = new DateTime();
+        $query =  $this->createQueryBuilder('ap')
+            ->join('ap.activity', 'a')
             ->where('a.startAt > :now')
             ->setParameter('now', $now)
             ->andWhere('ap.user = :user')
             ->setParameter('user', $user)
-            ->andWhere('ac is Null')
 
             ->orderBy('a.startAt', 'ASC')
             ->addOrderBy('a.endAt', 'ASC')
+            ->getQuery();
 
-            ->getQuery()
-            ->setMaxResults(1)
-            ->getResult();
-        return $lastResult;
+        $result = $query->getResult();
+
+        return $result;
+
     }
 
     public function getNextsForUserWithRelatedCancellation(User $user)
@@ -76,16 +89,13 @@ class ActivityParticipationRepository extends ServiceEntityRepository
 
     }
 
-    public function getNextsForAnActivityThatAreNotCancelled(Activity $activity)
+    public function getForAnActivity(Activity $activity)
     {
         $query =  $this->createQueryBuilder('ap')
             ->join('ap.activity', 'a')
-            ->leftjoin('App\Entity\Activity\ActivityCancellation', 'ac', 'WITH', 'ac.activity = ap.activity AND ac.cancellingUser = ap.user')
 
             ->andWhere('ap.activity = :activity')
             ->setParameter('activity', $activity)
-            ->andWhere('ac is NULL')
-
 
             ->orderBy('a.startAt', 'ASC')
             ->addOrderBy('a.endAt', 'ASC')

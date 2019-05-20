@@ -49,15 +49,28 @@ class ActivityManager
     {
         //
         // Restricting access
-        if (is_null($this->security->getToken())|| is_null($this->security->getToken()->getUser()||$this->security->getToken()->getUser()->getId()))
-        {
+        if (is_null($this->security->getToken()) || is_null($this->security->getToken()->getUser() || $this->security->getToken()->getUser()->getId())) {
             throw new AccessDeniedException('Restricted area');
         }
         $connectedUser = $this->security->getToken()->getUser();
 
-        $activityHistoryForTheUser = $this->em->getRepository(Activity::class)->getHistoryForUser($connectedUser);
+        $activityParticipations = $this->em->getRepository(ActivityParticipation::class)->getPastsForUser($connectedUser);
+        $activityHistoryArray = [];
+        foreach ($activityParticipations as $activityParticipation)
+        {
+            /** @var ActivityParticipation $activityParticipation */
+            $relatedActivity = $activityParticipation->getActivity();
+            $relatedActivityCancellation = $this->em->getRepository(ActivityCancellation::class)->findOneBy([
+                'activity' => $relatedActivity,
+                'cancellingUser' => $connectedUser
+            ]);
+            if(is_null($relatedActivityCancellation)) {
+                $activityHistoryArray[] = $relatedActivity;
+            }
 
-        return $activityHistoryForTheUser;
+        }
+
+        return $activityHistoryArray;
 
     }
 
@@ -114,7 +127,7 @@ class ActivityManager
         $availableActivitiesArray = [];
 
         $activityParticipationQueryResult = $this->em->getRepository(ActivityParticipation::class)->findBy(['user' => $connectedUser]);
-        $activityIdsArray = [];
+        $activityIdsArray = ['0'];
         foreach($activityParticipationQueryResult as $activityParticipation)
         {
             /** @var ActivityParticipation $acitivityParticipation */
@@ -223,19 +236,22 @@ class ActivityManager
         $connectedUser = $this->security->getToken()->getUser();
 
         $activityParticipationArray = [];
-        $itemArray = [];
-        $activityParticipationQueryResult = $this->em->getRepository(ActivityParticipation::class)->getNextsForUserWithRelatedCancellation($connectedUser);
-        foreach ($activityParticipationQueryResult as $entity) {
-            if ($entity instanceof ActivityParticipation) {
-                $itemArray['participation'] = $entity;
-            }
-            else {
-                $itemArray['cancellation'] = $entity;
-                $activityParticipationArray[] = $itemArray;
-                $itemArray = [];
-            }
-        }
 
+        $activityParticipationQueryResults = $this->em->getRepository(ActivityParticipation::class)->getNextsForUser($connectedUser);
+        foreach ($activityParticipationQueryResults as $activityParticipation)
+        {
+            $itemArray = [];
+            /** @var ActivityParticipation $activityParticipation */
+            $itemArray['participation'] = $activityParticipation;
+
+            $relatedActivity = $activityParticipation->getActivity();
+            $relatedActivityCancellation = $this->em->getRepository(ActivityCancellation::class)->findOneBy([
+                'cancellingUser' => $connectedUser,
+                'activity' => $relatedActivity
+            ]);
+            $itemArray['cancellation'] = $relatedActivityCancellation;
+            $activityParticipationArray[] = $itemArray;
+        }
 
 
         return $activityParticipationArray;
@@ -260,32 +276,30 @@ class ActivityManager
         }
         $connectedUser = $this->security->getToken()->getUser();
 
-        $activityParticipationArray = [];
-        $itemArray = [];
+        $toSend = [];
 
         $activity = $this->em->getRepository(Activity::class)->find($activityId);
         if (is_null($activity)) {
             throw new ItemNotFoundException('Specified activity not found');
         }
 
-        $activityParticipationQueryResult = $this->em->getRepository(ActivityParticipation::class)->getNextsForAnActivityThatAreNotCancelled($activity);
+        $activityParticipationQueryResult = $this->em->getRepository(ActivityParticipation::class)->getForAnActivity($activity);
 
+        foreach ($activityParticipationQueryResult as $activityParticipation)
+        {
+            /**@var ActivityParticipation $activityParticipation */
+            $concernedUser = $activityParticipation->getUser();
+            $concernedActivity = $activityParticipation->getActivity();
+            $relatedActivityCancellation = $this->em->getRepository(ActivityCancellation::class)->findOneBy([
+                'cancellingUser' => $concernedUser,
+                'activity' => $concernedActivity
+            ]);
+            if (is_null($relatedActivityCancellation)) {
+                $toSend[] = $activityParticipation;
+            }
+        }
 
-//
-//        foreach ($activityParticipationQueryResult as $entity) {
-//            if ($entity instanceof ActivityParticipation) {
-//                $itemArray['participation'] = $entity;
-//            }
-//            else {
-//                $itemArray['cancellation'] = $entity;
-//                $activityParticipationArray[] = $itemArray;
-//                $itemArray = [];
-//            }
-//        }
-
-
-
-        return $activityParticipationQueryResult;
+        return $toSend;
 
 
     }

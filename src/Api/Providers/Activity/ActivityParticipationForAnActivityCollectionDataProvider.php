@@ -13,6 +13,7 @@ use ApiPlatform\Core\DataProvider\CollectionDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
 use App\Entity\Activity\ActivityParticipation;
 use App\Managers\Activity\ActivityManager;
+use Exception;
 
 class ActivityParticipationForAnActivityCollectionDataProvider implements CollectionDataProviderInterface, RestrictedDataProviderInterface
 {
@@ -36,6 +37,7 @@ class ActivityParticipationForAnActivityCollectionDataProvider implements Collec
      * @param string $resourceClass
      * @param string|null $operationName
      * @return array|\Traversable
+     * @throws Exception
      */
     public function getCollection(string $resourceClass, string $operationName = null)
     {
