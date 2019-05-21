@@ -50,8 +50,8 @@
 
     <div>
 
-        <div class="w3-card w3-round w3-white w3-padding-32">
-            <h1>Participations</h1>
+        <div class="w3-card w3-round w3-white w3-padding-32 w3-hide-small">
+            <h3>Participations</h3>
         </div>
 
         <div class="w3-card w3-round w3-white w3-padding-32 w3-margin-top w3-container">
@@ -141,7 +141,7 @@
 
                 <header class="w3-container w3-theme-d1">
                     <span @click="closeActivityCancellationModal" class="w3-button w3-display-topright">&times;</span>
-                    <h2>Annulation de participation</h2>
+                    <h4>Annulation de participation</h4>
                 </header>
 
                 <div class="w3-container">

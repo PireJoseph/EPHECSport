@@ -4,12 +4,13 @@
     }
 
     #contentContainer {
-        margin-top: 16px;
+        margin-top: 0;
     }
 
     @media only screen and (min-width: 993px) {
         #centerColumn {
-            padding: 0 32px
+            padding: 0 32px;
+            /*margin-top: 16px;*/
         }
     }
 

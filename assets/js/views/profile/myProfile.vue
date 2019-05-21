@@ -49,8 +49,8 @@
     <!--<v-container  >-->
     <div>
 
-        <div class="w3-card w3-round w3-white w3-padding-32">
-            <h1 style="margin-top: 0"> Mon profil </h1>
+        <div class="w3-card w3-round w3-white w3-padding-32 w3-hide-small">
+            <h3 style="margin-top: 0"> Mon profil </h3>
         </div>
 
         <form

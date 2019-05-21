@@ -199,11 +199,11 @@
 
     <div>
 
-        <div class="w3-card w3-round w3-white w3-padding-32">
-            <h1>Rencontres importantes</h1>
+        <div class="w3-card w3-round w3-white w3-padding-32 w3-hide-small">
+            <h3>Rencontres importantes</h3>
         </div>
 
-        <div class="timeline w3-padding-32">
+        <div v-show="!!crucialMeetings" class="timeline w3-padding-32">
 
             <div v-for="(meeting, index) in crucialMeetings" :key="meeting.id" class="container left" :class="getClassFollowingIndex(index)">
                 <div class="content">
