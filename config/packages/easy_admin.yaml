@@ -163,7 +163,7 @@ easy_admin:
                 fields:
                     - 'activity'
                     - 'user'
-                    - 'isConfirmed'
+                    - { property: isConfirmed, type_options: {required: false} }
                     - 'answeredAt'
             list:
                 fields:
@@ -196,13 +196,12 @@ easy_admin:
                     - 'user'
                     - 'activity'
                     - { property: 'label', type: 'App\Form\Activity\UserRelatedFeedBackLabelType' }
-                    - 'isReallyPresent'
+
             list:
                 fields:
                     - 'user'
                     - 'activity'
                     - 'label'
-                    - 'isReallyPresent'
                     - 'createdBy'
 
 #        ---------------------------------------------------------------------------------------------------

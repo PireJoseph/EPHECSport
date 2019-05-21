@@ -19,7 +19,6 @@ use App\Entity\Activity\Sport;
 use App\Entity\Activity\UserRelatedFeedback;
 use App\Entity\User\User;
 use App\Exception\ItemNotFoundException;
-use App\Form\Activity\ActivityRelatedFeedbackLabelType;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -274,6 +273,7 @@ class ActivityManager
         {
             throw new AccessDeniedException('Restricted area');
         }
+        /** @var User $connectedUser */
         $connectedUser = $this->security->getToken()->getUser();
 
         $toSend = [];
@@ -294,7 +294,7 @@ class ActivityManager
                 'cancellingUser' => $concernedUser,
                 'activity' => $concernedActivity
             ]);
-            if (is_null($relatedActivityCancellation)) {
+            if (is_null($relatedActivityCancellation) && ($connectedUser->getId() !== $concernedUser->getId()) ) {
                 $toSend[] = $activityParticipation;
             }
         }
@@ -356,6 +356,48 @@ class ActivityManager
         $this->em->flush();
 
         return $userRelatedFeedback;
+    }
+
+    public function getUserRelatedFeedbackForAnActivity($activityId)
+    {
+        //
+        // Restricting access
+        if (is_null($this->security->getToken())|| is_null($this->security->getToken()->getUser()||$this->security->getToken()->getUser()->getId()))
+        {
+            throw new AccessDeniedException('Restricted area');
+        }
+        /** @var User $connectedUser */
+        $connectedUser = $this->security->getToken()->getUser();
+
+        $relatedActivity = $this->em->getRepository(Activity::class)->find($activityId);
+        if (is_null($relatedActivity))
+        {
+            throw new ItemNotFoundException('activity specified not found');
+        }
+
+        $toSend = [];
+
+        $userRelatedFeedbackQueryResults = $this->em->getRepository(UserRelatedFeedback::class)->findBy([
+            'createdBy' => $connectedUser->getId(),
+            'activity' => $activityId,
+        ]);
+
+        foreach ($userRelatedFeedbackQueryResults as $userRelatedFeedback) {
+            /** @var UserRelatedFeedback $userRelatedFeedback */
+            $relatedUser = $userRelatedFeedback->getUser();
+            $relatedActivityParticipation = $this->em->getRepository(ActivityParticipation::class)->findOneBy([
+                'user' => $relatedUser,
+                'activity' => $relatedActivity
+            ]);
+            if (!is_null($relatedActivityParticipation) && ($relatedUser->getId() !== $connectedUser->getId()))
+            {
+                $toSend[] = $userRelatedFeedback;
+            }
+
+        }
+
+        return $toSend;
+
     }
 
 

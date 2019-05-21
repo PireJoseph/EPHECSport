@@ -35,7 +35,8 @@ use ApiPlatform\Core\Annotation\ApiResource;
  *              "method"="GET",
  *              "path"="/{id}" ,
  *              "denormalization_context"={"groups"={"get-user"} },
- *              "normalization_context"={"groups"={"get-user"} }
+ *              "normalization_context"={"groups"={"get-user"} },
+ *              "requirements"={"id"="\d+"}
  *          },
  *     },
  *     collectionOperations={

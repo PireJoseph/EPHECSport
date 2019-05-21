@@ -9,6 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use Symfony\Component\Serializer\Annotation\Groups;
+use App\Controller\Actions\Activity\GetUserRelatedFeedbackForAnActivityAndAUser;
 
 /**
  * @ApiResource(
@@ -17,13 +18,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *              "method"="GET",
  *              "path"= "/user/feedbacks/{id}",
  *              "denormalization_context"={"groups"={"get-user-feedback"} },
- *              "normalization_context"={"groups"={"get-user-feedback"} }
+ *              "normalization_context"={"groups"={"get-user-feedback"} },
+ *              "requirements"={"id"="\d+"}
  *           },
  *          "putUserFeedback" = {
  *              "method"="PUT",
  *              "path"="/user/feedbacks/{id}",
  *              "denormalization_context"={"groups"={"put-user-feedback"} },
- *              "normalization_context"={"groups"={"put-user-feedback"} }
+ *              "normalization_context"={"groups"={"put-user-feedback"} },
+ *              "requirements"={"id"="\d+"}
  *          }
  *     },
  *     collectionOperations = {
@@ -32,6 +35,14 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *              "path"="/user/feedbacks/",
  *              "denormalization_context"={"groups"={"get-user-feedbacks"} },
  *              "normalization_context"={"groups"={"get-user-feedbacks"} }
+ *          },
+ *          "getUserFeedbackForAnActivity" = {
+ *              "method"="GET",
+ *              "path"= "/user/feedbacks/activities/{id}",
+ *              "denormalization_context"={"groups"={"get-user-feedbacks"} },
+ *              "normalization_context"={"groups"={"get-user-feedbacks"} },
+ *              "controller"=GetUserRelatedFeedbackForAnActivityAndAUser::class,
+ *              "requirements"={"id"="\d+"}
  *          },
  *          "postUserFeedback" = {
  *              "method"="POST",
@@ -69,6 +80,9 @@ class UserRelatedFeedback
     const USER_RELATED_FEEDBACK_LABEL_TOKEN_NEGATIVE_ATTITUDE = 'USER_RELATED_FEEDBACK_LABEL_TOKEN_NEGATIVE_ATTITUDE';
     const USER_RELATED_FEEDBACK_LABEL_VALUE_NEGATIVE_ATTITUDE = 'USER_RELATED_FEEDBACK_LABEL_VALUE_NEGATIVE_ATTITUDE';
 
+    const USER_RELATED_FEEDBACK_LABEL_TOKEN_USER_MISSING = 'USER_RELATED_FEEDBACK_LABEL_TOKEN_USER_MISSING';
+    const USER_RELATED_FEEDBACK_LABEL_VALUE_USER_MISSING = 'USER_RELATED_FEEDBACK_LABEL_VALUE_USER_MISSING';
+
 
     /**
      * @ORM\Id()
@@ -77,13 +91,6 @@ class UserRelatedFeedback
      * @Groups({"get-user-feedback", "get-user-feedbacks", "get-user-feedbacks", "post-user-feedback"})
      */
     private $id;
-
-    /**
-     * @Assert\Type(type="bool")
-     * @ORM\Column(type="boolean")
-     * @Groups({"get-user-feedback", "put-user-feedback", "get-user-feedbacks", "post-user-feedback"})
-     */
-    private $isReallyPresent;
 
     /**
      * @Assert\NotNull
@@ -124,14 +131,7 @@ class UserRelatedFeedback
 
     public function getIsReallyPresent(): ?bool
     {
-        return $this->isReallyPresent;
-    }
-
-    public function setIsReallyPresent(bool $isReallyPresent): self
-    {
-        $this->isReallyPresent = $isReallyPresent;
-
-        return $this;
+        return ($this->label !== self::USER_RELATED_FEEDBACK_LABEL_VALUE_USER_MISSING);
     }
 
     public function getLabel(): ?string
@@ -191,6 +191,7 @@ class UserRelatedFeedback
             self::USER_RELATED_FEEDBACK_LABEL_TOKEN_FRIENDLY => self::USER_RELATED_FEEDBACK_LABEL_VALUE_FRIENDLY,
             self::USER_RELATED_FEEDBACK_LABEL_TOKEN_LATE => self::USER_RELATED_FEEDBACK_LABEL_VALUE_LATE,
             self::USER_RELATED_FEEDBACK_LABEL_TOKEN_NEGATIVE_ATTITUDE => self::USER_RELATED_FEEDBACK_LABEL_VALUE_NEGATIVE_ATTITUDE,
+            self::USER_RELATED_FEEDBACK_LABEL_TOKEN_USER_MISSING => self::USER_RELATED_FEEDBACK_LABEL_VALUE_USER_MISSING
         ];
     }
 

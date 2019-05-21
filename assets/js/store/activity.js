@@ -23,7 +23,15 @@ export default {
         activityParticipationConfirmationLoading : false,
         activityParticipationConfirmationError: null,
         activityCancellationLoading: false,
-        activityCancellationError: null
+        activityCancellationError: null,
+        activityParticipationsForAnActivity : null,
+        activityParticipationsForAnActivityLoading : false,
+        activityParticipationsForAnActivityError : null,
+        userRelatedFeedbacksForAnActivity : [],
+        userRelatedFeedbacksForAnActivityLoading : false,
+        userRelatedFeedbacksForAnActivityError : null,
+        postUserRelatedFeedbackLoading : false,
+        postUserRelatedFeedbackError: null
 
     },
     getters: {
@@ -93,6 +101,30 @@ export default {
         },
         activityCancellationError (state) {
             return state.activityCancellationError
+        },
+        activityParticipationsForAnActivity (state) {
+            return state.activityParticipationsForAnActivity
+        },
+        activityParticipationsForAnActivityLoading (state) {
+            return state.activityParticipationsForAnActivityLoading
+        },
+        activityParticipationsForAnActivityError (state) {
+            return state.activityParticipationsForAnActivityError
+        },
+        userRelatedFeedbacksForAnActivity (state) {
+            return state.userRelatedFeedbacksForAnActivity
+        },
+        userRelatedFeedbacksForAnActivityLoading (state) {
+            return state.userRelatedFeedbacksForAnActivityLoading
+        },
+        userRelatedFeedbacksForAnActivityError (state) {
+            return state.userRelatedFeedbacksForAnActivityLoading
+        },
+        postUserRelatedFeedbackLoading (state) {
+            return state.postUserRelatedFeedbackLoading
+        },
+        postUserRelatedFeedbackError (state) {
+            return state.postUserRelatedFeedbackError
         },
 
     },
@@ -239,6 +271,60 @@ export default {
             state.activityCancellationLoading = false;
             state.activityCancellationError = error.message;
         },
+        ['GETTING_ACTIVITY_PARTICIPATION_FOR_AN_ACTIVITY'](state){
+            state.activityParticipationsForAnActivity = [];
+            state.isLoading = true;
+            state.activityParticipationsForAnActivityLoading = true;
+            state.error = null;
+            state.activityParticipationsForAnActivityError = null;
+        },
+        ['GET_ACTIVITY_PARTICIPATION_FOR_AN_ACTIVITY_SUCCESS'](state, activityParticipations){
+            state.activityParticipationsForAnActivity = activityParticipations;
+            state.isLoading = false;
+            state.activityParticipationsForAnActivityLoading = false;
+            state.error = null;
+            state.activityParticipationsForAnActivityError = null;
+        },
+        ['GET_ACTIVITY_PARTICIPATION_FOR_AN_ACTIVITY_ERROR'](state, error){
+            state.activityParticipationsForAnActivity = [];
+            state.isLoading = false;
+            state.activityParticipationsForAnActivityLoading = false;
+            state.error = error.message;
+            state.activityParticipationsForAnActivityError = error.message;
+        },
+        ['GETTING_USER_RELATED_FEEDBACKS_FOR_AN_ACTIVITY'](state){
+            state.userRelatedFeedbacksForAnActivity = null;
+            state.isLoading = true;
+            state.userRelatedFeedbacksForAnActivityLoading = true;
+            state.error = null;
+            state.userRelatedFeedbacksForAnActivityError = null;
+        },
+        ['GET_USER_RELATED_FEEDBACKS_FOR_AN_ACTIVITY_SUCCESS'](state, userRelatedFeedbacksForAnActivity){
+            state.userRelatedFeedbacksForAnActivity = userRelatedFeedbacksForAnActivity;
+            state.isLoading = false;
+            state.userRelatedFeedbacksForAnActivityLoading = false;
+            state.error = null;
+            state.userRelatedFeedbacksForAnActivityError = null;
+        },
+        ['GET_USER_RELATED_FEEDBACKS_FOR_AN_ACTIVITY_ERROR'](state, error){
+            state.userRelatedFeedbacksForAnActivity = null;
+            state.isLoading = false;
+            state.userRelatedFeedbacksForAnActivityLoading = false;
+            state.error = error.message;
+            state.userRelatedFeedbacksForAnActivityError = error.message;
+        },
+        ['POSTING_USER_RELATED_FEEDBACK'](state){
+            state.postUserRelatedFeedbackLoading = true;
+            state.postUserRelatedFeedbackError = null;
+        },
+        ['POST_USER_RELATED_FEEDBACK_SUCCESS'](state){
+            state.postUserRelatedFeedbackLoading = false;
+            state.postUserRelatedFeedbackError = null;
+        },
+        ['POST_USER_RELATED_FEEDBACK_ERROR'](state, error){
+            state.postUserRelatedFeedbackLoading = false;
+            state.postUserRelatedFeedbackError = error.message;
+        }
 
     },
     actions : {
@@ -341,8 +427,25 @@ export default {
             return ActivityAPI.postActivityCancellation(payload)
                 .then(res => commit('POST_ACTIVITY_CANCELLATION_SUCCESS'))
                 .catch(err => commit('POST_ACTIVITY_CANCELLATION_ERROR', err))
+        },
+        getActivityParticipationsForAnActivity({commit}, id) {
+            commit('GETTING_ACTIVITY_PARTICIPATION_FOR_AN_ACTIVITY');
+            return ActivityAPI.getActivityParticipationsForAnActivity(id)
+                .then(res => commit('GET_ACTIVITY_PARTICIPATION_FOR_AN_ACTIVITY_SUCCESS',res.data['hydra:member']))
+                .catch(err => commit('GET_ACTIVITY_PARTICIPATION_FOR_AN_ACTIVITY_ERROR', err))
+        },
+        getUserRelatedFeedbackForAnActivity({commit}, id) {
+            commit('GETTING_USER_RELATED_FEEDBACKS_FOR_AN_ACTIVITY');
+            return ActivityAPI.getUserRelatedFeedbackForAnActivity(id)
+                .then(res => commit('GET_USER_RELATED_FEEDBACKS_FOR_AN_ACTIVITY_SUCCESS',res.data['hydra:member']))
+                .catch(err => commit('GET_USER_RELATED_FEEDBACKS_FOR_AN_ACTIVITY_ERROR', err))
+        },
+        postUserRelatedFeedback({commit}, payload) {
+            commit('POSTING_USER_RELATED_FEEDBACK');
+            return ActivityAPI.postUserRelatedFeedback(payload)
+                .then(res => commit('POST_USER_RELATED_FEEDBACK_SUCCESS'))
+                .catch(err => commit('POST_USER_RELATED_FEEDBACK_ERROR', err))
         }
-
     }
 
 }

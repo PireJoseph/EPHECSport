@@ -65,9 +65,11 @@
                 <template slot="table-row" slot-scope="props">
                     <span v-if="props.column.field == 'after'">
 
-                        <button v-show="!isActivityFeedbackLoading" class="w3-button w3-grey w3-small" @click="loadActivityFeedback(props.row)" style="width: 85px">Feedback</button>
-                        <span v-show="isActivityFeedbackLoading" class="w3-block w3-center" ><i class="fa fa-spinner fa-spin" aria-hidden="true"></i></span>
+                        <button v-show="!isActivityFeedbackLoading" class="w3-button w3-grey w3-small w3-block" @click="loadActivityFeedback(props.row)" >Feedback activité</button>
+                        <span v-show="isActivityFeedbackLoading" class="w3-block w3-center w3-small" ><i class="fa fa-spinner fa-spin" aria-hidden="true"></i></span>
 
+                        <button v-show="!userRelatedFeedbackModalLoading" class="w3-button w3-black w3-small w3-margin-top w3-block" @click="loadActivityUsers(props.row)">Feedbacks participations</button>
+                        <span v-show="userRelatedFeedbackModalLoading" class="w3-block w3-center w3-small w3-margin-top" ><i class="fa fa-spinner fa-spin" aria-hidden="true"></i></span>
                     </span>
                     <span v-if="props.column.field == 'location'">
 
@@ -91,9 +93,9 @@
         <div id="notationModal" class="w3-modal" style="display: block;" v-show="modalOpen">
             <div class="w3-modal-content w3-animate-opacity">
 
-                <header class="w3-container w3-theme-d1">
+                <header class="w3-container w3-theme-d1" style="padding: 0 40px;">
                     <span @click="closeModal" class="w3-button w3-display-topright">&times;</span>
-                    <h2>Feedback {{activitySelectedLabel}}</h2>
+                    <h4 >Feedback {{activitySelectedLabel}}</h4>
                 </header>
 
                 <div class="w3-container">
@@ -146,6 +148,70 @@
             </div>
         </div>
 
+
+
+        <div id="userFeedbackModal" class="w3-modal" style="display: block;" v-show="userFeedbackModalOpen">
+            <div class="w3-modal-content w3-animate-opacity">
+
+                <header class="w3-container w3-theme-d1" style="padding: 0 40px;">
+                    <span @click="closeUserFeedbackModal" class="w3-button w3-display-topright">&times;</span>
+                    <h4>Feedback participations à : {{selectedActivityForUserFeedbackLabel}}</h4>
+                </header>
+
+                <div class="w3-container">
+                    <form action="#" v-show="(userFeedbackUserSelectArray.length > 1)">
+
+                        <div class="formInputContainer w3-center w3-margin ">
+                            <label class="formInputLabel">Participant :</label>
+                            <v-select
+                                    @input="changeUserFeedbackUserSelect"
+                                    :options="userFeedbackUserSelectArray"
+                                    :value="userFeedbackUserSelectValue"
+                                    :clearable="false"
+                                    :multiple="false"
+                            ></v-select>
+                        </div>
+
+                        <div v-show="(!!this.selectedUserForUserFeedback && !this.existingUserFeedback)" class="w3-padding">
+
+                            <div class="formInputContainer w3-center w3-margin ">
+                                <label class="formInputLabel">Libellé :</label>
+                                <v-select
+                                        @input="changeUserFeedbackLabelSelect"
+                                        :options="userFeedbackLabelSelectArray"
+                                        :value="userFeedbackLabelSelectValue"
+                                        :clearable="false"
+                                        :multiple="false"
+                                ></v-select>
+                            </div>
+
+                        </div>
+
+                        <div v-show="!!this.existingUserFeedback" class="w3-block-center w3-padding">
+                            <p class="w3-margin">Un feedback a déja été envoyé à ce participant pour cette activité</p>
+                        </div>
+
+
+
+                    </form>
+
+                    <div v-show="(userFeedbackUserSelectArray.length < 2)" class="w3-block-center w3-padding-32">
+                        <p class="w3-margin">Aucun participant à cette activité</p>
+                    </div>
+
+                </div>
+
+                <footer class="w3-container w3-theme-d1 w3-padding">
+                    <button type="button" class="w3-button w3-red" @click="closeUserFeedbackModal" >Fermer</button>
+                    <button v-show="((!this.postUserRelatedFeedbackLoading) && (this.userFeedbackUserSelectArray.length > 1) && ((!this.existingUserFeedback && !!this.selectedUserForUserFeedback && !!this.selectedActivityForUserFeedback && !!this.userFeedbackForm.label.length)))" type="button" class="w3-button w3-green" @click="submitUserFeedback" >Poster feedback</button>
+                    <span v-show="this.postUserRelatedFeedbackLoading" class="w3-center w3-small w3-margin-left" ><i class="fa fa-spinner fa-spin" aria-hidden="true"></i></span>
+                </footer>
+
+            </div>
+        </div>
+
+
+
     </div>
 
 </template>
@@ -158,11 +224,21 @@
         data() {
             return {
                 modalOpen : false,
+                userFeedbackModalOpen : false,
                 selectedActivity : null,
+                selectedActivityForUserFeedback : null,
+                selectedActivityForUserFeedbackLabel : '',
+                selectedUserForUserFeedback : null,
+                existingUserFeedback : null,
                 activityFeedbackForm : {
                     activityRatingOutOfFive : 0,
                     label : 'ACTIVITY_RELATED_FEEDBACK_LABEL_VALUE_NOTHING',
                     comment: ''
+                },
+                userFeedbackForm : {
+                    user : '',
+                    activity : '',
+                    label : ''
                 },
                 labelSelectArray : [
                     {
@@ -189,6 +265,42 @@
                         value: 'ACTIVITY_RELATED_FEEDBACK_LABEL_TOKEN_CHALLENGING',
                         label : 'Challenging',
                     },
+                ],
+                userFeedbackUserSelectArray : [
+                    {
+                        label : 'Choisissez...',
+                        user :   null
+                    }
+                ],
+                userFeedbackLabelSelectArray : [
+                    {
+                        value: 'USER_RELATED_FEEDBACK_LABEL_VALUE_NOTHING',
+                        label : 'Rien à dire'
+                    },
+                    {
+                        value: 'USER_RELATED_FEEDBACK_LABEL_VALUE_MVP',
+                        label : 'Très méritant'
+                    },
+                    {
+                        value: 'USER_RELATED_FEEDBACK_LABEL_VALUE_FAIRPLAY',
+                        label : 'Fairplay'
+                    },
+                    {
+                        value: 'USER_RELATED_FEEDBACK_LABEL_VALUE_FRIENDLY',
+                        label : 'Amical'
+                    },
+                    {
+                        value: 'USER_RELATED_FEEDBACK_LABEL_VALUE_LATE',
+                        label : 'En retard'
+                    },
+                    {
+                        value: 'USER_RELATED_FEEDBACK_LABEL_VALUE_NEGATIVE_ATTITUDE',
+                        label : 'Attitude négative'
+                    },
+                    {
+                        value: 'USER_RELATED_FEEDBACK_LABEL_VALUE_USER_MISSING',
+                        label : 'Absent'
+                    }
                 ],
                 header: [
                     {
@@ -241,12 +353,33 @@
                 }
                 return labelToReturn
             },
+            userFeedbackUserSelectValue(){
+                let labelToReturn = 'Choisissez...'
+                if(!!this.selectedUserForUserFeedback)
+                {
+                    labelToReturn = this.selectedUserForUserFeedback.username;
+                }
+                return labelToReturn;
+            },
+            userRelatedFeedbackModalLoading(){
+                return (this.activityParticipationsForAnActivityLoading || this.userRelatedFeedbacksForAnActivityLoading)
+            },
+            userFeedbackLabelSelectValue () {
+                return this.userFeedbackLabelSelectArray[0].label
+            },
+
             ...mapGetters({
                 activityHistory: 'activity/activityHistory',
                 isActivityFeedbackLoading: 'activity/isActivityHistoryFeedbackLoading',
                 activityFeedbackLoadingError: 'activity/activityHistoryFeedbackLoadingError',
                 activityFeedback: 'activity/activityHistoryFeedback',
-                userId: 'user/userId'
+                userId: 'user/userId',
+                activityParticipationsForAnActivity: 'activity/activityParticipationsForAnActivity',
+                activityParticipationsForAnActivityLoading : 'activity/activityParticipationsForAnActivityLoading',
+                userRelatedFeedbacksForAnActivity :  'activity/userRelatedFeedbacksForAnActivity',
+                userRelatedFeedbacksForAnActivityLoading: 'activity/userRelatedFeedbacksForAnActivityLoading',
+                postUserRelatedFeedbackLoading : 'activity/postUserRelatedFeedbackLoading'
+
             })
 
         },
@@ -264,6 +397,21 @@
                         this.modalOpen = true;
                     })
             },
+            loadActivityUsers(activity) {
+                this.selectedActivityForUserFeedback = activity;
+                this.selectedActivityForUserFeedbackLabel = activity.label;
+                this.userFeedbackForm.activity = activity['@id'];
+                this.$store.dispatch('activity/getActivityParticipationsForAnActivity', activity['id'] )
+                    .then(()=>{
+                       this.initUserSelect();
+                       this.$store.dispatch('activity/getUserRelatedFeedbackForAnActivity', this.selectedActivityForUserFeedback.id)
+                           .then(()=>{
+                               this.userFeedbackModalOpen = true;
+                           })
+                    });
+            },
+
+
             initForm(activityFeedback){
                 let label = 'ACTIVITY_RELATED_FEEDBACK_LABEL_VALUE_NOTHING', activityRatingOutOfFive = 0, comment = '';
                 if(!!activityFeedback)
@@ -276,13 +424,71 @@
               this.activityFeedbackForm.activityRatingOutOfFive = activityRatingOutOfFive;
               this.activityFeedbackForm.comment = comment;
             },
+            initUserSelect()
+            {
+                let userSelectArray = [
+                    {
+                        label : 'Choisissez...',
+                        user : null
+
+                    }
+                ];
+                this.activityParticipationsForAnActivity.map((activityParticipation)=>{
+                    userSelectArray.push({
+                        label : activityParticipation.user.username,
+                        user : activityParticipation.user
+                    })
+                });
+                this.userFeedbackUserSelectArray = userSelectArray;
+            },
+            initUserFeedbackForm(){
+                this.userFeedbackForm = {
+                    user : '',
+                    activity : '',
+                    label : this.userFeedbackLabelSelectArray[0].label
+                }
+            },
+
             closeModal()
             {
                 this.initForm();
                 this.modalOpen = false;
             },
+            closeUserFeedbackModal()
+            {
+                this.initUserFeedbackForm();
+                this.userFeedbackModalOpen = false;
+                this.selectedUserForUserFeedback = null;
+            },
+
             changeLabelSelect(val) {
                 this.activityFeedbackForm.label = val.value;
+            },
+            changeUserFeedbackUserSelect(val)
+            {
+                this.selectedUserForUserFeedback = val.user;
+
+                this.userFeedbackForm.label = this.userFeedbackLabelSelectArray[0].value;
+
+                let correspondingUserFeedback = null;
+                if (!!this.selectedUserForUserFeedback)
+                {
+                    this.userFeedbackForm.user = val.user['@id'];
+                    let filteredUserFeedback;
+                    filteredUserFeedback = this.userRelatedFeedbacksForAnActivity.filter((userRelatedFeedback)=>{
+                        return (userRelatedFeedback.user.id ===  this.selectedUserForUserFeedback.id)
+                    });
+                    if(filteredUserFeedback.length > 0){
+                        correspondingUserFeedback = filteredUserFeedback[0];
+                    }
+
+                }
+                this.existingUserFeedback = correspondingUserFeedback;
+
+            },
+            changeUserFeedbackLabelSelect(val)
+            {
+                this.userFeedbackForm.label = val.value;
             },
 
             submit() {
@@ -293,13 +499,18 @@
               }
             },
 
+            submitUserFeedback() {
+                this.$store.dispatch('activity/postUserRelatedFeedback', this.userFeedbackForm)
+                    .then((res)=>{
+                        this.closeUserFeedbackModal();
+                    })
+            },
+
             postActivityRelatedFeedback () {
                 this.activityFeedbackForm.activityRatingOutOfFive = parseInt( this.activityFeedbackForm.activityRatingOutOfFive)
                 let payload = this.activityFeedbackForm;
                 payload.activity = this.selectedActivity['@id']
                 payload.author = this.userId
-                console.log('post activity related feedback')
-                console.log(payload)
                 this.$store.dispatch('activity/postActivityHistoryFeedback', payload)
                 .then(() => {
                    this.closeModal();
@@ -309,7 +520,6 @@
                 this.activityFeedbackForm.activityRatingOutOfFive = parseInt( this.activityFeedbackForm.activityRatingOutOfFive)
                 let payload = this.activityFeedbackForm;
                 payload.activityRelatedFeedbackId = id;
-                console.log(payload)
                 this.$store.dispatch('activity/putActivityHistoryFeedback', payload)
                 .then(() => {
                     this.closeModal();

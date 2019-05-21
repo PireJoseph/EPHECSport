@@ -61,5 +61,21 @@ export default {
             '/api/activities/cancellations/',
             payload
         )
-    }
+    },
+    getActivityParticipationsForAnActivity(id) {
+        return ApiService.get(
+            '/api/activities/'+ id + '/participations/'
+        )
+    },
+    getUserRelatedFeedbackForAnActivity(id) {
+        return ApiService.get(
+            '/api/user/feedbacks/activities/' + id
+        )
+    },
+    postUserRelatedFeedback(payload) {
+        return ApiService.post(
+            '/api/user/feedbacks/',
+            payload
+        )
+    },
 }
