@@ -229,6 +229,7 @@
                 selectedActivityForUserFeedback : null,
                 selectedActivityForUserFeedbackLabel : '',
                 selectedUserForUserFeedback : null,
+                selectedLabelForUserFeedback : '',
                 existingUserFeedback : null,
                 activityFeedbackForm : {
                     activityRatingOutOfFive : 0,
@@ -365,7 +366,12 @@
                 return (this.activityParticipationsForAnActivityLoading || this.userRelatedFeedbacksForAnActivityLoading)
             },
             userFeedbackLabelSelectValue () {
-                return this.userFeedbackLabelSelectArray[0].label
+                let labelToReturn = this.userFeedbackLabelSelectArray[0].label;
+                if(this.selectedLabelForUserFeedback.length > 0)
+                {
+                    labelToReturn =  this.selectedLabelForUserFeedback;
+                }
+                return labelToReturn;
             },
 
             ...mapGetters({
@@ -442,6 +448,8 @@
                 this.userFeedbackUserSelectArray = userSelectArray;
             },
             initUserFeedbackForm(){
+                this.selectedLabelForUserFeedback = '';
+                this.selectedUserForUserFeedback = null;
                 this.userFeedbackForm = {
                     user : '',
                     activity : '',
@@ -458,7 +466,7 @@
             {
                 this.initUserFeedbackForm();
                 this.userFeedbackModalOpen = false;
-                this.selectedUserForUserFeedback = null;
+
             },
 
             changeLabelSelect(val) {
@@ -467,7 +475,7 @@
             changeUserFeedbackUserSelect(val)
             {
                 this.selectedUserForUserFeedback = val.user;
-
+                this.selectedLabelForUserFeedback = '';
                 this.userFeedbackForm.label = this.userFeedbackLabelSelectArray[0].value;
 
                 let correspondingUserFeedback = null;
@@ -488,6 +496,7 @@
             },
             changeUserFeedbackLabelSelect(val)
             {
+                this.selectedLabelForUserFeedback = val.label;
                 this.userFeedbackForm.label = val.value;
             },
 
