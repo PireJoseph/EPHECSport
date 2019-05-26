@@ -19,17 +19,17 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     itemOperations={
  *          "getSportMen" = {
  *              "method"="GET",
- *              "path"= "/sportsmen/{id}",
- *              "denormalization_context"={"groups"={"get-sportsman"} },
- *              "normalization_context"={"groups"={"get-sportsman"} }
+ *              "path"= "/sportmen/{id}",
+ *              "denormalization_context"={"groups"={"get-sportman"} },
+ *              "normalization_context"={"groups"={"get-sportman"} }
  *           },
  *     },
  *     collectionOperations={
  *          "getSportMens" = {
  *              "method"="GET",
- *              "path"="/sportsmen/",
- *              "denormalization_context"={"groups"={"get-sportsmen"} },
- *              "normalization_context"={"groups"={"get-sportsmen"} },
+ *              "path"="/sportmen/",
+ *              "denormalization_context"={"groups"={"get-sportmen"} },
+ *              "normalization_context"={"groups"={"get-sportmen"} },
  *          }
  *     }
  * )
@@ -46,7 +46,7 @@ class EmeritusSportMan
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"get-meeting","get-meetings", "get-sportsman", "get-sportsmen"})
+     * @Groups({"get-meeting","get-meetings", "get-sportman", "get-sportmen"})
      */
     private $id;
 
@@ -55,7 +55,7 @@ class EmeritusSportMan
      * @Assert\NotNull()
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
-     * @Groups({"get-meeting","get-meetings", "get-sportsman", "get-sportsmen"})
+     * @Groups({"get-meeting","get-meetings", "get-sportman", "get-sportmen"})
      */
     private $firstName;
 
@@ -64,20 +64,20 @@ class EmeritusSportMan
      * @Assert\NotNull()
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
-     * @Groups({"get-meeting","get-meetings", "get-sportsman", "get-sportsmen"})
+     * @Groups({"get-meeting","get-meetings", "get-sportman", "get-sportmen"})
      */
     private $lastName;
 
     /**
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"get-meeting","get-meetings", "get-sportsman", "get-sportsmen"})
+     * @Groups({"get-meeting","get-meetings", "get-sportman", "get-sportmen"})
      */
     private $nickName;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"get-meeting","get-meetings", "get-sportsman", "get-sportsmen"})
+     * @Groups({"get-meeting","get-meetings", "get-sportman", "get-sportmen"})
      */
     private $gender;
 
@@ -86,7 +86,7 @@ class EmeritusSportMan
      * @Assert\NotNull()
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
-     * @Groups({"get-meeting","get-meetings", "get-sportsman", "get-sportsmen"})
+     * @Groups({"get-meeting","get-meetings", "get-sportman", "get-sportmen"})
      */
     private $role;
 
@@ -94,14 +94,14 @@ class EmeritusSportMan
      * @Assert\NotNull()
      * @ORM\ManyToOne(targetEntity="App\Entity\Activity\Sport")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"get-meeting","get-meetings", "get-sportsman", "get-sportsmen"})
+     * @Groups({"get-meeting","get-meetings", "get-sportman", "get-sportmen"})
      */
     private $sport;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Activity\SportClub")
      * @ORM\JoinColumn(nullable=true)
-     * @Groups({"get-meeting","get-meetings", "get-sportsman", "get-sportsmen"})
+     * @Groups({"get-meeting","get-meetings", "get-sportman", "get-sportmen"})
      */
     private $sportClub;
 
@@ -111,13 +111,13 @@ class EmeritusSportMan
      *      joinColumns={@ORM\JoinColumn(name="emeritus_sport_man_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="picture_id", referencedColumnName="id", unique=true)}
      * )
-     * @Groups({"get-meeting","get-meetings", "get-sportsman", "get-sportsmen"})
+     * @Groups({"get-meeting","get-meetings", "get-sportman", "get-sportmen"})
      */
     private $pictures;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Promotion\Achievement", mappedBy="sportMen")
-     * @Groups({"get-meeting","get-meetings", "get-sportsman", "get-sportsmen"})
+     * @Groups({"get-meeting","get-meetings", "get-sportman", "get-sportmen"})
      */
     private $achievements;
 

@@ -12,10 +12,10 @@
         </div>
 
         <div class="w3-card w3-round w3-white w3-padding-32 w3-margin-top w3-container">
+
             <vue-good-table
                     :columns="header"
                     :rows="transformedAvailableActivities"
-                    :rtl="true"
                     :search-options="{
                         enabled: true,
                         trigger: 'enter',
@@ -26,17 +26,25 @@
                 <template slot="table-row" slot-scope="props">
 
                     <span v-if="props.column.field == 'after'">
+                        <button v-if="((!props.row.relatedRequest) && (!props.row.isJoinableByAnyone))" class="w3-button w3-black w3-small" :disabled="activityJoiningRequestLoading" @click="makeJoiningRequest(props.row['@id'])">
+                            <i class="fa fa-unlock-alt" aria-hidden="true"></i>
+                            <span class="w3-hide-small w3-hide-medium"> Demander</span>
+                        </button>
 
-                        <button v-if="((!props.row.relatedRequest) && (!props.row.isJoinableByAnyone))" class="w3-button w3-black w3-small" :disabled="activityJoiningRequestLoading" @click="makeJoiningRequest(props.row['@id'])">Demander pour rejoindre</button>
-                        <button v-if="((!props.row.relatedRequest) && (props.row.isJoinableByAnyone))" class="w3-button w3-green w3-small" :disabled="activityJoiningRequestLoading" @click="makeJoiningRequest(props.row['@id'])">Rejoindre</button>
-                        <button v-if="(props.row.relatedRequest)" class="w3-button w3-grey w3-small"  disabled>En attente d'admission</button>
+                        <button v-if="((!props.row.relatedRequest) && (props.row.isJoinableByAnyone))" class="w3-button w3-green w3-small" :disabled="activityJoiningRequestLoading" @click="makeJoiningRequest(props.row['@id'])">
+                            <i class="fa fa-sign-in" aria-hidden="true"></i>
+                            <span class="w3-hide-small w3-hide-medium"> Rejoindre</span>
+                        </button>
+
+                        <button v-if="(props.row.relatedRequest)" class="w3-button w3-grey w3-small"  disabled>
+                            <i class="fa fa-clock-o" aria-hidden="true"></i>
+                            <span class="w3-hide-small w3-hide-medium"> Attente d'admission</span>
+                        </button>
 
                     </span>
 
                     <span v-else-if="props.column.field == 'location'">
-
                         {{props.row.location.label}} - {{props.row.location.city}}
-
                     </span>
 
                     <div v-else-if="props.column.field == 'material'">
@@ -45,17 +53,22 @@
                         </ul>
                     </div>
 
-                    <span v-else>
-
-                        {{props.formattedRow[props.column.field]}}
-
+                    <span v-else-if="props.column.field == 'startAt'">
+                        {{getFormatedDateString(props.row.startAt)}} {{getFormatedDateTimeString(props.row.startAt)}}
                     </span>
+
+                    <span v-else>
+                        {{props.formattedRow[props.column.field]}}
+                    </span>
+
                 </template>
+
                 <div slot="emptystate">
                     Pas de résultats
                 </div>
 
             </vue-good-table>
+
         </div>
 
 
@@ -65,6 +78,7 @@
 
 <script>
     import {mapGetters} from "vuex";
+    import moment from 'moment';
 
     export default {
         name: 'available-activities',
@@ -72,14 +86,33 @@
             return {
                 header: [
                     {
-                        label: 'Actions',
-                        field: 'after',
-                        html: true,
-                        filterable: false,
-                        globalSearchDisabled: true,
+                        label: 'Libellé',
+                        field: 'label',
+                        filterable: true,
                     },
                     {
-                        label: 'Commence à',
+                        label: 'Sport',
+                        field: 'sport.label',
+                        filterable: true,
+                        thClass: 'w3-hide-small w3-hide-medium',
+                        tdClass: 'w3-hide-small w3-hide-medium',
+                    },
+                    {
+                        label: 'Matériel',
+                        field: 'material',
+                        filterable: true,
+                        thClass: 'w3-hide-small  w3-hide-medium',
+                        tdClass: 'w3-hide-small  w3-hide-medium',
+                    },
+                    {
+                        label: 'Lieu',
+                        field: 'location',
+                        filterable: true,
+                        thClass: 'w3-hide-small',
+                        tdClass: 'w3-hide-small',
+                    },
+                    {
+                        label: 'Début',
                         field: 'startAt',
                         filterable: true,
                         type: 'date',
@@ -87,24 +120,11 @@
                         dateOutputFormat:  'DD/MM/YYYY hh:mm',
                     },
                     {
-                        label: 'Lieu',
-                        field: 'location',
-                        filterable: true,
-                    },
-                    {
-                        label: 'Matériel',
-                        field: 'material',
-                        filterable: true,
-                    },
-                    {
-                        label: 'Sport',
-                        field: 'sport.label',
-                        filterable: true,
-                    },
-                    {
-                        label: 'Libellé',
-                        field: 'label',
-                        filterable: true,
+                        label: 'Accession',
+                        field: 'after',
+                        html: true,
+                        filterable: false,
+                        globalSearchDisabled: true,
                     },
                 ],
 
@@ -139,7 +159,27 @@
                     .then(
                         this.getAvailableActivitiesData
                     )
+            },
+
+
+            getFormatedDateString(dateString) {
+                let dateStringToReturn = '';
+                if( (dateString !== null) && (dateString !== '') )
+                {
+                    dateStringToReturn =  moment(dateString).format('Do MMMM YYYY')
+                }
+                console.log(dateStringToReturn)
+                return dateStringToReturn;
+            },
+            getFormatedDateTimeString(dateString) {
+                let dateTimeStringToReturn = '';
+                if( (dateString !== null) && (dateString !== '') )
+                {
+                    dateTimeStringToReturn =  moment(dateString).format('HH:mm')
+                }
+                return dateTimeStringToReturn;
             }
+
         },
         mounted() {
             this.getAvailableActivitiesData();

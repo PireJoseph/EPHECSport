@@ -27,7 +27,7 @@ class ActivityParticipationDTOAssembler
 
         $activityParticipationDTO->activityId = $activityParticipation->getActivity()->getId();
         $activityParticipationDTO->activityLabel = $activityParticipation->getActivity()->getLabel();
-        $activityParticipationDTO->activityStartAt = $activityParticipation->getActivity()->getStartAt()->format('d/m/Y');
+        $activityParticipationDTO->activityStartAt = $activityParticipation->getActivity()->getStartAt()->format('Y-m-d H:i:s');
         if (!is_null($activityParticipation->getActivity()->getLocation()))
         {
             $activityParticipationDTO->activityLocation = $activityParticipation->getActivity()->getLocation()->getString();

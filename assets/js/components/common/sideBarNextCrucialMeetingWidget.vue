@@ -20,7 +20,7 @@
         <div class="w3-container">
             <h6><strong>Prochaine rencontre importante</strong></h6>
             <p id="sideBarNextCrucialMeetingLabel" >{{ nextCrucialMeeting.label }}</p>
-            <p id="sideBarNextCrucialMeetingStartAt"  v-if="nextCrucialMeeting.startAt"  >le {{ nextCrucialMeeting.startAt }}</p>
+            <p class="w3-opacity" id="sideBarNextCrucialMeetingStartAt"  v-if="nextCrucialMeeting.startAt"  >le {{ getFormatedDateString(nextCrucialMeeting.startAt) }}</p>
             <p id="sideBarNextCrucialMeetingLocation" v-if="nextCrucialMeeting.location" >à {{ nextCrucialMeeting.location }}</p>
         </div>
 
@@ -30,6 +30,7 @@
 
 <script>
     import { mapGetters } from 'vuex'
+    import moment from 'moment'
 
     export default {
         name: 'side-bar-next-crucial-meeting-widget',
@@ -38,6 +39,11 @@
                 nextCrucialMeeting: 'user/nextCrucialMeeting',
             })
         },
+        methods: {
+            getFormatedDateString(dateString) {
+                return moment(dateString).format('Do MMMM YYYY')
+            }
+        }
     }
 
 </script>

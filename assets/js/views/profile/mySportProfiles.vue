@@ -1,44 +1,5 @@
 <style scoped >
 
-    .formInputContainer {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    input:not([type=checkbox]), textarea{
-        width: 100%!important;
-        border: none;
-        border-bottom: 2px solid lightgray;
-    }
-
-    input {
-        text-align: right;
-        align-self: flex-end;
-
-    }
-    textarea:focus {
-        text-align: left;
-    }
-    textarea {
-        text-align: right;
-    }
-
-    .formInputErrors {
-        margin-top: 5px;
-        width: 100%;
-    }
-
-    .formInputLabel {
-        text-align: left;
-        align-self: normal;
-        color: grey;
-        margin-bottom: 5px;
-    }
-
-    .formInputContainer{
-        min-height: 50px;
-    }
 
     strong {
         font-weight: bolder;
@@ -54,7 +15,7 @@
         <div>
             <form action="#">
 
-                <fieldset class="w3-container w3-card w3-round w3-white w3-padding-32 w3-margin-top">
+                <div class="w3-container w3-card w3-round w3-white w3-padding-32 w3-margin-top">
 
                     <h4>Formulaire profil sportif</h4>
 
@@ -140,13 +101,13 @@
                         />
                     </div>
 
-                </fieldset>
+                </div>
 
-                <fieldset class="w3-container w3-card w3-round w3-white w3-padding-32 w3-margin-top">
+                <div class="w3-container w3-card w3-round w3-white w3-padding-32 w3-margin-top">
                     <button type="button" class="w3-button w3-red" @click="setFormDataFromSport(formSport)" >Réinitialiser</button>
                     <button v-show="correspondingSportProfileExisting" type="button" class="w3-button w3-green"  @click="dispatchRequest" :disabled="sportProfileLoading">Modifier profil pour ce sport</button>
                     <button v-show="!correspondingSportProfileExisting" type="button" class="w3-button w3-green"  @click="dispatchRequest" :disabled="sportProfileLoading">Créer profil pour ce sport</button>
-                </fieldset>
+                </div>
 
 
             </form>

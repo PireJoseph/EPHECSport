@@ -1,7 +1,5 @@
 <template>
-    <div>
         <router-view name="activityContent"></router-view>
-    </div>
 </template>
 
 <script>

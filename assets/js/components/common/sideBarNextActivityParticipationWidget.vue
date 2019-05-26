@@ -18,7 +18,7 @@
         <div class="w3-container">
             <h6><strong>Prochaine activité</strong></h6>
             <p id="sideBarNextActivityLabel" >{{ nextActivityParticipation.activityLabel }}</p>
-            <p id="sideBarNextActivityStartAt"  v-if="!!nextActivityParticipation.activityStartAt"  >le {{ nextActivityParticipation.activityStartAt }}</p>
+            <p class="w3-opacity" id="sideBarNextActivityStartAt"  v-if="!!nextActivityParticipation.activityStartAt"  >le {{ getFormatedDateString(nextActivityParticipation.activityStartAt) }}</p>
             <p id="sideBarNextActivityLocation" v-if="!!nextActivityParticipation.activityLocation" >à {{ nextActivityParticipation.activityLocation }}</p>
         </div>
 
@@ -28,6 +28,7 @@
 
 <script>
     import { mapGetters } from 'vuex'
+    import moment from 'moment'
 
     export default {
         name: 'side-bar-next-activity-participation-widget',
@@ -36,6 +37,11 @@
                 nextActivityParticipation: 'user/nextActivityParticipation',
             })
         },
+        methods: {
+            getFormatedDateString(dateString) {
+                return moment(dateString).format('Do MMMM YYYY')
+            }
+        }
     }
 
 </script>

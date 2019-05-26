@@ -4,3 +4,40 @@
 .router-link-active:hover , .router-link-exact-active:hover span{
     color: #000!important;
 }
+
+
+.agile__actions {
+}
+.agile__nav-button {
+    background: transparent;
+    border: none;
+    color: #ccc;
+    cursor: pointer;
+    font-size: 24px;
+    transition-duration: 0.3s;
+}
+.agile__nav-button:hover {
+    color: #888;
+}
+.agile__dot {
+    margin: 0 10px;
+}
+.agile__dot button {
+    background-color: #eee;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: block;
+    height: 10px;
+    font-size: 0;
+    line-height: 0;
+    margin: 0;
+    padding: 0;
+    transition-duration: 0.3s;
+    width: 10px;
+}
+.agile__dot--current button, .agile__dot:hover button {
+    background-color: #888;
+}
+
+

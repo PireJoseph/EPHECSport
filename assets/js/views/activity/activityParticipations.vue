@@ -1,48 +1,7 @@
 <style scoped>
 
-    .answer-btn {
-        width: 80px;
-    }
 
-    .formInputContainer {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
 
-    input:not([type=checkbox]), textarea{
-        width: 100%!important;
-        border: none;
-        border-bottom: 2px solid lightgray;
-    }
-
-    input {
-        text-align: right;
-        align-self: flex-end;
-
-    }
-    textarea:focus {
-        text-align: left;
-    }
-    textarea {
-        text-align: right;
-    }
-
-    .formInputErrors {
-        margin-top: 5px;
-        width: 100%;
-    }
-
-    .formInputLabel {
-        text-align: left;
-        align-self: normal;
-        color: grey;
-        margin-bottom: 5px;
-    }
-
-    .formInputContainer{
-        min-height: 50px;
-    }
 
 </style>
 
@@ -55,10 +14,10 @@
         </div>
 
         <div class="w3-card w3-round w3-white w3-padding-32 w3-margin-top w3-container">
+
             <vue-good-table
                     :columns="header"
                     :rows="activityParticipations"
-                    :rtl="true"
                     :search-options="{
                         enabled: true,
                         trigger: 'enter',
@@ -77,14 +36,16 @@
                                     @click="confirmParticipation(props.row.participation)"
                                     :disabled="activityParticipationConfirmationLoading"
                             >
-                                Confirmer
+                                <i class="fa fa-check" aria-hidden="true"></i>
+                                <span class="w3-hide-small w3-hide-medium"> Confirmer</span>
                             </button>
                             <button
                                     v-else-if="( (!props.row.cancellation) && (props.row.participation.isConfirmed) )"
                                     class="w3-button w3-green w3-small answer-btn"
                                     disabled
                             >
-                                Confirmée
+                                <i class="fa fa-check" aria-hidden="true"></i>
+                                <span class="w3-hide-small w3-hide-medium"> Confirmée</span>
                             </button>
 
 
@@ -95,14 +56,16 @@
                                     @click="openActivityCancellationModal(props.row.participation.activity)"
                                     :disabled="activityCancellationLoading"
                             >
-                                Annuler
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                                <span class="w3-hide-small w3-hide-medium"> Annuler</span>
                             </button>
                             <button
                                     v-else
                                     class="w3-button w3-red w3-small answer-btn"
                                     disabled
                             >
-                                Annulée
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                                <span class="w3-hide-small w3-hide-medium"> Annulée</span>
                             </button>
 
 
@@ -114,24 +77,26 @@
                         </ul>
                     </div>
 
+                    <span v-else-if="props.column.field == 'participation.activity.startAt'">
+                        {{getFormatedDateString(props.row.participation.activity.startAt)}} {{getFormatedDateTimeString(props.row.participation.activity.startAt)}}
+                    </span>
+
                     <div v-else-if="props.column.field == 'participation.activity.location'">
-
                         {{props.row.participation.activity.location.label}} - {{props.row.participation.activity.location.city}}
-
                     </div>
 
                     <div v-else>
-
                         {{props.formattedRow[props.column.field]}}
-
                     </div>
 
                 </template>
+
                 <div slot="emptystate">
                     Pas de résultats
                 </div>
 
             </vue-good-table>
+
         </div>
 
 
@@ -183,6 +148,7 @@
 
 <script>
     import {mapGetters} from "vuex";
+    import moment from 'moment';
 
     export default {
         name: 'activity-participations',
@@ -196,40 +162,44 @@
                 },
                 header: [
                     {
-                        label: 'Actions',
-                        field: 'after',
-                        html: true,
-                        filterable: false,
-                        globalSearchDisabled: true,
-                    },
-                    {
-                        label: 'Commence à',
-                        field: 'participation.activity.startAt',
-                        filterable: true,
-                        type: 'date',
-                        dateInputFormat: 'YYYY-MM-DD', // expects 2018-03-16
-                        dateOutputFormat: 'DD/MM/YYYY hh:mm',
-                    },
-                    {
-                        label: 'Lieu',
-                        field: 'participation.activity.location',
-                        filterable: true,
-                    },
-                    {
-                        label: 'Matériel',
-                        field: 'participation.activity.material',
+                        label: 'Libellé',
+                        field: 'participation.activity.label',
                         filterable: true,
                     },
                     {
                         label: 'Sport',
                         field: 'participation.activity.sport.label',
                         filterable: true,
+                        thClass: 'w3-hide-small  w3-hide-medium',
+                        tdClass: 'w3-hide-small  w3-hide-medium',
                     },
                     {
-                        label: 'Libellé',
-                        field: 'participation.activity.label',
+                        label: 'Matériel',
+                        field: 'participation.activity.material',
+                        filterable: true,
+                        thClass: 'w3-hide-small w3-hide-medium',
+                        tdClass: 'w3-hide-small w3-hide-medium',
+                    },
+                    {
+                        label: 'Lieu',
+                        field: 'participation.activity.location',
+                        filterable: true,
+                        thClass: 'w3-hide-small',
+                        tdClass: 'w3-hide-small',
+                    },
+                    {
+                        label: 'Début',
+                        field: 'participation.activity.startAt',
                         filterable: true,
                     },
+                    {
+                        label: 'Confirmation',
+                        field: 'after',
+                        html: true,
+                        filterable: false,
+                        globalSearchDisabled: true,
+                    },
+
                 ],
                 dictionary: {
                     custom: {
@@ -298,6 +268,25 @@
                         }
                     },
                 )
+            },
+
+
+            getFormatedDateString(dateString) {
+                let dateStringToReturn = '';
+                if( (dateString !== null) && (dateString !== '') )
+                {
+                    dateStringToReturn =  moment(dateString).format('Do MMMM YYYY')
+                }
+                console.log(dateStringToReturn)
+                return dateStringToReturn;
+            },
+            getFormatedDateTimeString(dateString) {
+                let dateTimeStringToReturn = '';
+                if( (dateString !== null) && (dateString !== '') )
+                {
+                    dateTimeStringToReturn =  moment(dateString).format('HH:mm')
+                }
+                return dateTimeStringToReturn;
             }
 
         },

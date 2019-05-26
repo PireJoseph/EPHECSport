@@ -1,23 +1,128 @@
 <style scoped>
+
     #appContainer {
         background-color: gainsboro;
     }
 
-    #contentContainer {
-        margin-top: 0;
+    #loadingScreen{
+        display: flex;
+        flex-direction: row;
+        flex-grow: 1;
+        align-items: center;
+        justify-content: center;
+        font-size: 100px;
+        color: lightslategray;
     }
 
-    @media only screen and (min-width: 993px) {
+    #appContainer {
+        display: flex;
+        flex-flow: column;
+        flex-grow: 1;
+    }
+
+    #app {
+        display: flex;
+        flex-flow: column;
+        flex-grow: 1;
+        justify-content: space-between;
+    }
+
+
+    #footerContainer{
+        font-size: small;
+        display: flex;
+        flex-direction: column;
+    }
+    #footerContainer h6, #footerContainer p {
+        margin: 5px;
+    }
+
+    @media only screen and (max-width: 600px) {
+        #contentContainer {
+            display: flex;
+            justify-content: space-between;
+            flex-grow: 1;
+        }
+
+        #leftColumn {
+            display:none;
+        }
         #centerColumn {
-            padding: 0 32px;
-            /*margin-top: 16px;*/
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        #rightColumn {
+            display: none;
+        }
+
+    }
+
+    @media only screen and (min-width: 601px) and (max-width: 1199px) {
+
+        #contentContainer {
+            margin: 12px;
+            display: flex;
+            justify-content: space-between;
+            flex-grow: 1;
+        }
+
+        #leftColumn {
+           display:none;
+        }
+        #centerColumn {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        #rightColumn {
+            display: none;
         }
     }
 
-    @media only screen and (min-width: 1200px) {
+    @media only screen and (min-width: 1200px) and (max-width: 1499px) {
 
         #contentContainer {
-            margin: 16px 32px 0 32px;
+            margin: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            flex-grow: 1;
+        }
+
+        #leftColumn {
+            width: 20%
+        }
+        #centerColumn {
+            padding: 0 32px;
+            display: flex;
+            flex-direction: column;
+            width: 80%;
+        }
+        #rightColumn {
+            display: none;
+        }
+    }
+
+    @media only screen and (min-width: 1500px) {
+
+        #contentContainer {
+            margin: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            flex-grow: 1;
+        }
+
+        #leftColumn {
+            width: 15%
+        }
+        #centerColumn {
+            padding: 0 32px;
+            display: flex;
+            flex-direction: column;
+            width: 73%;
+        }
+        #rightColumn {
+            width: 12%;
         }
     }
 
@@ -27,109 +132,71 @@
 
         <div id="appContainer">
 
-            <!-- Navbar -->
-            <Navbar></Navbar>
-
-            <div id="loadingPage" class="w3-center" v-show="!baseDataLoaded" >
-                <h1>Chargement ...</h1>
+            <!-- Loading screen -->
+            <div id="loadingScreen"  v-show="!baseDataLoaded">
+                <i class="fas fa-spinner fa-spin"></i>
             </div>
 
-            <!-- Page Container -->
-            <div id="contentContainer" v-show="baseDataLoaded" class="w3-row" >
+            <div id="app" v-show="baseDataLoaded">
 
+                <!-- Navbar -->
+                <Navbar></Navbar>
 
-                <!-- Left Column -->
-                <div class="w3-col w3-hide-small w3-hide-medium l2">
+                <!-- content Container -->
+                <div id="contentContainer"  >
 
-                    <!-- Profile -->
-                    <user-tile></user-tile>
+                    <!-- Left Column -->
+                    <aside id="leftColumn" class="w3-hide-small w3-hide-medium">
 
-                    <br>
+                        <user-tile></user-tile>
 
-                    <side-bar-accordion></side-bar-accordion>
+                        <br />
 
-                    <br>
+                        <side-bar-accordion></side-bar-accordion>
 
-                    <side-bar-success-widget></side-bar-success-widget>
+                        <br />
 
-                    <br>
+                        <side-bar-success-widget></side-bar-success-widget>
 
-                    <side-bar-user-feedback-widget></side-bar-user-feedback-widget>
+                        <br v-show="!!userSuccessArray.length"/>
 
-                    <!-- End Left Column -->
-                </div>
+                        <side-bar-user-feedback-widget></side-bar-user-feedback-widget>
 
-                <!-- Middle Column -->
-                <div id="centerColumn" class="w3-col m12 l8">
+                    </aside>
 
-                    <div class="w3-center">
-
+                    <!-- Middle Column -->
+                    <main id="centerColumn" class="w3-center">
 
                         <router-view name="content"></router-view>
 
+                        <!-- End Middle Column -->
+                    </main>
 
+                    <!-- Right Column -->
+                    <aside id="rightColumn" class="w3-hide-small w3-hide-medium">
+
+                        <side-bar-next-activity-participation-widget></side-bar-next-activity-participation-widget>
+
+                        <br v-show="(!! nextActivityParticipation && !!nextCrucialMeeting)">
+
+                        <side-bar-next-crucial-meeting-widget></side-bar-next-crucial-meeting-widget>
+
+                    </aside>
+
+                </div>
+
+                <!--Footer-->
+                <footer id="footerContainer">
+
+                    <div class="w3-theme-d3 w3-hide-small" >
+                        <h6><img src="/images/favicon.png" style="width: 18px; height: 18px;"> EPHEC Sport </h6>
                     </div>
 
-                    <!-- End Middle Column -->
+                    <div class="w3-theme-d5 w3-hide-small w3-hide-medium w3-tiny" >
+                        <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
+                    </div>
 
-                </div>
-
-
-                <!-- Right Column -->
-                <div class="w3-col w3-hide-small w3-hide-medium l2 ">
-
-                    <!-- Next activity participation widget -->
-                    <side-bar-next-activity-participation-widget></side-bar-next-activity-participation-widget>
-
-                    <br  v-if="nextActivityParticipation" />
-
-                    <side-bar-next-crucial-meeting-widget></side-bar-next-crucial-meeting-widget>
-
-                    <!--<div class="w3-card w3-round w3-white w3-center">-->
-                    <!--<div class="w3-container">-->
-                    <!--<p>Friend Request</p>-->
-                    <!--<img src="/w3images/avatar6.png" alt="Avatar" style="width:50%"><br>-->
-                    <!--<span>Jane Doe</span>-->
-                    <!--<div class="w3-row w3-opacity">-->
-                    <!--<div class="w3-half">-->
-                    <!--<button class="w3-button w3-block w3-green w3-section" title="Accept"><i class="fa fa-check"></i></button>-->
-                    <!--</div>-->
-                    <!--<div class="w3-half">-->
-                    <!--<button class="w3-button w3-block w3-red w3-section" title="Decline"><i class="fa fa-remove"></i></button>-->
-                    <!--</div>-->
-                    <!--</div>-->
-                    <!--</div>-->
-                    <!--</div>-->
-                    <!---->
-
-                    <br v-if="nextCrucialMeeting" />
-
-                    <!--<div class="w3-card w3-round w3-white w3-padding-16 w3-center">-->
-                    <!--<p>ADS</p>-->
-                    <!--</div>-->
-                    <!--<br>-->
-
-                    <!--<div class="w3-card w3-round w3-white w3-padding-32 w3-center">-->
-                    <!--<p><i class="fa fa-bug w3-xxlarge"></i></p>-->
-                    <!--</div>-->
-
-                    <!-- End Right Column -->
-                </div>
-
-
-                <!-- End Page Container -->
-            </div>
-
-            <br>
-
-            <div id="footerContainer">
-                <!-- Footer -->
-                <footer class="w3-container w3-theme-d3 w3-padding-16">
-                    <h5><img src="/images/favicon.png" style="width: 18px; height: 18px;"> EPHEC Sport </h5>
-                </footer>
-
-                <footer class="w3-container w3-theme-d5">
-                    <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
+                    <!-- End Footer -->
                 </footer>
 
             </div>
@@ -164,7 +231,8 @@
                 mobileMenuShowed: 'navbar/isMobileMenuShowed',
                 nextActivityParticipation: 'user/nextActivityParticipation',
                 nextCrucialMeeting: 'user/nextCrucialMeeting',
-                baseDataLoaded: 'common/baseDataLoaded'
+                baseDataLoaded: 'common/baseDataLoaded',
+                userSuccessArray: 'user/userSuccess'
                 // currentUserId: 'user/currentUserId'
             })
         },
@@ -180,7 +248,6 @@
                 let payload = {
                     userId: this.$store.getters['user/userId'],
                 };
-                console.log(payload);
                 this.$store.dispatch('common/loadBaseData', payload)
             },
 

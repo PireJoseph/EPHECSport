@@ -1,46 +1,6 @@
 <style scoped>
 
 
-    .formInputContainer {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    input:not([type=checkbox]), textarea{
-        width: 100%!important;
-        border: none;
-        border-bottom: 2px solid lightgray;
-    }
-
-    input {
-        text-align: right;
-        align-self: flex-end;
-
-    }
-    textarea:focus {
-        text-align: left;
-    }
-    textarea {
-        text-align: right;
-    }
-
-    .formInputErrors {
-        margin-top: 5px;
-        width: 100%;
-    }
-
-    .formInputLabel {
-        text-align: left;
-        align-self: normal;
-        color: grey;
-        margin-bottom: 5px;
-    }
-
-    .formInputContainer{
-        min-height: 50px;
-    }
-
 
 </style>
 
@@ -57,7 +17,7 @@
             action="#"
         >
 
-            <fieldset class="w3-container w3-card w3-round w3-white w3-padding-32 w3-margin-top">
+            <div class="w3-container w3-card w3-round w3-white w3-padding-32 w3-margin-top">
 
                 <h4>Compte</h4>
 
@@ -120,13 +80,13 @@
                 </div>
 
 
-            </fieldset>
+            </div>
 
 
             <br />
 
 
-            <fieldset class="w3-container w3-card w3-round w3-white w3-padding-32 w3-margin-top">
+            <div class="w3-container w3-card w3-round w3-white w3-padding-32 w3-margin-top">
 
                 <h4>Contact</h4>
 
@@ -166,13 +126,13 @@
                 </div>
 
 
-            </fieldset>
+            </div>
 
 
             <br />
 
 
-            <fieldset class="w3-container w3-card w3-round w3-white w3-padding-32 w3-margin-top">
+            <div class="w3-container w3-card w3-round w3-white w3-padding-32 w3-margin-top">
                 <h4>Données personnelles</h4>
 
                 <div class="formInputContainer w3-center w3-margin ">
@@ -197,11 +157,11 @@
 
                 </div>
 
-            </fieldset>
+            </div>
 
             <br />
 
-            <fieldset class="w3-container w3-card w3-round w3-white w3-padding-32 w3-margin-top">
+            <div class="w3-container w3-card w3-round w3-white w3-padding-32 w3-margin-top">
                 <h4>Activités</h4>
 
                 <div class="formInputContainer w3-center w3-margin ">
@@ -238,15 +198,15 @@
                 </div>
 
 
-            </fieldset>
+            </div>
 
             <br />
 
 
-            <fieldset class="w3-container w3-card w3-round w3-white w3-padding-32 w3-margin-top">
+            <div class="w3-container w3-card w3-round w3-white w3-padding-32 w3-margin-top">
                 <button type="button" class="w3-button w3-red" @click="clear" >Réinitialiser</button>
                 <button type="button" class="w3-button w3-green"  @click="submit" :disabled="profileLoading" >Soumettre</button>
-            </fieldset>
+            </div>
 
         </form>
 

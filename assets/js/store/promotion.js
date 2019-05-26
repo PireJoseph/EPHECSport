@@ -5,12 +5,21 @@ export default {
     state: {
         isLoading: false,
         error: null,
-        crucialMeetings : null,
+
+        crucialMeetings : [],
         crucialMeetingsLoading : false,
         crucialMeetingsErrors : null,
-        officialTeams : null,
+
+        officialTeams : [],
         officialTeamsLoading: false,
-        officialTeamsErrors : null
+        officialTeamsErrors : null,
+
+        shoutOutsForSelectedTeam: [],
+        shoutOutsForSelectedTeamLoading : false,
+        shoutOutsForSelectedTeamError : null,
+
+        postTeamShoutOutLoading : false,
+        postTeamShoutOutLoadingError : null
 
     },
     getters : {
@@ -47,7 +56,7 @@ export default {
         ['GETTING_CRUCIAL_MEETINGS_DATA'](state){
             state.isLoading = true;
             state.error = null;
-            state.crucialMeetings = null;
+            state.crucialMeetings = [];
             state.crucialMeetingsLoading = true;
             state.crucialMeetingsErrors = null;
         },
@@ -65,10 +74,12 @@ export default {
             state.crucialMeetingsLoading = false;
             state.crucialMeetingsErrors = error.message;
         },
+
+
         ['GETTING_CRUCIAL_MEETINGS_DATA'](state){
             state.isLoading = true;
             state.error = null;
-            state.crucialMeetings = null;
+            state.crucialMeetings = [];
             state.crucialMeetingsLoading = true;
             state.crucialMeetingsErrors = null;
         },
@@ -86,6 +97,76 @@ export default {
             state.crucialMeetingsLoading = false;
             state.crucialMeetingsErrors = error.message;
         },
+
+
+        ['GETTING_OFFICIAL_TEAMS_DATA'](state){
+            state.isLoading = true;
+            state.error = null;
+            state.officialTeams = [];
+            state.officialTeamsLoading = true;
+            state.officialTeamsErrors = null;
+        },
+        ['GET_OFFICIAL_TEAMS_DATA_SUCCESS'](state, officialTeams){
+            state.isLoading = false;
+            state.error = null;
+            state.officialTeams = officialTeams;
+            state.officialTeamsLoading = false;
+            state.officialTeamsErrors = null;
+        },
+        ['GET_OFFICIAL_TEAMS_DATA_ERROR'](state, error){
+            state.isLoading = false;
+            state.error = error.message;
+            state.officialTeams = null;
+            state.officialTeamsLoading = false;
+            state.officialTeamsErrors = error.message;
+        },
+
+
+        ['GETTING_SHOUT_OUTS_FOR_SELECTED_TEAM_DATA'](state){
+            state.isLoading = true;
+            state.error = null;
+            state.shoutOutsForSelectedTeam = [];
+            state.shoutOutsForSelectedTeamLoading = true;
+            state.shoutOutsForSelectedTeamError = null;
+        },
+        ['GET_SHOUT_OUTS_FOR_SELECTED_TEAM_DATA_SUCCESS'](state, shoutOuts){
+            state.isLoading = false;
+            state.error = null;
+            state.shoutOutsForSelectedTeam = shoutOuts;
+            state.shoutOutsForSelectedTeamLoading = false;
+            state.shoutOutsForSelectedTeamError = null;
+        },
+        ['GET_SHOUT_OUTS_FOR_SELECTED_TEAM_DATA_ERROR'](state, error){
+            state.isLoading = false;
+            state.error = error.message;
+            state.shoutOutsForSelectedTeam = [];
+            state.shoutOutsForSelectedTeamLoading = false;
+            state.shoutOutsForSelectedTeamError = error.message;
+        },
+
+
+        ['POSTING_SHOUT_OUT'](state){
+            state.isLoading = true;
+            state.error = null;
+            state.postTeamShoutOutLoading = true;
+            state.postTeamShoutOutLoadingError = null;
+        },
+        ['POST_SHOUT_OUT_SUCCESS'](state){
+            state.isLoading = false;
+            state.error = null;
+            state.postTeamShoutOutLoading = false;
+            state.postTeamShoutOutLoadingError = null;
+        },
+        ['POST_SHOUT_OUT_ERROR'](state, error){
+            state.isLoading = false;
+            state.error = error.message;
+            state.postTeamShoutOutLoading = true;
+            state.postTeamShoutOutLoadingError = error.message;
+        },
+
+
+
+
 
     },
     actions : {
@@ -110,6 +191,27 @@ export default {
                 )
                 .catch(err => commit('GET_OFFICIAL_TEAMS_DATA_ERROR', err))
         },
+        getShoutOutsForSelectedTeam({commit}, payload) {
+            commit('GETTING_SHOUT_OUTS_FOR_SELECTED_TEAM_DATA');
+            return PromotionAPI.getShoutOutsForAnOfficialTeam(payload)
+                .then(
+                    function(res){
+                        commit('GET_SHOUT_OUTS_FOR_SELECTED_TEAM_DATA_SUCCESS', res.data['hydra:member'])
+                    }
+                )
+                .catch(err => commit('GET_SHOUT_OUTS_FOR_SELECTED_TEAM_DATA_ERROR', err))
+        },
+        postShoutOut({commit}, payload) {
+            console.log(payload)
+            commit('POSTING_SHOUT_OUT');
+            return PromotionAPI.postShoutOut(payload)
+                .then(
+                    function(res){
+                        commit('POST_SHOUT_OUT_SUCCESS')
+                    }
+                )
+                .catch(err => commit('POST_SHOUT_OUT_ERROR', err))
+        }
 
 
     }

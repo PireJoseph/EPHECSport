@@ -1,3 +1,7 @@
+<style scoped>
+
+</style>
+
 <template>
 
     <div>
@@ -7,34 +11,47 @@
 
 
         <div class="w3-card w3-round w3-white w3-padding-32 w3-margin-top w3-container">
+
             <vue-good-table
                     :columns="header"
                     :rows="otherProfiles"
                     :fixed-header="true"
-                    :rtl="true"
+
                     :search-options="{
                         enabled: true,
                         trigger: 'enter',
                         skipDiacritics: true,
-                        placeholder: 'Rechercher',
-                  }">
+                        placeholder: 'Rechercher'
+                    }"
             >
            <template slot="table-row" slot-scope="props">
+
                 <span v-if="props.column.field == 'after'">
 
-                  <button v-if="!props.row.isMyPartner" class="w3-button w3-grey w3-small" @click="addToPreferredPartners(props.row['@id'].split('/').pop())">Ajouter aux partenaires</button>
-                  <button v-if="props.row.isMyPartner" class="w3-button w3-red w3-small" @click="removeFromPreferredPartners(props.row['@id'].split('/').pop())">Retirer des partenaires</button>
+                  <button v-if="!props.row.isMyPartner" class="w3-button w3-green w3-small" @click="addToPreferredPartners(props.row['@id'].split('/').pop())">
+                      <i class="fa fa-plus" aria-hidden="true"></i>
+                      <span class="w3-hide-small w3-hide-medium"> Ajouter aux partenaires</span>
+                  </button>
+
+                  <button v-if="props.row.isMyPartner" class="w3-button w3-red w3-small" @click="removeFromPreferredPartners(props.row['@id'].split('/').pop())">
+                      <i class="fa fa-minus" aria-hidden="true"></i>
+                      <span class="w3-hide-small w3-hide-medium"> Ajouter aux partenaires</span>
+                  </button>
 
                 </span>
+
                 <span v-else>
                   {{props.formattedRow[props.column.field]}}
                 </span>
+
             </template>
+
             <div slot="emptystate">
                 Pas de résultats
             </div>
 
             </vue-good-table>
+
         </div>
 
     </div>
@@ -52,11 +69,9 @@
 
                 header: [
                     {
-                        label: 'Actions',
-                        field: 'after',
-                        html: true,
-                        filterable: false,
-                        globalSearchDisabled: true,
+                        label: 'Nom d\'utilisateur',
+                        field: 'username',
+                        filterable: true,
                     },
                     {
                         label: 'Classe',
@@ -64,12 +79,12 @@
                         filterable: true,
                     },
                     {
-                        label: 'Nom d\'utilisateur',
-                        field: 'username',
-                        filterable: true,
+                        label: 'Partenaire',
+                        field: 'after',
+                        html: true,
+                        filterable: false,
+                        globalSearchDisabled: true,
                     },
-
-
                 ],
 
             }

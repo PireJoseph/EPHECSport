@@ -3,9 +3,7 @@
 </style>
 
 <template>
-    <div>
-        <router-view name="promotionContent"></router-view>
-    </div>
+    <router-view name="promotionContent"></router-view>
 </template>
 
 <script>

@@ -3,9 +3,7 @@
 </style>
 
 <template>
-    <div>
         <router-view name="profileContent"></router-view>
-    </div>
 </template>
 
 <script>

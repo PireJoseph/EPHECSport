@@ -105,11 +105,11 @@ class UserDTOAssembler
         $newUserDTO->gender = $user->getGender();
 
         $userCreatedAt = $user->getCreatedAt();
-        $newUserDTO->createdAt =  (!is_null($userCreatedAt)) ? $userCreatedAt->format('Y-m-d') : null;
+        $newUserDTO->createdAt =  (!is_null($userCreatedAt)) ? $userCreatedAt->format('Y-m-d H:i:s') : null;
 
         // 'Age'
         $userBirthDate = $user->getBirthDate();
-        $newUserDTO->birthDate = (!is_null($userBirthDate)) ? $userBirthDate->format('Y-m-d') : null;
+        $newUserDTO->birthDate = (!is_null($userBirthDate)) ? $userBirthDate->format('Y-m-d H:i:s') : null;
 
         // Password --> we don't give it until its specified in the method
         $newUserDTO->password = $plainTextPassWord;

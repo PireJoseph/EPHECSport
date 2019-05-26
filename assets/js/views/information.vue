@@ -3,9 +3,7 @@
 </style>
 
 <template>
-    <div>
         <router-view name="informationContent"></router-view>
-    </div>
 </template>
 
 <script>

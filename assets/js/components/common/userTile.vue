@@ -20,7 +20,7 @@
             <hr>
             <p class="userInfo"><i class="fa fa-envelope fa-fw w3-margin-right w3-text-theme"></i>{{email}}</p>
             <p class="userInfo" v-show="schoolSection" ><i class="fa fa-pencil fa-fw w3-margin-right w3-text-theme"></i>{{schoolSection}}</p>
-            <p class="userInfo" v-show="birthDate" ><i class="fa fa-birthday-cake fa-fw w3-margin-right w3-text-theme"></i>{{birthDate}}</p>
+            <p class="userInfo" v-show="birthDate" ><i class="fa fa-birthday-cake fa-fw w3-margin-right w3-text-theme"></i>{{getFormatedDateString(birthDate)}}</p>
         </div>
     </div>
 </template>
@@ -28,6 +28,7 @@
 <script>
     import { mapGetters } from 'vuex'
     import { mapMutations } from 'vuex'
+    import moment from 'moment'
 
 
     export default {
@@ -44,8 +45,12 @@
             })
         },
         methods: {
-            ...mapMutations({
-            })
+            getFormatedDateString(dateString) {
+                if(dateString !== ''){
+                    return moment(dateString).format('Do MMMM YYYY')
+                }
+                return '';
+            }
         }
     }
 

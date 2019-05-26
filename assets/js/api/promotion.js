@@ -10,5 +10,17 @@ export default {
         return ApiService.get(
             '/api/teams/',
         );
+    },
+    getShoutOutsForAnOfficialTeam(id){
+        return ApiService.get(
+            '/api/teams/' + id +'/shoutouts/',
+        );
+    },
+    postShoutOut(payload) {
+        console.log(payload)
+        return ApiService.post(
+            '/api/shoutouts/',
+            payload
+        );
     }
 }

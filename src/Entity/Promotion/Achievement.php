@@ -71,6 +71,11 @@ class Achievement
         $this->sportMen = new ArrayCollection();
     }
 
+    public function __toString()
+    {
+       return $this->getLabel() . ' - ' . $this->getAcquiredAt()->format('d/m/Y');
+    }
+
     public function getId(): ?int
     {
         return $this->id;

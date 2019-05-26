@@ -1,5 +1,81 @@
 <style scoped>
 
+    .team-card-header {
+        padding: 12px;
+    }
+
+    .team-card-title {
+        margin: 0;
+    }
+
+    .team-card-nickname{
+        margin: 0;
+        font-style: italic;
+    }
+
+    .team-card-sport{
+        text-transform: uppercase;
+    }
+
+    .team-card-label{
+        margin: 0;
+    }
+
+    .team-card-photo{
+        padding: 16px 16px 0 16px;
+    }
+
+    .team-card-achievement-header, .team-card-achievement-header span {
+        display: block;
+        text-align: left;
+        font-size: medium;
+    }
+
+    .team-card-shout-out-header {
+        font-size: medium;
+    }
+    .team-card-shout-out-comment {
+        font-size: medium;
+        margin-top: 0;
+    }
+    .team-card-shout-out-comment i{
+        font-size: x-small!important;
+    }
+
+
+    @media only screen and (max-width: 600px) {
+
+        .team-card-achievement-header, .team-card-achievement-header span {
+            display: block;
+            text-align: left;
+            font-size: small;
+        }
+
+        .team-card-achievement-header span i {
+            font-size: small!important;
+        }
+        .team-card-achievement-comment {
+            font-size: small;
+        }
+
+
+        .team-card-shout-out-header {
+            font-size: small;
+        }
+        .team-card-shout-out-comment {
+            margin-top: 0;
+            font-size: small;
+
+        }
+        .team-card-shout-out-comment i{
+            font-size: xx-small!important;
+        }
+    }
+
+    button.active{
+        color: black!important;
+    }
+
 
 
 </style>
@@ -7,45 +83,412 @@
 
 
 <template>
+
     <div>
 
-        <div class="w3-card w3-round w3-white w3-padding-32">
-            <h1>Equipes officielles</h1>
+        <div class="w3-card w3-round w3-white w3-padding-32 w3-hide-small">
+            <h3>Equipes officielles</h3>
+        </div>
+
+        <div v-show="!!officialTeams">
+
+            <div v-for="team in officialTeams" :key="team.id" class="w3-card w3-margin-top w3-white w3-center">
+                <div class="w3-theme-d3 team-card-header">
+                    <h5 class="w3-padding team-card-title">
+                        <span v-show="!!team.shortName">{{team.shortName}} - </span><span>{{team.name}}</span>
+                    </h5>
+                    <div v-show="areTeamDetailsShown(team)">
+                        <p class="team-card-nickname" v-show="!!team.nickName"><span class="w3-opacity">{{team.nickName}}</span></p>
+                        <p class="team-card-sport w3-margin" >{{team.sport.label}}</p>
+                    </div>
+                </div>
+                <p class="w3-padding-16 team-card-label" v-show="areTeamDetailsShown(team)" >{{team.label}}</p>
+                
+                <!--pictures carousel-->
+                <div class="team-card-photo"  v-if="isCarouselPicturesOpenForTeam(team)">
+                    <agile
+                            :options="agileOptions"
+                    >
+                        <div  v-for="teamPictures in team.pictures" :key="teamPictures.image">
+
+                            <img
+                                    @click="openPicturesModal((getPicturePath()  + teamPictures.image))"
+                                    v-bind:src="(getPicturePath()  + teamPictures.image)"
+                                    v-bind:alt="teamPictures.label"
+                                    title="agrandir"
+                                    class="w3-hover-opacity"
+                                    style="height: 100px; cursor:pointer"
+
+                            />
+                            <p class="w3-centered" style="margin-bottom: 0">{{teamPictures.label}}</p>
+
+                        </div>
+
+                        <template slot="prevButton"><i class="fas fa-chevron-left"></i></template>
+                        <template slot="nextButton"><i class="fas fa-chevron-right"></i></template>
+
+                    </agile>
+                </div>
+                
+                <!--achievements list-->
+                <div class="team-card-achievements w3-padding"  v-if="isAchievementsListOpenForTeam(team)">
+                    <ul class="w3-ul ">
+                        <li  class="w3-border w3-theme-d1" v-for="teamAchievement in team.achievements" :key="teamAchievement.id">
+
+                            <h4 class="team-card-achievement-header w3-margin-bottom">
+                                <span><i class="fa fa-star-o" aria-hidden="true"></i> {{teamAchievement.label}}</span>
+                                <span class="w3-opacity"><i class="fa fa-calendar-check-o" aria-hidden="true"></i> {{getFormatedDateString(teamAchievement.acquiredAt)}}</span>
+                            </h4>
+
+                            <p class="w3-right-align team-card-achievement-comment" >
+                                {{teamAchievement.comment}}
+                            </p>
+
+                        </li>
+                    </ul>
+                </div>
+
+                <!--shoutOuts list-->
+                <div class="team-card-ShoutOuts w3-padding"  v-if="isShoutOutsListOpenForTeam(team)">
+                    <div v-show="shoutOutsForSelectedTeamLoading" class="w3-opacity w3-center w3-padding">
+                        <i class="fas fa-spinner fa-spin"></i>
+                    </div>
+                    <div v-show="!selectedTeamHasShoutOuts" class="w3-opacity w3-center w3-padding">
+                        Aucun encouragement n'a été posté
+                    </div>
+                    <ul v-show="(!shoutOutsForSelectedTeamLoading & selectedTeamHasShoutOuts)" class="w3-ul " >
+
+                        <li v-for="shoutOut in shoutOutsForSelectedTeam" :key="shoutOut.id" class="team-card-shout-out w3-border w3-theme-l1 w3-margin-bottom">
+                            <h4 class="team-card-shout-out-header w3-left-align">
+                                <span class="w3-opacity"><i class="fa fa-calendar-o" aria-hidden="true"></i> posté le {{getFormatedDateString(shoutOut.createdAt)}}, à {{getFormatedDateTimeString(shoutOut.createdAt)}}</span>
+                            </h4>
+                            <p class="team-card-shout-out-comment w3-right-align ">
+                                <i class="fa fa-quote-left w3-small" aria-hidden="true"></i><span> {{shoutOut.content}}</span> <i class="fa fa-quote-right w3-small" aria-hidden="true"></i>
+                            </p>
+                        </li>
+
+                    </ul>
+                    <div>
+                        <button
+                                class="w3-button w3-small w3-white w3-border"
+                                @click="openShoutOutFormModal(team)"
+                        >
+                            Encourager !
+                        </button>
+                    </div>
+                </div>
+                
+
+                <!--btns bar-->
+                <div class="w3-padding team-card-footer">
+                    <button
+                            class="w3-button  w3-theme-d1 "
+                            @click="togglePicturesCarousel(team)"
+                            :disabled="!teamHasPictures(team)"
+                            v-bind:class="{ 'w3-theme-d3': isCarouselPicturesOpenForTeam(team), 'w3-theme-d1': !isCarouselPicturesOpenForTeam(team) }"
+                    >
+                        <i class="fa fa-camera" aria-hidden="true"></i><span class="w3-hide-small"> Photos</span>
+                    </button>
+
+                    <button
+                            class="w3-button  w3-theme-d1 w3-margin-left w3-margin-right"
+                            @click="toggleAchievementsList(team)"
+                            :disabled="!teamHasAchievements(team)"
+                            v-bind:class="{ 'w3-theme-d3': isAchievementsListOpenForTeam(team), 'w3-theme-d1': !isAchievementsListOpenForTeam(team) }"
+
+                    >
+                        <i class="fa fa-trophy" aria-hidden="true"></i><span class="w3-hide-small"> Palmarès</span>
+                    </button>
+                    <button
+                            class="w3-button  w3-theme-d1 "
+                            @click="toggleShoutOutsList(team)"
+                            v-bind:class="{ 'w3-theme-d3': isShoutOutsListOpenForTeam(team), 'w3-theme-d1': !isShoutOutsListOpenForTeam(team) }"
+                    >
+                        <i class="fa fa-bullhorn" aria-hidden="true"></i><span class="w3-hide-small"> Encouragements</span>
+                    </button>
+                </div>
+            </div>
+
         </div>
 
 
+        <!--pictures Modal-->
+        <div class="w3-modal"
+             style="display: block;"
+             @click="closePicturesModal"
+             v-show="picturesModalOpen">
+            <div class="w3-modal-content w3-animate-opacity">
+                <img  v-bind:src="picturesModalImgSrc" class="w3-image">
+            </div>
+        </div>
+
+
+        <!--ShoutOut Modal-->
+        <div id="shoutOutModal" class="w3-modal" style="display: block;" v-show="isShoutOutFormModalOpen"> 
+
+            <div class="w3-modal-content w3-animate-opacity">
+
+                <header class="w3-container w3-theme-d1">
+                    <span @click="closeShoutOutFormModal" class="w3-button w3-display-topright">&times;</span>
+                    <h4 v-if="selectedTeamForShoutOutForm !== null">Encouragement {{selectedTeamForShoutOutForm.name}}</h4>
+                </header>
+
+                <div class="w3-container">
+                    <form action="#">
+
+                        <div class="formInputContainer w3-center w3-margin ">
+                            <label class="formInputLabel" for="shoutOutContentInput">Contenu :</label>
+                            <textarea
+                                    id="shoutOutContentInput"
+                                    name="shoutOutContentInput"
+                                    v-model="shoutOutForm.content"
+                                    v-validate="'max:2048|min:3|required'"
+                                    maxlength="2048"
+                                    minlength="3"
+                                    required
+                                    data-vv-validate-on=""
+                                    rows="5"
+                            >
+                        </textarea>
+                            <span v-show="!!errors.first('shoutOutContentInput')" class="w3-tag w3-tiny w3-padding w3-red formInputErrors" >{{ errors.first('shoutOutContentInput') }}</span>
+
+                        </div>
+
+                    </form>
+                </div>
+
+                <footer class="w3-container w3-theme-d1 w3-padding">
+                    <button type="button" class="w3-button w3-red" @click="closeShoutOutFormModal" >Fermer</button>
+                    <button type="button" class="w3-button w3-green" @click="postShoutOutForm(selectedTeamForShoutOutForm)" :disabled="postShoutOutLoading">Poster encouragements</button>
+                </footer>
+
+            </div>
+        </div>
+
+
+
     </div>
+
 </template>
 
 
 <script>
 
-    import {mapGetters} from "vuex";
+    import {mapState} from "vuex";
     import moment from "moment"
+    import { VueAgile } from 'vue-agile'
+
 
     export default {
         name: 'official-teams',
+        components: {
+            agile: VueAgile
+        },
         data() {
             return {
+                
+                idOfTeamWithPicturesCarouselOpen : null,
+                idOfTeamWithAchievementsListOpen: null,
+
+                idOfTeamWithShoutOutsListOpen: null,
+                selectedTeamForShoutOutForm: null,
+
+                picturesModalOpen : false,
+                picturesModalImgSrc : '',
+                agileOptions : {
+                    fade: false,
+                    centerMode: true,
+                    dots: true,
+                    navButtons: true,
+                    slidesToShow: 1,
+                    responsive: [
+                        {
+                            breakpoint: 600,
+                            settings: {
+                                slidesToShow: 3
+                            }
+                        },
+                        {
+                            breakpoint: 1000,
+                            settings: {
+                                navButtons: true
+                            }
+                        }
+                    ]
+                },
+                
+                
+                isShoutOutFormModalOpen : false,
+                shoutOutForm : {
+                    officialTeamTarget : '',
+                    content: ''
+                },
+
+
+                dictionary: {
+                    custom: {
+                        shoutOutContentInput: {
+                            required: 'Message requis',
+                            max: 'Message trop long',
+                            min: 'Message trop court',
+                        },
+                    }
+                },
 
             }
         },
         computed: {
 
-            ...mapGetters({
-                officialTeams : 'promotion/officialTeams'
-                // userId: 'user/userId'
+            selectedTeamHasShoutOuts(){
+                return (this.shoutOutsForSelectedTeam.length > 0)
+            },
+
+
+            ...mapState({
+                officialTeams : (state) => state.promotion.officialTeams,
+
+                shoutOutsForSelectedTeam :  (state) => state.promotion.shoutOutsForSelectedTeam,
+                shoutOutsForSelectedTeamLoading : (state) => state.promotion.shoutOutsForSelectedTeamLoading,
+
+                postShoutOutLoading : (state) => state.promotion.postTeamShoutOutLoading
             }),
 
 
         },
         methods: {
+
             getCrucialMeetingsData() {
                 this.$store.dispatch('promotion/getOfficialTeamsData')
             },
 
+
+            getSelectedTeam(){
+                return this.selectedTeam;
+            },
+
+
+            areTeamDetailsShown(team) { 
+                return (!(this.idOfTeamWithPicturesCarouselOpen === team.id) && !(this.idOfTeamWithAchievementsListOpen === team.id) && !(this.idOfTeamWithShoutOutsListOpen === team.id));
+            },
+
+
+            teamHasPictures(team){
+                return (this.getTeamAchievements(team).length > 0)
+            },
+            getTeamPictures(team){
+                let pictures = [];
+                team.pictures.map((picture)=>{
+                    pictures.push(picture);
+                });
+                return pictures;
+            },
+            getPicturePath(){
+                return   '/images/pictures/';
+            },
+            togglePicturesCarousel(team){
+                this.idOfTeamWithAchievementsListOpen = null;
+                this.idOfTeamWithShoutOutsListOpen = null;
+                this.idOfTeamWithPicturesCarouselOpen = (this.idOfTeamWithPicturesCarouselOpen === null) ? team.id : null;
+            },
+            isCarouselPicturesOpenForTeam(team) {
+                return this.idOfTeamWithPicturesCarouselOpen === team.id;
+            },
+            openPicturesModal(imgSrc) {
+                this.picturesModalImgSrc = imgSrc;
+                this.picturesModalOpen = true;
+            },
+            closePicturesModal() {
+                this.selectedTeam = null;
+                this.picturesModalOpen = false;
+            },
+
+
+            teamHasAchievements(team){
+                return (this.getTeamPictures(team).length > 0)
+            },
+            getTeamAchievements(team){
+                let achievements = [];
+                team.achievements.map((achievement)=>{
+                    achievements.push(achievement);
+                });
+                return achievements;
+            },
+            toggleAchievementsList(team){
+                this.idOfTeamWithPicturesCarouselOpen = null;
+                this.idOfTeamWithShoutOutsListOpen = null;
+                this.idOfTeamWithAchievementsListOpen = (this.idOfTeamWithAchievementsListOpen === null) ? team.id : null;
+            },
+            isAchievementsListOpenForTeam(team){
+                return this.idOfTeamWithAchievementsListOpen === team.id;
+            },
+
+            toggleShoutOutsList(team){
+                this.idOfTeamWithPicturesCarouselOpen = null;
+                this.idOfTeamWithAchievementsListOpen = null;
+                if(this.idOfTeamWithShoutOutsListOpen === null) {
+                    this.idOfTeamWithShoutOutsListOpen = team.id;
+                    this.getShoutOutsForSelectedTeam(team);
+                } else {
+                    this.idOfTeamWithShoutOutsListOpen = null;
+                }
+            },
+            isShoutOutsListOpenForTeam(team){
+                return this.idOfTeamWithShoutOutsListOpen === team.id;
+            },
+            openShoutOutFormModal(team) {
+                this.isShoutOutFormModalOpen = true;
+                this.selectedTeamForShoutOutForm = team;
+                this.shoutOutForm.officialTeamTarget = team['@id']
+            },
+            closeShoutOutFormModal() {
+                this.isShoutOutFormModalOpen = false;
+                this.selectedTeamForShoutOutForm = null;
+                this.shoutOutForm = {
+                    officialTeamTarget : '',
+                    content: ''
+                }
+            },
+            getShoutOutsForSelectedTeam(team) {
+                this.$store.dispatch('promotion/getShoutOutsForSelectedTeam', team.id);
+            },
+            postShoutOutForm(selectedTeamForShoutOutForm){
+                let validation;
+                validation = this.$validator.validateAll();
+                validation.then(
+                    (isFormValid) => {
+                        if(isFormValid) {
+                            this.$store.dispatch('promotion/postShoutOut', this.shoutOutForm)
+                                .then (
+                                    (success) => {
+                                        this.getShoutOutsForSelectedTeam(selectedTeamForShoutOutForm);
+                                        this.closeShoutOutFormModal();
+                                    },
+                                    (errors) => {
+
+                                    }
+                                )
+                        }
+                    },
+                )
+            },
+            
+            
+            
+            
+            getFormatedDateString(dateString) {
+                return moment(dateString).format('Do MMMM YYYY')
+            },
+            getFormatedDateTimeString(dateString) {
+                return moment(dateString).format('HH:mm:ss')
+            },
+
+
+
+
+
         },
         mounted() {
+            this.$validator.localize('fr', this.dictionary);
             this.getCrucialMeetingsData();
         },
     }

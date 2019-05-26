@@ -1,5 +1,15 @@
 <style scoped>
 
+    @media only screen and (max-width: 600px){
+        #navbarContainer{
+            margin-bottom: 50px;
+        }
+    }
+    #mobileNavBar {
+        position: fixed;
+        width: 100%;
+        z-index: 9999;
+    }
 
     /* Style the links inside the navigation bar */
     .topnav a {
@@ -149,7 +159,7 @@
                 <div class="dropdown" >
                     <button v-bind:class="{ moduleactive: moduleInformationActive }" class="dropbtn" @mouseenter="activeDropdown('information')" ><i class="fa fa-search"></i> <i v-bind:class="{ 'fa-rotate-90': isInformationDropDownActive }" class="fa fa-caret-right"></i></button>
                     <div class="dropdown-content w3-theme-d4" v-show="isInformationDropDownActive" @click="clickDropdownItem">
-                        <router-link to="/user/information/links" class="w3-bar-item w3-button w3-padding-large w3-hover-white" >Lien externe</router-link>
+                        <router-link to="/user/information/links" class="w3-bar-item w3-button w3-padding-large w3-hover-white" >Liens externes</router-link>
                         <router-link to="/user/information/pros" class="w3-bar-item w3-button w3-padding-large w3-hover-white" >Professionnel de la santé</router-link>
                     </div>
                 </div>
@@ -163,7 +173,7 @@
 
 
         <!-- Navbar on small screens -->
-        <div class="3-bar w3-theme-d3 w3-left-align w3-large w3-hide-large w3-hide-medium">
+        <div id="mobileNavBar" class="3-bar w3-theme-d3 w3-left-align w3-large w3-hide-large w3-hide-medium">
             <a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-padding-large w3-large w3-theme-d2" href="javascript:void(0);" @click="toggleNavMenu" ><i class="fa fa-bars"></i></a>
             <router-link to="/user/home" class="w3-bar-item w3-button w3-padding-large w3-theme-d4" ><span  @click="closeNavMenu"><i class="fa fa-home w3-margin-right" ></i>Home</span></router-link>
             <div  v-show="mobileMenuShowed" class="w3-bar-block w3-theme-d2 w3-large">

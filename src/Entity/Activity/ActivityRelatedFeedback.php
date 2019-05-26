@@ -33,6 +33,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *              "path"="/activity_related_feedbacks" ,
  *              "denormalization_context"={"groups"={"activity-history-feedback"} },
  *              "normalization_context"={"groups"={"activity-history-feedback"} },
+ *              "validation_groups"={"post-activity-history-feedback"}
  *         }
  *     }
  * )
@@ -79,15 +80,16 @@ class ActivityRelatedFeedback
      *      min = 0,
      *      max = 5,
      *      minMessage = "La cotation minimale est de {{ limit }}",
-     *      maxMessage = "La cotation maximale est de {{ limit }}"
+     *      maxMessage = "La cotation maximale est de {{ limit }}",
+     *      groups = {"Default","post-activity-history-feedback"}
      * )
      */
     private $activityRatingOutOfFive;
 
     /**
      * @Groups({"activity-history-feedback"})
-     * @Assert\NotNull
-     * @Assert\NotBlank
+     * @Assert\NotNull(groups = {"Default","post-activity-history-feedback"})
+     * @Assert\NotBlank(groups = {"Default","post-activity-history-feedback"})
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
      */
@@ -95,7 +97,7 @@ class ActivityRelatedFeedback
 
     /**
      * @Groups({"activity-history-feedback"})
-     * @Assert\NotNull
+     * @Assert\NotNull(groups = {"Default","post-activity-history-feedback"})
      * @ORM\ManyToOne(targetEntity="App\Entity\Activity\Activity")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -108,8 +110,7 @@ class ActivityRelatedFeedback
     private $createdBy;
 
     /**
-     * @Groups({"activity-history-feedback"})
-     * @Assert\NotNull
+     * @Assert\NotNull(groups = {"Default"})
      * @ORM\ManyToOne(targetEntity="App\Entity\User\User")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -117,6 +118,7 @@ class ActivityRelatedFeedback
 
     /**
      * @Groups({"activity-history-feedback"})
+     * @Assert\NotNull(groups = {"Default"})
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255, nullable=true)
      */

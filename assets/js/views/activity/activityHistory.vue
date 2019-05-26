@@ -1,44 +1,5 @@
 <style scoped>
 
-    .formInputContainer {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    input:not([type=checkbox]), textarea{
-        width: 100%!important;
-        border: none;
-        border-bottom: 2px solid lightgray;
-    }
-
-    input {
-        text-align: right;
-        align-self: flex-end;
-
-    }
-    textarea:focus {
-        text-align: left;
-    }
-    textarea {
-        text-align: right;
-    }
-
-    .formInputErrors {
-        margin-top: 5px;
-        width: 100%;
-    }
-
-    .formInputLabel {
-        text-align: left;
-        align-self: normal;
-        color: grey;
-        margin-bottom: 5px;
-    }
-
-    .formInputContainer{
-        min-height: 50px;
-    }
 
 </style>
 
@@ -51,10 +12,10 @@
         </div>
 
         <div class="w3-card w3-round w3-white w3-padding-32 w3-margin-top w3-container">
+
             <vue-good-table
                     :columns="header"
                     :rows="activityHistory"
-                    :rtl="true"
                     :search-options="{
                         enabled: true,
                         trigger: 'enter',
@@ -63,30 +24,43 @@
                   }">
                 >
                 <template slot="table-row" slot-scope="props">
+
                     <span v-if="props.column.field == 'after'">
 
-                        <button v-show="!isActivityFeedbackLoading" class="w3-button w3-grey w3-small w3-block" @click="loadActivityFeedback(props.row)" >Feedback activité</button>
+                        <button v-show="!isActivityFeedbackLoading" class="w3-button w3-grey w3-small w3-block" @click="loadActivityFeedback(props.row)" >
+                            <i class="fa fa-bolt" aria-hidden="true"></i>
+                            <span class="w3-hide-small w3-hide-medium"> Activité</span>
+                        </button>
                         <span v-show="isActivityFeedbackLoading" class="w3-block w3-center w3-small" ><i class="fa fa-spinner fa-spin" aria-hidden="true"></i></span>
 
-                        <button v-show="!userRelatedFeedbackModalLoading" class="w3-button w3-black w3-small w3-margin-top w3-block" @click="loadActivityUsers(props.row)">Feedbacks participations</button>
+                        <button v-show="!userRelatedFeedbackModalLoading" class="w3-button w3-black w3-small w3-margin-top w3-block" @click="loadActivityUsers(props.row)">
+                            <i class="fa fa-users" aria-hidden="true"></i>
+                            <span class="w3-hide-small w3-hide-medium"> Participations</span>
+                        </button>
                         <span v-show="userRelatedFeedbackModalLoading" class="w3-block w3-center w3-small w3-margin-top" ><i class="fa fa-spinner fa-spin" aria-hidden="true"></i></span>
-                    </span>
-                    <span v-if="props.column.field == 'location'">
 
+                    </span>
+
+                    <span v-else-if="props.column.field == 'location'">
                         {{props.row.location.label}} - {{props.row.location.city}}
-
                     </span>
+
+                    <span v-else-if="props.column.field == 'endAt'">
+                        {{getFormatedDateString(props.row.endAt)}}
+                    </span>
+
                     <span v-else>
-
                         {{props.formattedRow[props.column.field]}}
-
                     </span>
+
                 </template>
+
                 <div slot="emptystate">
                     Pas de résultats
                 </div>
 
             </vue-good-table>
+
         </div>
 
 
@@ -218,6 +192,7 @@
 
 <script>
     import {mapGetters} from "vuex";
+    import moment from 'moment';
 
     export default {
         name: 'activity-history',
@@ -305,34 +280,35 @@
                 ],
                 header: [
                     {
-                        label: 'Actions',
-                        field: 'after',
-                        html: true,
-                        filterable: false,
-                        globalSearchDisabled: true,
-                    },
-                    {
-                        label: 'Terminée à',
-                        field: 'endAt',
-                        filterable: true,
-                        type: 'date',
-                        dateInputFormat: 'YYYY-MM-DD', // expects 2018-03-16
-                        dateOutputFormat:  'Do/MMM/YYYY hh:mm',
-                    },
-                    {
-                        label: 'Lieu',
-                        field: 'location',
+                        label: 'Libellé',
+                        field: 'label',
                         filterable: true,
                     },
                     {
                         label: 'Sport',
                         field: 'sport.label',
                         filterable: true,
+                        thClass: 'w3-hide-small w3-hide-medium',
+                        tdClass: 'w3-hide-small w3-hide-medium',
                     },
                     {
-                        label: 'Libellé',
-                        field: 'label',
+                        label: 'Lieu',
+                        field: 'location',
                         filterable: true,
+                        thClass: 'w3-hide-small',
+                        tdClass: 'w3-hide-small',
+                    },
+                    {
+                        label: 'Fin',
+                        field: 'endAt',
+                        filterable: true,
+                    },
+                    {
+                        label: 'Feedback',
+                        field: 'after',
+                        html: true,
+                        filterable: false,
+                        globalSearchDisabled: true,
                     },
                 ],
 
@@ -533,7 +509,17 @@
                 .then(() => {
                     this.closeModal();
                 })
+            },
+
+            getFormatedDateString(dateString) {
+                let dateStringToReturn = '';
+                if( (dateString !== null) && (dateString !== '') )
+                {
+                    dateStringToReturn =  moment(dateString).format('Do MMMM YYYY')
+                }
+                return dateStringToReturn;
             }
+
         },
         mounted() {
             this.getActivityHistoryData()

@@ -33,10 +33,10 @@ class CrucialMeetingDTOAssembler
 
         $crucialMeetingDTO->crucialMeetingId = $crucialMeeting->getId();
         $crucialMeetingDTO->label = $crucialMeeting->getLabel();
-        $crucialMeetingDTO->startAt = $crucialMeeting->getStartAt()->format('d/m/y');
+        $crucialMeetingDTO->startAt = $crucialMeeting->getStartAt()->format('Y-m-d H:i:s');
         $crucialMeetingDTO->location = (is_null($crucialMeeting->getLocation())) ? null : $crucialMeeting->getLocation()->getString();
         $crucialMeetingDTO->comment = $crucialMeeting->getComment();
-        $crucialMeetingDTO->endAt = (is_null($crucialMeeting->getEndAt())) ? null :$crucialMeeting->getEndAt()->format('d/m/y');
+        $crucialMeetingDTO->endAt = (is_null($crucialMeeting->getEndAt())) ? null :$crucialMeeting->getEndAt()->format('Y-m-d H:i:s');
         $sportsDTOs = [];
         foreach ($crucialMeeting->getSports() as $sport)
         {

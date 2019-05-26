@@ -9,10 +9,13 @@
 namespace App\Managers\Promotion;
 
 
+use ApiPlatform\Core\Exception\ItemNotFoundException;
 use App\Entity\Promotion\Achievement;
 use App\Entity\Promotion\CrucialMeeting;
+use App\Entity\Promotion\EmeritusSportMan;
 use App\Entity\Promotion\OfficialTeam;
 use App\Entity\Promotion\ShoutOut;
+use App\Entity\User\User;
 use App\Exception\InvalidArgumentException;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -90,6 +93,59 @@ class PromotionManager
         $this->em->flush();
 
         return $shoutout;
+    }
+
+    public function getShoutOutsForAnOfficialTeam($id)
+    {
+        //
+        // Restricting access
+        if (is_null($this->security->getToken())|| is_null($this->security->getToken()->getUser()||$this->security->getToken()->getUser()->getId()))
+        {
+            throw new AccessDeniedException('Restricted area');
+        }
+        /** @var User $connectedUser */
+        $connectedUser = $this->security->getToken()->getUser();
+
+        $officialTeamTarget = $this->em->getRepository(OfficialTeam::class)->find($id);
+        if(is_null($officialTeamTarget))
+        {
+            throw new ItemNotFoundException('Official team not found');
+        }
+
+        $shoutOuts = $this->em->getRepository(ShoutOut::class)->findBy([
+            'author' => $connectedUser,
+            'officialTeamTarget' => $officialTeamTarget
+        ],[
+            'createdAt'=>'DESC'
+        ]);
+
+        return $shoutOuts;
+
+    }
+
+    public function getShoutOutsForAnEmeritusSportMan($id)
+    {
+        //
+        // Restricting access
+        if (is_null($this->security->getToken())|| is_null($this->security->getToken()->getUser()||$this->security->getToken()->getUser()->getId()))
+        {
+            throw new AccessDeniedException('Restricted area');
+        }
+        /** @var User $connectedUser */
+        $connectedUser = $this->security->getToken()->getUser();
+
+        $emeritusSportManTarget = $this->em->getRepository(EmeritusSportMan::class)->find($id);
+        if(is_null($emeritusSportManTarget))
+        {
+            throw new ItemNotFoundException('Emeritus sport man not found');
+        }
+
+        $shoutOuts = $this->em->getRepository(ShoutOut::class)->findBy([
+            'author' => $connectedUser,
+            'emeritusSportManTarget' => $emeritusSportManTarget
+        ]);
+
+        return $shoutOuts;
     }
 
 

@@ -16,10 +16,10 @@ export default {
         areSuccessUnlockedVisible: Boolean,
         areActivityParticipationVisible: Boolean,
         isPersonalProfileVisible: Boolean,
-        userBirthDate: Date,
+        userBirthDate: '',
         userSchoolClass : String,
         userSchoolSection : String,
-        userCreatedAt : Date,
+        userCreatedAt : '',
         canGoAway :  Boolean,
         activityCostLimit : Number,
         profileLoading : false,
@@ -266,7 +266,8 @@ export default {
             state.addressedUserRelatedFeedbackLabelsCumuled = data.addressedUserRelatedFeedbackLabelsCumuled;
             state.nextActivityParticipation = data.nextActivityParticipationDTO;
             state.nextCrucialMeeting = data.nextCrucialMeetingDTO;
-            state.sportProfileDTOs = data.sportProfileDTOs
+
+            state.sportProfileDTOs = data.sportProfileDTOs;
             state.isLoading = false;
             state.error = null;
         },

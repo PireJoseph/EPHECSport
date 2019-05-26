@@ -29,7 +29,6 @@ easy_admin:
                   - 'User'
                   - 'SportProfile'
                   - 'Success'
-                  - 'SportClub'
                   - 'SchoolClass'
                   - 'SchoolSection'
 
@@ -39,6 +38,7 @@ easy_admin:
               children:
                   - 'EmeritusSportMan'
                   - 'OfficialTeam'
+                  - 'SportClub'
                   - 'Achievement'
                   - 'CrucialMeeting'
                   - 'ShoutOut'
@@ -259,7 +259,6 @@ easy_admin:
                     - { property: 'wantedTimesPerWeek',type: 'integer', type_options: { attr: { value: 1, min: 0} }  }
                     - 'wantToBeNotifiedAboutThisSport'
                     - 'isVisible'
-                    - 'sportClub'
             list:
                fields:
                    - 'user'
@@ -278,16 +277,6 @@ easy_admin:
                    - 'user'
                    - 'label'
 
-        SportClub:
-            class: App\Entity\Activity\SportClub
-            form:
-                fields:
-                    - 'label'
-                    - 'sport'
-            list:
-                fields:
-                    - 'label'
-                    - 'sport'
 
         SchoolClass:
             class: App\Entity\Profile\SchoolClass
@@ -323,6 +312,7 @@ easy_admin:
                     - 'role'
                     - 'sport'
                     - 'sportClub'
+                    - { property: 'achievements', type: 'entity', type_options: { class:  'App\Entity\Promotion\Achievement', multiple: true , required: false, disabled: true } }
                     - { property: 'pictures', type: 'collection', type_options: { entry_type: 'App\Form\PictureType' } }
             list:
                 fields:
@@ -340,11 +330,23 @@ easy_admin:
                     - 'nickName'
                     - 'label'
                     - 'sport'
+                    - { property: 'achievements', type: 'entity', type_options: { class:  'App\Entity\Promotion\Achievement', multiple: true , required: false, disabled: true } }
                     - { property: 'pictures', type: 'collection', type_options: { entry_type: 'App\Form\PictureType' } }
             list:
                 fields:
                     - 'name'
                     - 'shortName'
+                    - 'sport'
+
+        SportClub:
+            class: App\Entity\Activity\SportClub
+            form:
+                fields:
+                    - 'label'
+                    - 'sport'
+            list:
+                fields:
+                    - 'label'
                     - 'sport'
 
         Achievement:
