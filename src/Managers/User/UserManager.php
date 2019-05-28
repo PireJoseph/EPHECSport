@@ -131,7 +131,7 @@ class UserManager
             // vérification de l'existance du nouvel utilisateur
             $persistedUser = $this->em->getRepository(User::class)->findOneBy(['username' => $newUserDTO->username]);
             if (is_null($persistedUser)) {
-                throw new Exception('user persisted but not retrieved :hyperthonk:');
+                throw new Exception('user persisted but not retrieved');
             }
 
 

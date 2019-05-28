@@ -17,7 +17,6 @@ const TokenService = {
     },
 
     saveToken(accessToken) {
-        // console.log(jwt_decode(accessToken));
         localStorage.setItem(TOKEN_KEY, accessToken)
     },
 
@@ -30,7 +29,6 @@ const TokenService = {
     },
 
     saveRefreshToken(refreshToken) {
-        // console.log(jwt_decode(refreshToken));
         localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken)
     },
 
@@ -43,7 +41,6 @@ const TokenService = {
     },
 
     saveRefreshTokenExpiration(refreshTokenExpiration) {
-        // console.log(jwt_decode(refreshToken));
         localStorage.setItem(REFRESH_TOKEN_EXPIRATION_KEY, refreshTokenExpiration)
     },
 
