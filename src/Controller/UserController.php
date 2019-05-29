@@ -12,15 +12,7 @@ class UserController extends AbstractController
      */
     public function index($section)
     {
-//        $this->denyAccessUnlessGranted('ROLE_USER');
-//
-//        $usr = $this->get('security.token_storage')->getToken()->getUser();
-//
-//        $userId = $usr->getId();
-
-        return $this->render('user/index.html.twig', [
-//            'currentUserId' => $userId
-        ]);
+        return $this->render('user/index.html.twig', []);
     }
 
 

@@ -1,9 +1,11 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
-import store from '../store';
-
+// token service
 import TokenService from '../services/token';
+
+// cookie service
+import CookieService from '../services/cookie'
 
 // 1. Define route components.
 import Home from '../views/home';

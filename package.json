@@ -23,6 +23,7 @@
     "dependencies": {
         "es6-promise": "^4.2.6",
         "jquery": "^3.4.1",
+        "js-cookie": "^2.2.0",
         "jwt-decode": "^2.2.0",
         "moment": "^2.24.0",
         "v-owl-carousel": "^1.0.8",

@@ -1,0 +1,20 @@
+# CSRF protection for API
+dunglas_angular_csrf:
+  # Collection of patterns where to set the cookie
+  cookie:
+    set_on:
+      - { path: ^/login_check }
+      - { path: ^/user/login }
+    # Expiration time of the cookie (30 days)
+    expire: 2592000
+
+  # Collection of patterns to secure
+  secure:
+    - { path: ^/api, methods: [GET,POST,PUT,DELETE] }
+    - { path: ^/api/token/refresh, methods: [POST,PUT,DELETE] }
+
+
+  # Collection of patterns to exclude
+  exclude:
+    - { path: ^/admin }
+    - { path: ^/(_(profiler|wdt)|css|images|js)/ }
