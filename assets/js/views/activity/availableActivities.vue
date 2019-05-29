@@ -44,7 +44,9 @@
                     </span>
 
                     <span v-else-if="props.column.field == 'location'">
-                        {{props.row.location.label}} - {{props.row.location.city}}
+                        <span v-if="!!props.row.location">
+                            {{props.row.location.label}} - {{props.row.location.city}}
+                        </span>
                     </span>
 
                     <div v-else-if="props.column.field == 'material'">

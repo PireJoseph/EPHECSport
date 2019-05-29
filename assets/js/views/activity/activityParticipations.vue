@@ -82,7 +82,9 @@
                     </span>
 
                     <div v-else-if="props.column.field == 'participation.activity.location'">
-                        {{props.row.participation.activity.location.label}} - {{props.row.participation.activity.location.city}}
+                         <span v-if="!!props.row.participation.activity.location">
+                            {{props.row.participation.activity.location.label}} - {{props.row.participation.activity.location.city}}
+                         </span>
                     </div>
 
                     <div v-else>

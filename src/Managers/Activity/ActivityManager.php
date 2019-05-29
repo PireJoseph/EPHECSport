@@ -194,9 +194,24 @@ class ActivityManager
         }
         $connectedUser = $this->security->getToken()->getUser();
 
-        $activityInvitations = $this->em->getRepository(ActivityInvitation::class)->getNonAnsweredForThisUser($connectedUser);
+        $activityInvitationsArray = [];
 
-        return $activityInvitations;
+        $activityInvitationsQueryResult = $this->em->getRepository(ActivityInvitation::class)->getNonAnsweredForThisUser($connectedUser);
+
+        foreach($activityInvitationsQueryResult as $activityInvitation)
+        {
+            /** @var ActivityInvitation $activityInvitation */
+            $relatedActivity = $activityInvitation->getActivity();
+            $correspondingActivityParticipationQueryResult = $this->em->getRepository(ActivityParticipation::class)->findOneBy([
+                'user' => $connectedUser,
+                'activity' => $relatedActivity
+            ]);
+            if(is_null($correspondingActivityParticipationQueryResult)) {
+                $activityInvitationsArray[] = $activityInvitation;
+            }
+        }
+
+        return $activityInvitationsArray;
 
     }
 
