@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
@@ -88,8 +89,27 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         // For example : return new RedirectResponse($this->router->generate('some_route'));
         return new RedirectResponse($this->router->generate('default'));
 
-//        throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
+
     }
+
+    /**
+     * Override to change what happens after a bad username/password is submitted.
+     *
+     * @param Request $request
+     * @param AuthenticationException $exception
+     * @return RedirectResponse
+     */
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
+    {
+        if ($request->hasSession()) {
+            $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
+        }
+
+        $url = $this->getLoginUrl();
+
+        return new RedirectResponse($url);
+    }
+
 
     protected function getLoginUrl()
     {

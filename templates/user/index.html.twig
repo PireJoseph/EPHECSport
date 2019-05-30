@@ -21,7 +21,7 @@
 {% block bodyClass %}'w3-theme-l5'{% endblock %}
 
 {% block body %}
-    <div id="root" data-xsrf-token-bearer="{{ app.request.cookies.get('XSRF-TOKEN') }} ">
+    <div id="root"{# data-xsrf-token-bearer="{{ app.request.cookies.get('XSRF-TOKEN') }}"#} >
         <router-view></router-view>
     </div>
 

@@ -21,7 +21,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *              "method"="GET",
  *              "path"= "/sportmen/{id}",
  *              "denormalization_context"={"groups"={"get-sportman"} },
- *              "normalization_context"={"groups"={"get-sportman"} }
+ *              "normalization_context"={"groups"={"get-sportman"} },
+ *              "requirements"={"id"="\d+"}
  *           },
  *     },
  *     collectionOperations={

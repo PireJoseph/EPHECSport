@@ -152,7 +152,7 @@
                     <div class="dropdown-content w3-theme-d4" v-show="isPromotionDropDownActive" @click="clickDropdownItem">
                         <router-link to="/user/promotion/meetings" class="w3-bar-item w3-button w3-padding-large w3-hover-white" >Rencontres importantes</router-link>
                         <router-link to="/user/promotion/teams" class="w3-bar-item w3-button w3-padding-large w3-hover-white" >Equipes officielles</router-link>
-                        <router-link to="/user/promotion/sportmen" class="w3-bar-item w3-button w3-padding-large w3-hover-white" >Sportif émérite</router-link>
+                        <router-link to="/user/promotion/sportmen" class="w3-bar-item w3-button w3-padding-large w3-hover-white" >Sportifs émérites</router-link>
                     </div>
                 </div>
 
@@ -197,7 +197,7 @@
                 <div v-show="isPromotionAccordionActive" class="w3-theme-d4" @click="closeNavMenu">
                     <router-link to="/user/promotion/meetings" class="w3-bar-item w3-button w3-padding-large w3-hover-white" >Rencontres importantes</router-link>
                     <router-link to="/user/promotion/teams" class="w3-bar-item w3-button w3-padding-large w3-hover-white" >Equipes officielles</router-link>
-                    <router-link to="/user/promotion/sportmen" class="w3-bar-item w3-button w3-padding-large w3-hover-white" >Sportif émérite</router-link>
+                    <router-link to="/user/promotion/sportmen" class="w3-bar-item w3-button w3-padding-large w3-hover-white" >Sportifs émérites</router-link>
                 </div>
 
                 <button v-bind:class="{ moduleactive: moduleInformationActive }" class="w3-bar-item w3-button w3-padding-large" @click="activeMenuAccordion('information')" > Information <i  v-bind:class="{ 'fa-rotate-90': isInformationAccordionActive }" class="fa fa-caret-right"></i></button>

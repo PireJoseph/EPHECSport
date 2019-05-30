@@ -25,7 +25,7 @@ class Achievement
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"get-team","get-teams","get-sportsman", "get-sportsmen"})
+     * @Groups({"get-team","get-teams", "get-sportman", "get-sportmen"})
      */
     private $id;
 
@@ -34,7 +34,7 @@ class Achievement
      * @Assert\NotNull()
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
-     * @Groups({"get-team","get-teams","get-sportsman", "get-sportsmen"})
+     * @Groups({"get-team","get-teams", "get-sportman", "get-sportmen"})
      */
     private $label;
 
@@ -43,14 +43,14 @@ class Achievement
      * @Assert\NotNull()
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
-     * @Groups({"get-team","get-teams","get-sportsman", "get-sportsmen"})
+     * @Groups({"get-team","get-teams", "get-sportman", "get-sportmen"})
      */
     private $comment;
 
     /**
      * @Assert\NotNull()
      * @ORM\Column(type="datetime")
-     * @Groups({"get-team","get-teams","get-sportsman", "get-sportsmen"})
+     * @Groups({"get-team","get-teams", "get-sportman", "get-sportmen"})
      */
     private $acquiredAt;
 

@@ -19,7 +19,18 @@ export default {
         shoutOutsForSelectedTeamError : null,
 
         postTeamShoutOutLoading : false,
-        postTeamShoutOutLoadingError : null
+        postTeamShoutOutLoadingError : null,
+
+        sportMen : [],
+        sportMenLoading : false,
+        sportMenError : null,
+
+        shoutOutsForSelectedSportMan: [],
+        shoutOutsForSelectedSportManLoading : false,
+        shoutOutsForSelectedSportManError : null,
+
+        postSportManShoutOutLoading : false,
+        postSportManShoutOutLoadingError : null,
 
     },
     getters : {
@@ -40,15 +51,6 @@ export default {
         },
         crucialMeetingsErrors (state) {
             return state.crucialMeetingsErrors;
-        },
-        officialTeams (state) {
-            return state.officialTeams;
-        },
-        officialTeamsLoading (state) {
-            return state.officialTeamsLoading;
-        },
-        officialTeamsErrors (state) {
-            return state.officialTeamsErrors;
         },
     },
     mutations: {
@@ -145,28 +147,90 @@ export default {
         },
 
 
-        ['POSTING_SHOUT_OUT'](state){
+        ['POSTING_OFFICIAL_TEAM_SHOUT_OUT'](state){
             state.isLoading = true;
             state.error = null;
             state.postTeamShoutOutLoading = true;
             state.postTeamShoutOutLoadingError = null;
         },
-        ['POST_SHOUT_OUT_SUCCESS'](state){
+        ['POST_OFFICIAL_TEAM_SHOUT_OUT_SUCCESS'](state){
             state.isLoading = false;
             state.error = null;
             state.postTeamShoutOutLoading = false;
             state.postTeamShoutOutLoadingError = null;
         },
-        ['POST_SHOUT_OUT_ERROR'](state, error){
+        ['POST_OFFICIAL_TEAM_SHOUT_OUT_ERROR'](state, error){
             state.isLoading = false;
             state.error = error.message;
-            state.postTeamShoutOutLoading = true;
+            state.postTeamShoutOutLoading = false;
             state.postTeamShoutOutLoadingError = error.message;
         },
 
 
+        ['GETTING_SPORT_MEN_DATA'](state){
+            state.isLoading = true;
+            state.error = null;
+            state.sportMen = [];
+            state.sportMenLoading = true;
+            state.sportMenError = null;
+        },
+        ['GET_SPORT_MEN_DATA_SUCCESS'](state, sportMen){
+            state.isLoading = false;
+            state.error = null;
+            state.sportMen = sportMen;
+            state.sportMenLoading = false;
+            state.sportMenError = null;
+        },
+        ['GET_SPORT_MEN_DATA_ERROR'](state, error){
+            state.isLoading = false;
+            state.error = error.message;
+            state.sportMen = null;
+            state.sportMenLoading = false;
+            state.sportMenError = error.message;
+        },
 
 
+        ['GETTING_SHOUT_OUTS_FOR_SELECTED_SPORT_MAN_DATA'](state){
+            state.isLoading = true;
+            state.error = null;
+            state.shoutOutsForSelectedSportMan = [];
+            state.shoutOutsForSelectedSportManLoading = true;
+            state.shoutOutsForSelectedSportManError = null;
+        },
+        ['GET_SHOUT_OUTS_FOR_SELECTED_SPORT_MAN_DATA_SUCCESS'](state, shoutOuts){
+            state.isLoading = false;
+            state.error = null;
+            state.shoutOutsForSelectedSportMan = shoutOuts;
+            state.shoutOutsForSelectedSportManLoading = false;
+            state.shoutOutsForSelectedSportManError = null;
+        },
+        ['GET_SHOUT_OUTS_FOR_SELECTED_SPORT_MAN_DATA_ERROR'](state, error){
+            state.isLoading = false;
+            state.error = error.message;
+            state.shoutOutsForSelectedTeam = [];
+            state.shoutOutsForSelectedTeamLoading = false;
+            state.shoutOutsForSelectedTeamError = error.message;
+        },
+
+
+        ['POSTING_SPORT_MAN_SHOUT_OUT'](state){
+            state.isLoading = true;
+            state.error = null;
+            state.postSportManShoutOutLoading = true;
+            state.postSportManShoutOutLoadingError = null;
+        },
+        ['POST_SPORT_MAN_SHOUT_OUT_SUCCESS'](state){
+            state.isLoading = false;
+            state.error = null;
+            state.postSportManShoutOutLoading = false;
+            state.postSportManShoutOutLoadingError = null;
+        },
+        ['POST_SPORT_MAN_SHOUT_OUT_ERROR'](state, error){
+            state.isLoading = false;
+            state.error = error.message;
+            state.postSportManShoutOutLoading = false;
+            state.postSportManShoutOutLoadingError = error.message;
+        },
 
     },
     actions : {
@@ -181,6 +245,7 @@ export default {
                 )
                 .catch(err => commit('GET_CRUCIAL_MEETINGS_DATA_ERROR', err))
         },
+
         getOfficialTeamsData({commit}) {
             commit('GETTING_OFFICIAL_TEAMS_DATA');
             return PromotionAPI.getOfficialTeamsData()
@@ -201,18 +266,48 @@ export default {
                 )
                 .catch(err => commit('GET_SHOUT_OUTS_FOR_SELECTED_TEAM_DATA_ERROR', err))
         },
-        postShoutOut({commit}, payload) {
+        postOfficialTeamShoutOut({commit}, payload) {
             console.log(payload)
-            commit('POSTING_SHOUT_OUT');
+            commit('POSTING_OFFICIAL_TEAM_SHOUT_OUT');
             return PromotionAPI.postShoutOut(payload)
                 .then(
                     function(res){
-                        commit('POST_SHOUT_OUT_SUCCESS')
+                        commit('POST_OFFICIAL_TEAM_SHOUT_OUT_SUCCESS')
                     }
                 )
-                .catch(err => commit('POST_SHOUT_OUT_ERROR', err))
-        }
+                .catch(err => commit('POST_OFFICIAL_TEAM_SHOUT_OUT_ERROR', err))
+        },
 
+        getSportMenData({commit}) {
+            commit('GETTING_SPORT_MEN_DATA');
+            return PromotionAPI.getSportMenData()
+                .then(
+                    function(res){
+                        commit('GET_SPORT_MEN_DATA_SUCCESS', res.data['hydra:member'])
+                    }
+                )
+                .catch(err => commit('GET_SPORT_MEN_DATA_ERROR', err))
+        },
+        getShoutOutsForSelectedSportMan({commit}, payload) {
+            commit('GETTING_SHOUT_OUTS_FOR_SELECTED_SPORT_MAN_DATA');
+            return PromotionAPI.getShoutOutsForASportMan(payload)
+                .then(
+                    function(res){
+                        commit('GET_SHOUT_OUTS_FOR_SELECTED_SPORT_MAN_DATA_SUCCESS', res.data['hydra:member'])
+                    }
+                )
+                .catch(err => commit('GET_SHOUT_OUTS_FOR_SELECTED_SPORT_MAN_DATA_ERROR', err))
+        },
+        postSportManShoutOut({commit}, payload) {
+            commit('POSTING_SPORT_MAN_SHOUT_OUT');
+            return PromotionAPI.postShoutOut(payload)
+                .then(
+                    function(res){
+                        commit('POST_SPORT_MAN_SHOUT_OUT_SUCCESS')
+                    }
+                )
+                .catch(err => commit('POST_SPORT_MAN_SHOUT_OUT_ERROR', err))
+        },
 
     }
 

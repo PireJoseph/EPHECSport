@@ -4,7 +4,9 @@ dunglas_angular_csrf:
   cookie:
     set_on:
       - { path: ^/login_check }
-      - { path: ^/user/login }
+      - { path: ^/user }
+      - { path: ^/api/ }
+
     # Expiration time of the cookie (30 days)
     expire: 2592000
 
@@ -17,4 +19,5 @@ dunglas_angular_csrf:
   # Collection of patterns to exclude
   exclude:
     - { path: ^/admin }
+    - { route: api_entrypoint }
     - { path: ^/(_(profiler|wdt)|css|images|js)/ }

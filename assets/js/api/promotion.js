@@ -17,10 +17,20 @@ export default {
         );
     },
     postShoutOut(payload) {
-        console.log(payload)
         return ApiService.post(
             '/api/shoutouts/',
             payload
         );
-    }
+    },
+    getSportMenData(){
+        return ApiService.get(
+            '/api/sportmen/'
+        )
+    },
+    getShoutOutsForASportMan(id){
+        return ApiService.get(
+            '/api/sportmen/' + id +'/shoutouts/',
+        );
+    },
+
 }

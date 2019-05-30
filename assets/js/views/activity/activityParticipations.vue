@@ -279,7 +279,6 @@
                 {
                     dateStringToReturn =  moment(dateString).format('Do MMMM YYYY')
                 }
-                console.log(dateStringToReturn)
                 return dateStringToReturn;
             },
             getFormatedDateTimeString(dateString) {

@@ -107,7 +107,7 @@
                 <!--pictures carousel-->
                 <div class="team-card-photo"  v-if="isCarouselPicturesOpenForTeam(team)">
                     <agile
-                            :options="agileOptions"
+                            :options="getAgileOptionsForTeam(team)"
                     >
                         <div  v-for="teamPictures in team.pictures" :key="teamPictures.image">
 
@@ -295,28 +295,7 @@
 
                 picturesModalOpen : false,
                 picturesModalImgSrc : '',
-                agileOptions : {
-                    fade: false,
-                    centerMode: true,
-                    dots: true,
-                    navButtons: true,
-                    slidesToShow: 1,
-                    responsive: [
-                        {
-                            breakpoint: 600,
-                            settings: {
-                                slidesToShow: 3
-                            }
-                        },
-                        {
-                            breakpoint: 1000,
-                            settings: {
-                                navButtons: true
-                            }
-                        }
-                    ]
-                },
-                
+
                 
                 isShoutOutFormModalOpen : false,
                 shoutOutForm : {
@@ -357,23 +336,16 @@
         },
         methods: {
 
-            getCrucialMeetingsData() {
+            getOfficialTeamsData() {
                 this.$store.dispatch('promotion/getOfficialTeamsData')
             },
-
-
-            getSelectedTeam(){
-                return this.selectedTeam;
-            },
-
 
             areTeamDetailsShown(team) { 
                 return (!(this.idOfTeamWithPicturesCarouselOpen === team.id) && !(this.idOfTeamWithAchievementsListOpen === team.id) && !(this.idOfTeamWithShoutOutsListOpen === team.id));
             },
 
-
             teamHasPictures(team){
-                return (this.getTeamAchievements(team).length > 0)
+                return (this.getTeamPictures(team).length > 0)
             },
             getTeamPictures(team){
                 let pictures = [];
@@ -402,9 +374,8 @@
                 this.picturesModalOpen = false;
             },
 
-
             teamHasAchievements(team){
-                return (this.getTeamPictures(team).length > 0)
+                return (this.getTeamAchievements(team).length > 0)
             },
             getTeamAchievements(team){
                 let achievements = [];
@@ -448,6 +419,7 @@
                     content: ''
                 }
             },
+
             getShoutOutsForSelectedTeam(team) {
                 this.$store.dispatch('promotion/getShoutOutsForSelectedTeam', team.id);
             },
@@ -457,7 +429,7 @@
                 validation.then(
                     (isFormValid) => {
                         if(isFormValid) {
-                            this.$store.dispatch('promotion/postShoutOut', this.shoutOutForm)
+                            this.$store.dispatch('promotion/postOfficialTeamShoutOut', this.shoutOutForm)
                                 .then (
                                     (success) => {
                                         this.getShoutOutsForSelectedTeam(selectedTeamForShoutOutForm);
@@ -471,10 +443,7 @@
                     },
                 )
             },
-            
-            
-            
-            
+
             getFormatedDateString(dateString) {
                 return moment(dateString).format('Do MMMM YYYY')
             },
@@ -482,14 +451,44 @@
                 return moment(dateString).format('HH:mm:ss')
             },
 
+            getAgileOptionsForTeam(team){
+                let numberOfPitcuresToShowOnLargeScreen;
+                let numberOfPicturesForTheTeam = team.pictures.length;
 
+                if(numberOfPicturesForTheTeam < 3){
+                    numberOfPitcuresToShowOnLargeScreen = 1
+                } else {
+                    numberOfPitcuresToShowOnLargeScreen = 3;
+                }
 
+                return {
+                    fade: false,
+                        centerMode: true,
+                        dots: true,
+                        navButtons: true,
+                        slidesToShow: 1,
+                        responsive: [
+                        {
+                            breakpoint: 600,
+                            settings: {
+                                slidesToShow: numberOfPitcuresToShowOnLargeScreen
+                            }
+                        },
+                        {
+                            breakpoint: 1000,
+                            settings: {
+                                navButtons: true
+                            }
+                        }
+                    ]
+                };
 
+            },
 
         },
         mounted() {
             this.$validator.localize('fr', this.dictionary);
-            this.getCrucialMeetingsData();
+            this.getOfficialTeamsData();
         },
     }
 </script>

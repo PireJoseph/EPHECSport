@@ -38,7 +38,6 @@ import ExternalLinks from '../views/information/externalLinks';
 import HealthProfessionals from '../views/information/healthProfessionals';
 
 
-
 // 2. Define some routes
 const routes = [
     {
@@ -210,6 +209,21 @@ let router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
+
+    //logout and deny access to app while cookies are not allowed by client
+
+
+
+    // get app root container
+    // let rootAppContainer = document.querySelector('#root');
+    // // check if the xsfToken is present in the the right data attribute of the app container
+    // if(!rootAppContainer.dataset.xsrfTokenBearer) {
+    //     console.log('token not present in DOM');
+    //     // assign xsfr token as a data
+    //     rootAppContainer.dataset.xsrfTokenBearer = CookieService.getXSRFTokenFromCookie();
+    // }
+
+
     if (to.matched.some(record => record.meta.requiresAuth)) {
         // this route requires auth, check if logged in
         // if not, redirect to login page.

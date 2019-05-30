@@ -10,13 +10,10 @@ const ApiService = {
     // Stores the 401 response interceptor position so that it can be later ejected when needed
     _401interceptor: null,
 
-    // Stores the  request interceptor
-    _requestInterceptor: null,
 
     init(baseURL) {
         axios.defaults.baseURL = baseURL;
         this.mount401Interceptor();
-        this.mountRequestInterceptor();
     },
 
     setHeader() {
@@ -64,6 +61,15 @@ const ApiService = {
                 return response
             },
             async (error) => {
+                // check if the error is a 403 deny from xsrf
+                if ( (error.request.status == 403) && (error.response.data.detail === 'Bad CSRF token.') ){
+                    // send another request with the cookie acquired from the response
+                    return this.customRequest({
+                        method: error.config.method,
+                        url: error.config.url,
+                        data: error.config.data
+                    });
+                }
 
                 // check if we got 401 response from the server (typically a bad JSON web token)
                 if (error.request.status == 401) {
@@ -98,32 +104,6 @@ const ApiService = {
         )
     },
 
-    mountRequestInterceptor(){
-        this._requestInterceptor = axios.interceptors.request.use(
-             (config) => {
-
-                 // If we are calling the API
-                 if (config.url.includes('/api/')) {
-
-                     // verify that the xscf token is in the cookies
-                     if(!CookieService.isXSRFTokenPresentInCookie()) {
-
-                         // get token from user app twig template
-                         let xsrf_token = document.querySelector('#root').dataset.xsrfTokenBearer;
-
-                         // reset cookie
-                         CookieService.setXSFRTokenInCookie(xsrf_token);
-
-                     }
-
-                 }
-
-            return config;
-        },  (error) => {
-            // Do something with request error
-            return Promise.reject(error);
-        });
-    },
 
 
 
