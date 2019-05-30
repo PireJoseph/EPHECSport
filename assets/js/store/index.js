@@ -8,6 +8,7 @@ import AppCommonModule from './appCommon'
 import SideBarModule from './sideBar'
 import ActivityModule from './activity'
 import PromotionModule from './promotion'
+import InformationModule from './information'
 
 Vue.use(Vuex);
 
@@ -19,6 +20,7 @@ export default new Vuex.Store({
         common: AppCommonModule,
         sideBar: SideBarModule,
         activity: ActivityModule,
-        promotion: PromotionModule
+        promotion: PromotionModule,
+        information: InformationModule
     }
 });

@@ -1,8 +1,80 @@
+#root {
+    display: flex;
+    flex-flow: column;
+    flex-grow: 1;
+}
+
+
+.answer-btn {
+    width: 80px;
+}
+
+.formInputContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 50px;
+
+}
+
+input:not([type=checkbox]):not([type="search"]), textarea{
+    width: 100%!important;
+    border: none;
+    border-bottom: 2px solid lightgray;
+}
+
+input {
+    text-align: right;
+    align-self: flex-end;
+
+}
+textarea:focus {
+    text-align: left;
+}
+textarea {
+    text-align: right;
+}
+
+.formInputErrors {
+    margin-top: 5px;
+    width: 100%;
+}
+
+.formInputLabel {
+    text-align: left;
+    align-self: normal;
+    color: grey;
+    margin-bottom: 5px;
+}
+
 .router-link-active , .router-link-exact-active span{
     color: #ee7102;
 }
 .router-link-active:hover , .router-link-exact-active:hover span{
     color: #000!important;
+}
+
+
+
+
+
+
+
+
+/*Custom js librairies styling*/
+
+/*datepicker*/
+.vdp-datepicker {
+    width: 100%;
+    text-align: center;
+}
+
+.date-picker-input {
+    width: 100%!important;
+    border: none;
+    border-bottom: 2px solid lightgray;
+    text-align: right;
+    align-self: flex-end;
 }
 
 
@@ -40,4 +112,20 @@
     background-color: #888;
 }
 
+
+/*Tables customization*/
+.vgt-table {
+    font-size: small!important;
+}
+.vgt-table th, .vgt-table td{
+    padding: 5px!important;
+    text-align: right;
+}
+@media only screen and (max-width: 600px) {
+
+    .vgt-table th, .vgt-table td{
+        text-align: center;
+    }
+
+}
 

@@ -14,14 +14,12 @@
 
     {{ encore_entry_link_tags('user') }}
 
-
-    {#<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">#}
 {% endblock %}
 
 {% block bodyClass %}'w3-theme-l5'{% endblock %}
 
 {% block body %}
-    <div id="root"{# data-xsrf-token-bearer="{{ app.request.cookies.get('XSRF-TOKEN') }}"#} >
+    <div id="root" >
         <router-view></router-view>
     </div>
 

@@ -11,12 +11,6 @@
 
 require('../css/w3.css');
 
-require('vue-good-table/dist/vue-good-table.css');
-
-require('vue2-dropzone/dist/vue2Dropzone.min.css');
-
-require('vue-select/dist/vue-select.css');
-
 require('../css/app.css');
 
 // Need jQuery? Install it with "yarn add jquery", then uncomment to require it.

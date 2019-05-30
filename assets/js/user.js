@@ -1,3 +1,13 @@
+// JS Librairies styling
+
+require('vue-good-table/dist/vue-good-table.css');
+
+require('vue2-dropzone/dist/vue2Dropzone.min.css');
+
+require('vue-select/dist/vue-select.css');
+
+// Js Librairies
+
 import 'babel-polyfill'
 
 import Vue from 'vue'
@@ -22,6 +32,7 @@ import moment from 'moment';
 
 
 import VeeValidate from 'vee-validate';
+
 const veeValidateConfig = {
     errorBagName: 'errors', // change if property conflicts
     locale: 'fr',
