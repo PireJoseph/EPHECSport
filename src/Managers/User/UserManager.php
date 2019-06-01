@@ -361,7 +361,7 @@ class UserManager
 
 
 
-    public function getOtherProfiles() : ? array
+    public function getOtherProfiles() :  array
     {
 
         //

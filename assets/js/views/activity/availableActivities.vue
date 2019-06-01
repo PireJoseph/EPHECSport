@@ -32,12 +32,12 @@
                         </button>
 
                         <button v-if="((!props.row.relatedRequest) && (props.row.isJoinableByAnyone))" class="w3-button w3-green w3-small" :disabled="activityJoiningRequestLoading" @click="makeJoiningRequest(props.row['@id'])">
-                            <i class="fa fa-sign-in" aria-hidden="true"></i>
+                            <i class="fas fa-sign-in-alt"></i>
                             <span class="w3-hide-small w3-hide-medium"> Rejoindre</span>
                         </button>
 
                         <button v-if="(props.row.relatedRequest)" class="w3-button w3-grey w3-small"  disabled>
-                            <i class="fa fa-clock-o" aria-hidden="true"></i>
+                            <i class="far fa-clock"></i>
                             <span class="w3-hide-small w3-hide-medium"> Attente d'admission</span>
                         </button>
 

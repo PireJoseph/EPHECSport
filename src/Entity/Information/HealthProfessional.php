@@ -95,7 +95,7 @@ class HealthProfessional
     private $title;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\picture", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Picture", cascade={"persist", "remove"})
      * @Groups({"get-professional","get-professionals"})
      */
     private $picture;

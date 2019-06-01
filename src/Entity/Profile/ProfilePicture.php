@@ -40,6 +40,11 @@ class ProfilePicture implements Serializable
      */
     private $updatedAt;
 
+    public function __toString() : string
+    {
+        return $this->picture;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

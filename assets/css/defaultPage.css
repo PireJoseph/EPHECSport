@@ -1,9 +1,7 @@
-/*.bgimg {*/
-    /*background-image: url('../img/BGImgDefault.jpg');*/
-    /*min-height: 100%;*/
-    /*background-position: center;*/
-    /*background-size: cover;*/
-/*}*/
+#home {
+    height: 100%;
+    min-height: 100%;
+}
 
 body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif;}
 body, html {
@@ -69,8 +67,26 @@ body, html {
 
 /* Turn off parallax scrolling for tablets and phones */
 @media only screen and (max-device-width: 1600px) {
-    .bgimg-1, .bgimg-2, .bgimg-3 {
+    .bgimg-1, .bgimg-2, .bgimg-3, .bgimg-4, .bgimg-5 {
         background-attachment: scroll;
         min-height: 400px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .mobile-menu-open{
+        background-color: white!important;
+        color: black!important;
+    }
+    #navDemo {
+        box-shadow: 0 8px 10px 0 rgba(0,0,0,0.16);
+    }
+    .bgimg-1 {
+        background-image: linear-gradient(180deg, rgba(255,0,0,0), #607d8b);
+    }
+}
+@media screen and (max-width: 850px) {
+    .link-title{
+        display: none;
     }
 }

@@ -10,44 +10,53 @@
 {% endblock %}
 
 {% block body %}
+    {{ encore_entry_script_tags('defaultPage') }}
 
     <!------------>
     <!-- Navbar -->
     <!------------>
 
     <!-- Navbar (sit on top) -->
-    <div class="w3-top">
+    <div class="w3-top" id="navbarContainer">
         <div class="w3-bar" id="myNavbar">
             <a class="w3-bar-item w3-button w3-hover-black w3-hide-medium w3-hide-large w3-right" href="javascript:void(0);" onclick="toggleFunction()" title="Toggle Navigation Menu">
                 <i class="fa fa-bars"></i>
             </a>
-            <a href="#home" class="w3-bar-item w3-button" onclick="hideNavBar()"><i class="fa fa-home"></i>HOME</a>
-            <a href="#about" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-info"></i> A PROPOS</a>
-            {#<a href="#activities" class="w3-bar-item w3-button w3-hide-small" style="text-transform: uppercase"><i class="fa fa-bolt"></i> activités</a>
-            <a href="#promotion" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-star"></i> PROMOTION</a>
-            <a href="#information" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-search"></i> INFORMATION</a>#}
-            <a href="#contact" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-envelope"></i> CONTACT</a>
-            {% if app.user %}
-                <a href="{{ path('app_logout', {}) }}" class="w3-bar-item w3-button w3-hide-small w3-right "><i class="fa fa-user-times"></i> SE DECONNECTER</a>
-            {% else %}
-                <a href="{{ path('app_login',{}) }}" class="w3-bar-item w3-button w3-hide-small w3-right "><i class="fa fa-user"></i> SE CONNECTER</a>
-            {% endif %}
+            <a href="#home" class="w3-bar-item w3-button" onclick="hideNavBar()"><i class="fa fa-home"></i><span class="link-title"> HOME</span></a>
+            <a href="#about" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-info"></i><span class="link-title"> </span> A PROPOS</a>
+            <a href="#contact" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-envelope"></i><span class="link-title  "> HOME</span> CONTACT</a>
+            <a href="{{ path('user', {}) }}" class="w3-bar-item w3-button w3-hide-small"><i class="fas fa-sign-in-alt"></i><span> APP</span></a>
+            <div class=" w3-right">
+                {% if app.user %}
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('easyadmin', {}) }}" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-lock"></i><span class="link-title  "> ZONE ADMIN</span></a>
+                    {% endif %}
+                    <a href="{{ path('app_logout', {}) }}" class="w3-bar-item w3-button w3-hide-small "><i class="fa fa-user-times"></i><span class="link-title "> SE DECONNECTER</span></a>
+
+                {% else %}
+                    <a href="{{ path('app_login',{}) }}" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-user"></i><span class="link-title  "> SE CONNECTER</span></a>
+                {% endif %}
+            </div>
+
 
         </div>
 
         <!-- Navbar on small screens -->
         <div id="navDemo" class="w3-bar-block w3-white w3-hide w3-hide-large w3-hide-medium">
             <a href="#about" class="w3-bar-item w3-button" onclick="toggleFunction()">A PROPOS</a>
-    {#        <a href="#activities" class="w3-bar-item w3-button" style="text-transform: uppercase" onclick="toggleFunction()">activités</a>
-            <a href="#promotion" class="w3-bar-item w3-button" onclick="toggleFunction()">PROMOTION</a>
-            <a href="#information" class="w3-bar-item w3-button" onclick="toggleFunction()">INFORMATION</a>#}
             <a href="#contact" class="w3-bar-item w3-button" onclick="toggleFunction()">CONTACT</a>
+            <a href="{{ path('user', {}) }}" class="w3-bar-item w3-button">APP</a>
+
             {% if app.user %}
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a href="{{ path('easyadmin', {}) }}" class="w3-bar-item w3-button">ZONE ADMIN</a>
+                {% endif %}
                 <a href="{{ path('app_logout', {}) }}" class="w3-bar-item w3-button">SE DECONNECTER</a>
             {% else %}
                 <a href="{{  path('app_login',{}) }}" class="w3-bar-item w3-button">SE CONNECTER</a>
             {% endif %}
         </div>
+
     </div>
 
     <!------------>
@@ -87,17 +96,14 @@
             <a href="#activities" class="w3-button w3-third w3-container w3-center about-gallery-item w3-padding-large">
                 <p class="about-gallery-item-title"><b>Organiser</b></p>
                 <p class="about-gallery-item-label">Activités et rencontres</p>
-                {#<img src="{{ asset('build/images/IMGActiviteEPHEC.jpg') }}" class="w3-round w3-image w3-opacity w3-hover-opacity-off w3-grayscale img-about w3-hide-small" alt="Photo of Me" >#}
             </a>
             <a href="#promotion" class="w3-button w3-third w3-container w3-center about-gallery-item w3-padding-large">
                 <p class="about-gallery-item-title"><b>Promouvoir</b></p>
                 <p class="about-gallery-item-label">Equipes et sportifs</p>
-                {#<img src="{{ asset('build/images/IMGPromotionEPHEC.jpg') }}" class="w3-round w3-image w3-opacity w3-hover-opacity-off w3-grayscale img-about w3-hide-small" alt="Photo of Me" >#}
             </a>
             <a href="#information" class="w3-button w3-third w3-container w3-center about-gallery-item w3-padding-large">
                 <p class="about-gallery-item-title"><b>Informer</b></p>
                 <p class="about-gallery-item-label">Sport, nutrition et santé</p>
-                {#<img src="{{ asset('build/images/IMGInformationEPHEC.jpg') }}" class="w3-round w3-image w3-opacity w3-hover-opacity-off w3-grayscale img-about w3-hide-small" alt="Photo of Me">#}
             </a>
         </div>
 
@@ -111,19 +117,19 @@
 
     <div class="w3-row w3-center w3-dark-grey w3-padding-16">
         <div class="w3-quarter w3-section">
-            <span class="w3-xlarge">{{ userNumber|default('0') }}{% if userNumber > 1 %}+{% endif %}</span><br>
+            <span class="w3-xlarge">{{ userNumber|default('0') }}</span><br>
             Inscrit{% if userNumber > 1 %}s{% endif %}
         </div>
         <div class="w3-quarter w3-section">
-            <span class="w3-xlarge">{{ activityNumber|default('0') }}{% if activityNumber > 1 %}+{% endif %}</span><br>
+            <span class="w3-xlarge">{{ activityNumber|default('0') }}</span><br>
             Activité{% if activityNumber > 1 %}s{% endif %} créée{% if activityNumber> 1 %}s{% endif %}
         </div>
         <div class="w3-quarter w3-section">
-            <span class="w3-xlarge">{{ teamNumber|default('0') }}{% if teamNumber > 1 %}+{% endif %}</span><br>
+            <span class="w3-xlarge">{{ teamNumber|default('0') }}</span><br>
             Equipe{% if teamNumber > 1 %}s{% endif %} EPHEC
         </div>
         <div class="w3-quarter w3-section">
-            <span class="w3-xlarge">{{ highLevelSportManNumber|default('0') }}{% if highLevelSportManNumber > 1 %}+{% endif %}</span><br>
+            <span class="w3-xlarge">{{ highLevelSportManNumber|default('0') }}</span><br>
             Sportif{% if highLevelSportManNumber > 1 %}s{% endif %} de haut niveau
         </div>
     </div>
@@ -167,26 +173,8 @@
             </div>
         </div>
 
-{#        <div class="w3-row-padding w3-center w3-section">
-            <div class="w3-col m3">
-                <img src="{{ asset('build/images/activityPic1.jpg') }}" style="width:100%"  class="w3-grayscale w3-hover-opacity" alt="The mist">
-            </div>
-
-            <div class="w3-col m3">
-                <img src="{{ asset('build/images/activityPic15.jpg') }}" style="width:100%"  class="w3-grayscale w3-hover-opacity" alt="My beloved typewriter">
-            </div>
-
-            <div class="w3-col m3">
-                <img src="{{ asset('build/images/activityPic7.jpg') }}" style="width:100%"  class="w3-grayscale w3-hover-opacity" alt="Empty ghost train">
-            </div>
-
-            <div class="w3-col m3">
-                <img src="{{ asset('build/images/activityPic8.jpg') }}" style="width:100%"  class="w3-grayscale w3-hover-opacity" alt="Sailing">
-            </div>
-        </div>#}
-
         <div class="w3-row-padding w3-center w3-section">
-            <button class="w3-button w3-padding-large w3-light-grey w3-margin">Participer</button>
+            <a href="{{ path('user', {}) }}" class="w3-btn w3-button w3-bar-item w3-button  w3-padding-large w3-light-grey w3-margin">Participer</a>
         </div>
     </div>
 
@@ -210,21 +198,10 @@
         <p class="w3-center"><em>Suivez et supportez nos équipes et sportifs de haut niveau.</em></p>
         <p class="w3-center"><em>Soyez au courant de leurs plus grands exploits et venez les soutenir lors de leur prochaine rencontre.</em></p>
     </div>
-{#
-    <!-- slideshow with ephec team and emeritus sportman -->
-    <div class="w3-content w3-display-container">
-        <img class="mySlides" src="{{ asset('build/images/activityPic1.jpg') }}" style="width:100%">
-        <img class="mySlides" src="{{ asset('build/images/activityPic2.jpg') }}" style="width:100%">
-        <img class="mySlides" src="{{ asset('build/images/activityPic3.jpg') }}" style="width:100%">
-        <img class="mySlides" src="{{ asset('build/images/activityPic4.jpg') }}" style="width:100%">
-
-        <button class="w3-button w3-black w3-display-left" onclick="plusDivs(-1)">&#10094;</button>
-        <button class="w3-button w3-black w3-display-right" onclick="plusDivs(1)">&#10095;</button>
-    </div>#}
 
     <div class="w3-content w3-container" >
         <div class="w3-row-padding w3-center w3-section">
-            <button class="w3-button w3-padding-large w3-light-grey w3-margin">Soutenir</button>
+            <a href="{{ path('user', {}) }}" class="w3-btn w3-button w3-bar-item w3-button  w3-padding-large w3-light-grey w3-margin">Soutenir</a>
         </div>
     </div>
 
@@ -244,6 +221,10 @@
         <h3 class="w3-center">Que retenir?</h3>
         <p class="w3-center"><em>Découvrer notre sélection de documentation.</em></p>
         <p class="w3-center"><em>Interrogez nos professionels de la santé partenaires.</em></p>
+    </div>
+
+    <div class="w3-row-padding w3-center w3-section">
+        <a href="{{ path('user', {}) }}" class="w3-btn w3-button w3-bar-item w3-button  w3-padding-large w3-light-grey w3-margin">En savoir plus</a>
     </div>
 
 
@@ -293,52 +274,40 @@
     {{ parent() }}
 
     <script type="application/javascript">
+
+        var navbar = document.getElementById("myNavbar");
+        var navDemo = document.getElementById("navDemo");
+
         // Change style of navbar on scroll
         window.onscroll = function() {myFunction()};
         function myFunction() {
             var navbar = document.getElementById("myNavbar");
             if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
-                navbar.className = "w3-bar" + " w3-card" + " w3-animate-top" + " w3-white";
+                navbar.className = "w3-bar" + " w3-card"  + " w3-white";
             } else {
-                navbar.className = navbar.className.replace(" w3-card w3-animate-top w3-white", "");
+                navbar.className = navbar.className.replace(" w3-card w3-white", "");
             }
         }
 
         // Used to toggle the menu on small screens when clicking on the menu button
         function toggleFunction() {
-            var x = document.getElementById("navDemo");
-            if (x.className.indexOf("w3-show") == -1) {
-                x.className += " w3-show";
+            // var navbar = document.getElementById("myNavbar");
+
+            if (navDemo.className.indexOf("w3-show") == -1) {
+                navDemo.className += " w3-show";
+                navbar.className += " mobile-menu-open";
+
             } else {
-                x.className = x.className.replace(" w3-show", "");
+                navDemo.className = navDemo.className.replace(" w3-show", "");
+                navbar.className = navbar.className.replace("mobile-menu-open", "");
             }
         }
 
         function hideNavBar() {
-            var y = document.getElementById("navDemo");
-            document.getElementById("navDemo").className = y.className.replace(" w3-show", "");
+            navDemo.className = navDemo.className.replace(" w3-show", "");
         }
 
-        // // promotion slideshow
-        // var slideIndex = 1;
-        // showDivs(slideIndex);
-        //
-        // function plusDivs(n) {
-        //     showDivs(slideIndex += n);
-        // }
-
-        // function showDivs(n) {
-        //     var i;
-        //     var x = document.getElementsByClassName("mySlides");
-        //     if (n > x.length) {slideIndex = 1}
-        //     if (n < 1) {slideIndex = x.length}
-        //     for (i = 0; i < x.length; i++) {
-        //         x[i].style.display = "none";
-        //     }
-        //     x[slideIndex-1].style.display = "block";
-        // }
     </script>
 
-    {{ encore_entry_script_tags('defaultPage') }}
 
 {% endblock %}

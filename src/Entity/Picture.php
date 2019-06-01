@@ -26,6 +26,7 @@ class Picture implements Serializable
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
+     * @Groups({"activity-history","get-team","get-teams", "get-sportman", "get-sportmen", "get-link","get-links", "get-professional","get-professionals"})
      * @ORM\Column(type="integer")
      */
     private $id;
@@ -57,6 +58,10 @@ class Picture implements Serializable
      */
     private $updatedAt;
 
+    public function __toString() : string
+    {
+        return $this->image;
+    }
 
     public function getId(): ?int
     {

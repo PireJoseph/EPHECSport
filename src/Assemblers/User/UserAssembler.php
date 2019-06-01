@@ -25,7 +25,12 @@ class UserAssembler
     private $passwordEncoder;
     private $validator;
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder, ValidatorInterface $validator, EncoderInterface $encoder, SerializerInterface $serializer)
+    /**
+     * UserAssembler constructor.
+     * @param UserPasswordEncoderInterface $passwordEncoder
+     * @param ValidatorInterface $validator
+     */
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder, ValidatorInterface $validator)
     {
         $this->passwordEncoder = $passwordEncoder;
         $this->validator = $validator;

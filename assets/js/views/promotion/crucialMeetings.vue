@@ -249,7 +249,7 @@
 
                     <div class="w3-container detail-section w3-padding">
                         <span class="w3-left detail-label">
-                            <i class="fa fa-clock-o w3-margin-right" aria-hidden="true"></i> Heure :
+                            <i class="far fa-clock w3-margin-right"></i> Heure :
                         </span>
                         <span class="detail-value">
                             {{ getFormatedDateString(selectedCrucialMeeting.startAt) }}

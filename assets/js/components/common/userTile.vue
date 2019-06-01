@@ -19,7 +19,7 @@
             <p class="w3-center" v-show="!!picture"><img v-bind:src="picture" class="w3-circle" style="width:64px" alt="Avatar"></p>
             <hr>
             <p class="userInfo"><i class="fa fa-envelope fa-fw w3-margin-right w3-text-theme"></i>{{email}}</p>
-            <p class="userInfo" v-show="schoolSection" ><i class="fa fa-pencil fa-fw w3-margin-right w3-text-theme"></i>{{schoolSection}}</p>
+            <p class="userInfo" v-show="schoolSection" ><i class="fas fa-pencil-ruler fa-fw w3-margin-right w3-text-theme"></i>{{schoolSection}}</p>
             <p class="userInfo" v-show="birthDate" ><i class="fa fa-birthday-cake fa-fw w3-margin-right w3-text-theme"></i>{{getFormatedDateString(birthDate)}}</p>
         </div>
     </div>

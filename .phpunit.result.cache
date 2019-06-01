@@ -1,0 +1,1 @@
+C:37:"PHPUnit\Runner\DefaultTestResultCache":171:{a:2:{s:7:"defects";a:1:{s:49:"App\Tests\UserManagerTest::testGetAllPersonalData";i:5;}s:5:"times";a:1:{s:49:"App\Tests\UserManagerTest::testGetAllPersonalData";d:72.866;}}}

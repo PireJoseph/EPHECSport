@@ -8,10 +8,6 @@ api_platform:
     # The version of the API.
     version: '1.0.0'
 
-    mapping:
-        # The list of paths with files or directories where the bundle will look for additional resource files.
-        paths:
-        - '%kernel.project_dir%/config/api_platform'
 
     # The list of your resources class directories. Defaults to the directories of the mapping paths but might differ.
     resource_class_directories:

@@ -136,8 +136,8 @@
                         <li  class="w3-border w3-theme-d1" v-for="teamAchievement in team.achievements" :key="teamAchievement.id">
 
                             <h4 class="team-card-achievement-header w3-margin-bottom">
-                                <span><i class="fa fa-star-o" aria-hidden="true"></i> {{teamAchievement.label}}</span>
-                                <span class="w3-opacity"><i class="fa fa-calendar-check-o" aria-hidden="true"></i> {{getFormatedDateString(teamAchievement.acquiredAt)}}</span>
+                                <span><i class="far fa-star"></i> {{teamAchievement.label}}</span>
+                                <span class="w3-opacity"><i class="far fa-calendar-check" aria-hidden="true"></i> {{getFormatedDateString(teamAchievement.acquiredAt)}}</span>
                             </h4>
 
                             <p class="w3-right-align team-card-achievement-comment" >
@@ -160,7 +160,7 @@
 
                         <li v-for="shoutOut in shoutOutsForSelectedTeam" :key="shoutOut.id" class="team-card-shout-out w3-border w3-theme-l1 w3-margin-bottom">
                             <h4 class="team-card-shout-out-header w3-left-align">
-                                <span class="w3-opacity"><i class="fa fa-calendar-o" aria-hidden="true"></i> posté le {{getFormatedDateString(shoutOut.createdAt)}}, à {{getFormatedDateTimeString(shoutOut.createdAt)}}</span>
+                                <span class="w3-opacity"><i class="far fa-calendar-check" aria-hidden="true"></i> posté le {{getFormatedDateString(shoutOut.createdAt)}}, à {{getFormatedDateTimeString(shoutOut.createdAt)}}</span>
                             </h4>
                             <p class="team-card-shout-out-comment w3-right-align ">
                                 <i class="fa fa-quote-left w3-small" aria-hidden="true"></i><span> {{shoutOut.content}}</span> <i class="fa fa-quote-right w3-small" aria-hidden="true"></i>

@@ -19,7 +19,7 @@
             <div v-show="(isPreferredPartnersAccordionOpen && userPreferredPartners.length) " class="w3-container">
                 <p v-for="userPreferredPartner in userPreferredPartners" :key="userPreferredPartner.id">{{ userPreferredPartner.username }}</p>
             </div>
-            <button @click="toggleDisponibilityAccordion" class="w3-button w3-block w3-theme-l1 w3-left-align" :disabled="!userDisponibilityPatterns.length"><i class="fa fa-calendar-check-o fa-fw w3-margin-right"></i> Disponibilités</button>
+            <button @click="toggleDisponibilityAccordion" class="w3-button w3-block w3-theme-l1 w3-left-align" :disabled="!userDisponibilityPatterns.length"><i class="far fa-calendar-check fa-fw w3-margin-right"></i> Disponibilités</button>
             <div v-show="(isDisponibilityAccordionOpen && userDisponibilityPatterns.length)" class="w3-container">
                 <p v-for="userDisponibilityPattern in userDisponibilityPatterns" :key="userDisponibilityPattern.value">{{ userDisponibilityPattern.label }}</p>
             </div>

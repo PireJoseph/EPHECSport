@@ -133,8 +133,8 @@
                         <li  class="w3-border w3-theme-d1" v-for="sportManAchievement in sportMan.achievements" :key="sportManAchievement.id">
 
                             <h4 class="sport-man-card-achievement-header w3-margin-bottom">
-                                <span><i class="fa fa-star-o" aria-hidden="true"></i> {{sportManAchievement.label}}</span>
-                                <span class="w3-opacity"><i class="fa fa-calendar-check-o" aria-hidden="true"></i> {{getFormatedDateString(sportManAchievement.acquiredAt)}}</span>
+                                <span><i class="far fa-star"></i> {{sportManAchievement.label}}</span>
+                                <span class="w3-opacity"><i class="far fa-calendar-check" aria-hidden="true"></i> {{getFormatedDateString(sportManAchievement.acquiredAt)}}</span>
                             </h4>
 
                             <p class="w3-right-align sport-man-card-achievement-comment" >
@@ -157,7 +157,7 @@
 
                         <li v-for="shoutOut in shoutOutsForSelectedSportMan" :key="shoutOut.id" class="sport-man-card-shout-out w3-border w3-theme-l1 w3-margin-bottom">
                             <h4 class="sport-man-card-shout-out-header w3-left-align">
-                                <span class="w3-opacity"><i class="fa fa-calendar-o" aria-hidden="true"></i> posté le {{getFormatedDateString(shoutOut.createdAt)}}, à {{getFormatedDateTimeString(shoutOut.createdAt)}}</span>
+                                <span class="w3-opacity"><i class="far fa-calendar-check" aria-hidden="true"></i> posté le {{getFormatedDateString(shoutOut.createdAt)}}, à {{getFormatedDateTimeString(shoutOut.createdAt)}}</span>
                             </h4>
                             <p class="sport-man-card-shout-out-comment w3-right-align ">
                                 <i class="fa fa-quote-left w3-small" aria-hidden="true"></i><span> {{shoutOut.content}}</span> <i class="fa fa-quote-right w3-small" aria-hidden="true"></i>
