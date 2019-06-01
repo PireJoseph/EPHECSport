@@ -123,7 +123,7 @@
     <div id="navbarContainer">
 
         <!-- Navbar -->
-        <div class="w3-bar w3-theme-d2 w3-left-align w3-large w3-hide-small ">
+        <div class="w3-bar w3-theme-d2 w3-left-align w3-card w3-large w3-hide-small ">
 
             <router-link to="/user/home" class="w3-bar-item w3-button w3-padding-large w3-theme-d4" ><span  @click="closeNavMenu"><i class="fa fa-home w3-margin-right" ></i>Home</span></router-link>
 
@@ -173,19 +173,19 @@
 
 
         <!-- Navbar on small screens -->
-        <div id="mobileNavBar" class="3-bar w3-theme-d3 w3-left-align w3-large w3-hide-large w3-hide-medium">
+        <div id="mobileNavBar" class="3-bar w3-card w3-theme-d3 w3-left-align w3-large w3-hide-large w3-hide-medium">
             <a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-padding-large w3-large w3-theme-d2" href="javascript:void(0);" @click="toggleNavMenu" ><i class="fa fa-bars"></i></a>
             <router-link to="/user/home" class="w3-bar-item w3-button w3-padding-large w3-theme-d4" ><span  @click="closeNavMenu"><i class="fa fa-home w3-margin-right" ></i>Home</span></router-link>
             <div  v-show="mobileMenuShowed" class="w3-bar-block w3-theme-d2 w3-large">
 
-                <button v-bind:class="{ moduleactive: moduleProfileActive }" class="w3-bar-item w3-button w3-padding-large" @click="activeMenuAccordion('profile')" > Profil <i  v-bind:class="{ 'fa-rotate-90': isProfileAccordionActive }" class="fa fa-caret-right"></i></button>
+                <button v-bind:class="{ moduleactive: moduleProfileActive, 'w3-card' : isProfileAccordionActive }" class="w3-bar-item w3-button w3-padding-large" @click="activeMenuAccordion('profile')" > Profil <i  v-bind:class="{ 'fa-rotate-90': isProfileAccordionActive }" class="fa fa-caret-right"></i></button>
                 <div  v-show="isProfileAccordionActive" class="w3-theme-d4" @click="closeNavMenu">
                     <router-link to="/user/profile/mine" class="w3-bar-item w3-button w3-padding-large w3-hover-white" >Mon profil</router-link>
                     <router-link to="/user/profile/sport" class="w3-bar-item w3-button w3-padding-large w3-hover-white" >Profils sportifs</router-link>
                     <router-link to="/user/profile/others" class="w3-bar-item w3-button w3-padding-large w3-hover-white" >Autres membres</router-link>
                 </div>
 
-                <button v-bind:class="{ moduleactive: moduleActivityActive }" class="w3-bar-item w3-button w3-padding-large" @click="activeMenuAccordion('activity')" > Activités <i  v-bind:class="{ 'fa-rotate-90': isActivityAccordionActive }" class="fa fa-caret-right"></i></button>
+                <button v-bind:class="{ moduleactive: moduleActivityActive, 'w3-card' : isActivityAccordionActive }" class="w3-bar-item w3-button w3-padding-large" @click="activeMenuAccordion('activity')" > Activités <i  v-bind:class="{ 'fa-rotate-90': isActivityAccordionActive }" class="fa fa-caret-right"></i></button>
                 <div v-show="isActivityAccordionActive" class="w3-theme-d4" @click="closeNavMenu">
                     <router-link to="/user/activity/history" class="w3-bar-item w3-button w3-padding-large w3-hover-white" >Historique</router-link>
                     <router-link to="/user/activity/available" class="w3-bar-item w3-button w3-padding-large w3-hover-white" >Disponibles</router-link>
@@ -193,14 +193,14 @@
                     <router-link to="/user/activity/participations" class="w3-bar-item w3-button w3-padding-large w3-hover-white" >Participations</router-link>
                 </div>
 
-                <button v-bind:class="{ moduleactive: modulePromotionActive }" class="w3-bar-item w3-button w3-padding-large" @click="activeMenuAccordion('promotion')" > Promotion <i  v-bind:class="{ 'fa-rotate-90': isPromotionAccordionActive }" class="fa fa-caret-right"></i></button>
+                <button v-bind:class="{ moduleactive: modulePromotionActive, 'w3-card' : isPromotionAccordionActive }" class="w3-bar-item w3-button w3-padding-large" @click="activeMenuAccordion('promotion')" > Promotion <i  v-bind:class="{ 'fa-rotate-90': isPromotionAccordionActive }" class="fa fa-caret-right"></i></button>
                 <div v-show="isPromotionAccordionActive" class="w3-theme-d4" @click="closeNavMenu">
                     <router-link to="/user/promotion/meetings" class="w3-bar-item w3-button w3-padding-large w3-hover-white" >Rencontres importantes</router-link>
                     <router-link to="/user/promotion/teams" class="w3-bar-item w3-button w3-padding-large w3-hover-white" >Equipes officielles</router-link>
                     <router-link to="/user/promotion/sportmen" class="w3-bar-item w3-button w3-padding-large w3-hover-white" >Sportifs émérites</router-link>
                 </div>
 
-                <button v-bind:class="{ moduleactive: moduleInformationActive }" class="w3-bar-item w3-button w3-padding-large" @click="activeMenuAccordion('information')" > Information <i  v-bind:class="{ 'fa-rotate-90': isInformationAccordionActive }" class="fa fa-caret-right"></i></button>
+                <button v-bind:class="{ moduleactive: moduleInformationActive, 'w3-card' : isInformationAccordionActive }" class="w3-bar-item w3-button w3-padding-large" @click="activeMenuAccordion('information')" > Information <i  v-bind:class="{ 'fa-rotate-90': isInformationAccordionActive }" class="fa fa-caret-right"></i></button>
                 <div v-show="isInformationAccordionActive" class="w3-theme-d4" @click="closeNavMenu">
                     <router-link to="/user/information/links" class="w3-bar-item w3-button w3-padding-large w3-hover-white" >Lien externe</router-link>
                     <router-link to="/user/information/pros" class="w3-bar-item w3-button w3-padding-large w3-hover-white" >Professionnel de la santé</router-link>
@@ -223,6 +223,7 @@
     export default {
         name: 'navbar',
         computed: {
+
             moduleProfileActive() {
                 return this.$route.path.includes("profile")
             },
@@ -235,6 +236,7 @@
             moduleInformationActive() {
                 return this.$route.path.includes("information")
             },
+
             ...mapGetters({
                 isProfileDropDownActive: 'navbar/isProfileDropDownActive',
                 isActivityDropDownActive: 'navbar/isActivityDropDownActive',
@@ -254,7 +256,7 @@
                 this.$store.commit('security/LOGOUT');
                 this.$router.push({path: '/user/login'});
             },
-            clickDropdownItem(event) {
+            clickDropdownItem() {
                 this.$store.commit('navbar/DEACTIVATE_ALL_MENU_DROPDOWN');
             },
             activeDropdown(dropdownId) {

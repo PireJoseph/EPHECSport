@@ -67,9 +67,9 @@ export default {
     },
     actions : {
 
-        getExternalLinksData({commit}) {
+        getHealthProfessionalsData({commit}) {
             commit('GETTING_HEALTH_PROFESSIONALS_DATA');
-            return InformationAPI.getCrucialMeetingsData()
+            return InformationAPI.getHealthProfessionalsData()
                 .then(
                     function(res){
                         commit('GET_HEALTH_PROFESSIONALS_DATA_SUCCESS', res.data['hydra:member'])
@@ -77,10 +77,9 @@ export default {
                 )
                 .catch(err => commit('GET_HEALTH_PROFESSIONALS_DATA_ERROR', err))
         },
-
-        getHealthProfessionalsData({commit}) {
+            getExternalLinksData({commit}) {
             commit('GETTING_EXTERNAL_LINKS_DATA');
-            return InformationAPI.getCrucialMeetingsData()
+            return InformationAPI.getExternalLinksData()
                 .then(
                     function(res){
                         commit('GET_EXTERNAL_LINKS_DATA_SUCCESS', res.data['hydra:member'])

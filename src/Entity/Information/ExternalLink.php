@@ -56,6 +56,12 @@ class ExternalLink
      * @Assert\NotBlank()
      * @Assert\NotNull()
      * @Assert\Type(type="string")
+     * @Assert\Length(
+     *      min = 8,
+     *      max = 25,
+     *      minMessage = "La description doit faire au moins {{ limit }} charactères",
+     *      maxMessage = "La descirption doit faire maximum {{ limit }} charactères"
+     * )
      * @ORM\Column(type="string", length=255)
      * @Groups({"get-link","get-links"})
      */
@@ -65,6 +71,12 @@ class ExternalLink
      * @Assert\NotBlank()
      * @Assert\NotNull()
      * @Assert\Type(type="string")
+     * @Assert\Length(
+     *      min = 4,
+     *      max = 60,
+     *      minMessage = "La description doit faire au moins {{ limit }} charactères",
+     *      maxMessage = "La descirption doit faire maximum {{ limit }} charactères"
+     * )
      * @ORM\Column(type="string", length=255)
      * @Groups({"get-link","get-links"})
      */

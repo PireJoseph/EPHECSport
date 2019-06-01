@@ -410,9 +410,9 @@ easy_admin:
             form:
                 fields:
                     - { property: 'url', type: 'url' }
-                    - 'label'
-                    - { property: 'description', type: 'textarea' }
-                    - { property: 'picture', type: 'App\Form\PictureType' }
+                    - { property: 'label', help: 'entre 4 et 25 caractères', type_options: { attr: { minlength: '4', maxlength: '25' } } }
+                    - { property: 'description', type: 'textarea', help: 'entre 8 et 60 caractères', type_options: { attr: { minlength: '8', maxlength: '60' } } }
+                    - { property: 'picture', type: 'App\Form\PictureType', help: 'Veuillez fournir une image carrée de minimum 100px de diamètre'  }
             list:
                 fields:
                     - 'url'
