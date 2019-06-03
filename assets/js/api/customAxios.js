@@ -15,18 +15,15 @@ let customAxiosInstance = axios.create({
 customAxiosInstance.interceptors.response.use(
 
     (response) => {
-        console.log('interceptor success');
         return response
     },
     async (error) => {
-        console.log('interceptor error');
         const originalRequest = error.config;
 
         if (error.code !== "ECONNABORTED" && error.response.status === 401) {
             if (error.config.url.includes('api/token/refresh')) {
 
                 // Refresh token has failed. Logout the user
-                console.log('Refresh token has failed');
                 store.commit('security/LOGOUT');
                 throw error
             } else {
@@ -42,8 +39,6 @@ customAxiosInstance.interceptors.response.use(
                     return store
                         .dispatch('security/refreshToken', refreshTokenPayload)
                         .then(function(){
-                                console.log('relaunch initial request');
-                                console.log(JSON.stringify(originalRequest));
                                 return customAxiosInstance(originalRequest);
                              }
                         );
@@ -59,7 +54,6 @@ customAxiosInstance.interceptors.response.use(
     }
 
 );
-
 
 
 

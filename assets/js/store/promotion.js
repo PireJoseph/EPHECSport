@@ -267,7 +267,6 @@ export default {
                 .catch(err => commit('GET_SHOUT_OUTS_FOR_SELECTED_TEAM_DATA_ERROR', err))
         },
         postOfficialTeamShoutOut({commit}, payload) {
-            console.log(payload)
             commit('POSTING_OFFICIAL_TEAM_SHOUT_OUT');
             return PromotionAPI.postShoutOut(payload)
                 .then(

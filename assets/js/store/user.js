@@ -230,7 +230,6 @@ export default {
         },
         ['REFRESH_OTHER_PROFILE_DATA_SUCCESS'](state, data){
             state.isLoading = false;
-            console.log(data);
             state.otherProfiles = data['hydra:member'];
             state.error = null;
         },

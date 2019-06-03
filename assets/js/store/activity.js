@@ -384,7 +384,6 @@ export default {
             return ActivityAPI.getAvailableActivities()
                 .then(
                     function(res){
-                        console.log(res.data);
                         commit('GET_AVAILABLE_ACTIVITIES_DATA_SUCCESS', res.data['hydra:member'])
                     }
                 )
