@@ -1,0 +1,7 @@
+{# templates/bundles/TwigBundle/Exception/error404.html.twig #}
+{% extends 'error.html.twig' %}
+
+{% block errorTitle %}Accès refusé{% endblock %}
+{% block errorDescription %}Cette zone est réservée aux administrateurs{% endblock %}
+{% block errorLink %}<a href="{{ path('default') }}">retourner à l'acccueil</a>{% endblock %}
+

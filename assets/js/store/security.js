@@ -49,7 +49,6 @@ export default {
             TokenService.removeToken();
             TokenService.removeRefreshToken();
             TokenService.removeRefreshTokenExpiration();
-
             state.isLoading = false;
             state.error = error.message;
 

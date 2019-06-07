@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Form;
+namespace App\Form\Profile;
 
 use App\Entity\User\User;
 use Symfony\Component\Form\AbstractType;
@@ -49,7 +49,7 @@ class RegistrationFormType extends AbstractType
                         'min' => 8,
                         'minMessage' => 'Votre mot de passe doit contenir au minimum {{ limit }} caractères',
                         // max length allowed by Symfony for security reasons
-                        'max' => 4096,
+                        'max' => 128,
                         'maxMessage' => 'Votre mot de passe ne doit pas excéder {{ limit }} caractères',
                         'groups' => ['register_form']
                     ]),

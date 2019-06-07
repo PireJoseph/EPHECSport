@@ -1,0 +1,17 @@
+{# templates/error.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+
+{% endblock %}
+
+{% block body %}
+    <h1>{% block errorTitle %}{% endblock %}</h1>
+
+    <div>
+        <p>{% block errorDescription %}{% endblock %}</p>
+        <p>{% block errorLink %}{% endblock %}</p>
+    </div>
+{% endblock %}
+
+{% block javascripts %}{% endblock %}

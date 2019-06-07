@@ -5,7 +5,7 @@ namespace App\Controller\User;
 use App\Entity\User\User;
 use App\Exception\EmailAddressAlreadyExistsException;
 use App\Exception\itemAlreadyExistsException;
-use App\Form\RegistrationFormType;
+use App\Form\Profile\RegistrationFormType;
 use App\Managers\User\UserManager;
 use App\Security\LoginFormAuthenticator;
 use Exception;
