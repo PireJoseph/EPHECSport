@@ -1,0 +1,16 @@
+{# templates/bundles/TwigBundle/Exception/error404.html.twig #}
+{% extends 'error.html.twig' %}
+
+{% block title %}Erreur inattendue{% endblock %}
+
+{% block errorTitle %}Erreur inattendue{% endblock %}
+
+{% block errorIcon %}
+    <span class="error-code">5</span>
+    <span class="error-code-icon"><i class="fas fa-dizzy"></i></span>
+    <span class="error-code">0</span>
+{% endblock %}
+
+{% block errorDescription %}Désolé, une erreur inattendue s'est produite{% endblock %}
+
+

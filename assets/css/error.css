@@ -1,0 +1,20 @@
+body {
+    justify-content: center;
+    align-items: center;
+}
+.error-code-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.error-code {
+    font-size: 90px;
+    font-weight: 900;
+}
+.error-code-icon {
+    font-size: 64px;
+    vertical-align: super;
+    margin: 0 7px;
+}
+#errorContainer{
+}

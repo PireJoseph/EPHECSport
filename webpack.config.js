@@ -21,6 +21,7 @@ Encore
      */
     .addEntry('app', './assets/js/app.js')
     .addEntry('form','./assets/js/form.js')
+    .addEntry('error','./assets/js/error.js')
     .addEntry('defaultPage','./assets/js/defaultPage.js')
     .addEntry('loginPage','./assets/js/loginPage.js')
     .addEntry('registerPage','./assets/js/registerPage.js')

@@ -1,17 +1,35 @@
 {# templates/error.html.twig #}
 {% extends 'base.html.twig' %}
 
+{% block title %}Erreur{% endblock %}
+
+
 {% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('error') }}
 
 {% endblock %}
 
 {% block body %}
-    <h1>{% block errorTitle %}{% endblock %}</h1>
 
-    <div>
-        <p>{% block errorDescription %}{% endblock %}</p>
-        <p>{% block errorLink %}{% endblock %}</p>
+    <div id="errorContainer">
+
+        <h1 class="w3-center">{% block errorTitle %}{% endblock %}</h1>
+
+        <div class="error-code-container w3-text-red">
+            {% block errorIcon %}{% endblock %}
+        </div>
+
+        <div >
+            <p class="w3-center">{% block errorDescription %}{% endblock %}</p>
+            <p class="w3-center"><a class="w3-button w3-light-gray" href="{{ path('default') }}">{% block errorLink %}Retourner à l'acccueil{% endblock %}</a></p>
+        </div>
+
     </div>
+
 {% endblock %}
 
-{% block javascripts %}{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('error') }}
+{% endblock %}

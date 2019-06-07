@@ -1,7 +1,15 @@
 {# templates/bundles/TwigBundle/Exception/error404.html.twig #}
 {% extends 'error.html.twig' %}
 
+{% block title %}Accès refusé{% endblock %}
+
 {% block errorTitle %}Accès refusé{% endblock %}
+
+{% block errorIcon %}
+    <span class="error-code">4</span>
+    <span class="error-code-icon"><i class="fas fa-lock"></i></span>
+    <span class="error-code">3</span>
+{% endblock %}
+
 {% block errorDescription %}Cette zone est réservée aux administrateurs{% endblock %}
-{% block errorLink %}<a href="{{ path('default') }}">retourner à l'acccueil</a>{% endblock %}
 

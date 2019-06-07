@@ -1,0 +1,2 @@
+require('../css/error.css');
+

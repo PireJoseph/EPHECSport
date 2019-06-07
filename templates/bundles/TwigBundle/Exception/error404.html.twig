@@ -1,0 +1,17 @@
+{# templates/bundles/TwigBundle/Exception/error404.html.twig #}
+{% extends 'error.html.twig' %}
+
+{% block title %}Non trouvé{% endblock %}
+
+{% block errorTitle %}Non trouvé{% endblock %}
+
+{% block errorIcon %}
+    <span class="error-code">4</span>
+    <span class="error-code-icon"><i class="fas fa-ghost"></i></span>
+    <span class="error-code">4</span>
+{% endblock %}
+
+{% block errorDescription %}Aucune ressource ne correspond à l'url spécifiée{% endblock %}
+
+
+
