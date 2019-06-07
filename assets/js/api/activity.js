@@ -13,13 +13,13 @@ export default {
     },
     postActivityHistoryFeedback(payload) {
         return ApiService.post(
-            '/api/activity_related_feedbacks',
+            '/api/activities/feedbacks',
             payload
         )
     },
     putActivityHistoryFeedback(id, payload) {
         return ApiService.put(
-            '/api/activity_related_feedbacks/' + id,
+            '/api/activities/feedbacks/' + id,
             payload
         )
     },

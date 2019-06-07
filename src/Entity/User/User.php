@@ -29,7 +29,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
  * @UniqueEntity(fields={"email"}, message="Il existe déja un compte avec cet emial")
  * @see http://schema.org/Person Documentation on Schema.org
  * @ApiResource(
- *     routePrefix="/user",
+ *     routePrefix="/users",
  *     itemOperations={
  *        "getUser" = {
  *              "method"="GET",

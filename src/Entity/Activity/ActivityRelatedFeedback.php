@@ -13,7 +13,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ApiResource(
  *     itemOperations={
- *         "get",
+ *         "get"= {
+ *              "path"="/activities/feedbacks/{id}" ,
+ *         },
  *         "getActivityHistoryFeedback" = {
  *              "method"="GET",
  *              "path"="/activities/{id}/feedbacks/" ,
@@ -22,7 +24,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *          },
  *          "put" ={
  *              "method"="PUT",
- *              "path"="/activity_related_feedbacks/{id}" ,
+ *              "path"="/activities/feedbacks/{id}" ,
  *              "denormalization_context"={"groups"={"activity-history-feedback"} },
  *              "normalization_context"={"groups"={"activity-history-feedback"} }
  *           }
@@ -30,7 +32,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     collectionOperations = {
  *        "post" = {
  *              "method"="POST",
- *              "path"="/activity_related_feedbacks" ,
+ *              "path"="/activities/feedbacks/" ,
  *              "denormalization_context"={"groups"={"activity-history-feedback"} },
  *              "normalization_context"={"groups"={"activity-history-feedback"} },
  *              "validation_groups"={"post-activity-history-feedback"}

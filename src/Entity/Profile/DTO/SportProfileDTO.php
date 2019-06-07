@@ -21,6 +21,7 @@ use App\Controller\Actions\Profile\CreateSportProfile;
  *     itemOperations={
  *           "getSportProfile" = {
  *              "method"="GET",
+ *              "path"="/sportprofiles/{id}",
  *         },
  *        "updateSportProfile" = {
  *              "method"="PUT",

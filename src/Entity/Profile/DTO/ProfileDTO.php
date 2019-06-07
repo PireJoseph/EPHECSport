@@ -19,26 +19,26 @@ use App\Controller\Actions\Profile\AddPreferredPartner;
  *     itemOperations={
  *        "getProfile" = {
  *              "method"="GET",
- *              "path"="/profile/{id}" ,
+ *              "path"="/profiles/{id}" ,
  *               "denormalization_context"={"groups"={"read"} },
  *              "normalization_context"={"groups"={"read"} }
  *          },
  *        "updateProfile" = {
  *              "method"="PUT",
- *              "path"="/profile/{id}",
+ *              "path"="/profiles/{id}",
  *              "denormalization_context"={"groups"={"write"} },
  *              "normalization_context"={"groups"={"write"} }
  *         },
  *        "addPreferredPartner" = {
  *              "method"="PUT",
- *              "path"="/profile/{id}/partner/add",
+ *              "path"="/profiles/{id}/partner/add",
  *              "denormalization_context"={"groups"={"partner"} },
  *              "normalization_context"={"groups"={"partner"} },
  *              "controller"=AddPreferredPartner::class,
  *         },
  *        "removePreferredPartner" = {
  *              "method"="PUT",
- *              "path"="/profile/{id}/partner/remove",
+ *              "path"="/profiles/{id}/partner/remove",
  *              "denormalization_context"={"groups"={"partner"} },
  *              "normalization_context"={"groups"={"partner"} },
  *              "controller"=RemovePreferredPartner::class,
@@ -47,7 +47,7 @@ use App\Controller\Actions\Profile\AddPreferredPartner;
  *     collectionOperations={
  *        "getOtherProfiles" = {
  *              "method"="GET",
- *              "path"="/profile/",
+ *              "path"="/profiles/",
  *              "denormalization_context"={"groups"={"all"} },
  *              "normalization_context"={"groups"={"all"} }
  *         },

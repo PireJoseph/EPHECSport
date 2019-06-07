@@ -3,13 +3,13 @@ import ApiService from '../services/api'
 export default {
     put(id, data) {
         return ApiService.put(
-            '/api/profile/' + id,
+            '/api/profiles/' + id,
            data
         );
     },
     getAll() {
         return ApiService.get(
-            '/api/profile/',
+            '/api/profiles/',
         );
     },
     postSportProfile(data) {
@@ -26,13 +26,13 @@ export default {
     },
     addPreferredPartner(id, data) {
         return ApiService.put(
-            '/api/profile/' + id  + '/partner/add',
+            '/api/profiles/' + id  + '/partner/add',
             data
         );
     },
     removePreferredPartner(id, data) {
         return ApiService.put(
-            '/api/profile/' + id + '/partner/remove',
+            '/api/profiles/' + id + '/partner/remove',
             data
         );
     }
