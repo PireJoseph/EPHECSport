@@ -10,16 +10,24 @@ namespace App\Managers\User;
 
 use App\Assemblers\Profile\DTO\ProfileDTOAssembler;
 use App\Assemblers\Profile\DTO\SportProfileDTOAssembler;
+use App\Entity\Activity\ActivityCancellation;
+use App\Entity\Activity\ActivityInvitation;
+use App\Entity\Activity\ActivityParticipation;
+use App\Entity\Activity\ActivityRelatedFeedback;
 use App\Entity\Activity\Sport;
+use App\Entity\Activity\UserRelatedFeedback;
 use App\Entity\Profile\DTO\ProfileDTO;
 use App\Entity\Profile\DTO\SportProfileDTO;
 use App\Entity\Profile\SportProfile;
 use App\Entity\Profile\Success;
+use App\Entity\Promotion\ShoutOut;
 use App\Exception\EmailAddressAlreadyExistsException;
+use App\Exception\InvalidArgumentException;
 use App\Exception\InvalidIdentifierException;
 use App\Exception\ItemNotFoundException;
 use App\Exception\ValidationException;
 use App\Exception\itemAlreadyExistsException;
+use Doctrine\Common\Collections\ArrayCollection;
 use Exception;
 use App\Assemblers\User\DTO\UserDTOAssembler;
 use App\Assemblers\User\UserAssembler;
@@ -681,5 +689,152 @@ class UserManager
 
         return $data;
     }
+
+    /**
+     * delete user related data before deleting user
+     * @param User $user
+     * @return User
+     * @throws InvalidArgumentException
+     */
+    public function deleteUserData(User $user){
+
+        if (is_null($user) || (!$user instanceof User)) {
+            throw new InvalidArgumentException('you need to provide a user in order to delete his account');
+        }
+
+        // suppression des photo utilisateurs
+        $pictures = $user->getPictures();
+        foreach($pictures as $picture){
+            $this->em->remove($picture);
+        }
+        $user->setPictures(new ArrayCollection());
+
+
+        $profilePicture  = $user->getProfilePicture();
+        if(!is_null($profilePicture)){
+            $this->em->remove($profilePicture);
+        }
+
+        // sport profiles
+        $sportProfilesQuerySelect = $this->em->getRepository(SportProfile::class)->findBy(['user'=>$user]);
+        foreach ($sportProfilesQuerySelect as $sportProfile)
+        {
+            $this->em->remove($sportProfile);
+        }
+
+        // success
+        $successQueryResult = $this->em->getRepository(Success::class)->findBy(['user'=>$user]);
+        foreach ($successQueryResult as $success)
+        {
+            $this->em->remove($success);
+        }
+
+        // success
+        $successQueryResult = $this->em->getRepository(Success::class)->findBy(['user'=>$user]);
+        foreach ($successQueryResult as $success)
+        {
+            $this->em->remove($success);
+        }
+
+        // activity invitation
+        $invitationsQueryResult = $this->em->getRepository(ActivityInvitation::class)->findBy(['recipitent'=>$user]);
+        foreach ($invitationsQueryResult as $success)
+        {
+            $this->em->remove($success);
+        }
+
+        // activity participation
+        $participationQueryResult = $this->em->getRepository(ActivityParticipation::class)->findBy(['user'=>$user]);
+        foreach ($participationQueryResult as $participation)
+        {
+            $this->em->remove($participation);
+        }
+
+        //userRelatedFeedback
+        $userFeedBackMadeQueryResult = $this->em->getRepository(UserRelatedFeedback::class)->findBy(['createdBy'=>$user]);
+        foreach ($userFeedBackMadeQueryResult as $feedbackMade)
+        {
+            $this->em->remove($feedbackMade);
+        }
+        $userFeedBackAddressedQueryResult = $this->em->getRepository(UserRelatedFeedback::class)->findBy(['user'=>$user]);
+        foreach ($userFeedBackAddressedQueryResult as $feedbackAddressed)
+        {
+            $this->em->remove($feedbackAddressed);
+        }
+
+        //activity cancellation
+        $activityCancellationQueryResult = $this->em->getRepository(ActivityCancellation::class)->findBy(['createdBy'=>$user]);
+        foreach ($activityCancellationQueryResult as $cancellation)
+        {
+            $this->em->remove($cancellation);
+        }
+
+        //activity related feedback
+        $activityRelatedFeedbackCreatedQueryResult = $this->em->getRepository(ActivityRelatedFeedback::class)->findBy(['createdBy'=>$user]);
+        foreach ($activityRelatedFeedbackCreatedQueryResult as $feedbackCreated)
+        {
+            $this->em->remove($feedbackCreated);
+        }
+        $activityRelatedFeedbackMadeQueryResult = $this->em->getRepository(ActivityRelatedFeedback::class)->findBy(['author'=>$user]);
+        foreach ($activityRelatedFeedbackMadeQueryResult as $feedbackMade)
+        {
+            $this->em->remove($feedbackMade);
+        }
+
+        // shoutouts
+        $shoutOutsQueryResult = $this->em->getRepository(ShoutOut::class)->findBy(['createdBy'=>$user]);
+        foreach ($shoutOutsQueryResult as $shoutOut)
+        {
+            $this->em->remove($shoutOut);
+        }
+
+
+        $this->em->flush();
+
+
+        // suppression de la photo de profil
+        return $user;
+
+    }
+
+    public function removeUser(User $user){
+        $this->em->remove($user);
+        $this->em->flush();
+    }
+
+    public function blockPersonalDataUsage() {
+        //
+        // Restricting access
+        if (is_null($this->security->getToken())|| is_null($this->security->getToken()->getUser()||$this->security->getToken()->getUser()->getId()))
+        {
+            throw new AccessDeniedException('Restricted area');
+        }
+        /** @var User $connectedUser */
+        $connectedUser = $this->security->getToken()->getUser();
+    }
+
+    public function getAllPersonalData(User $user) {
+
+
+        $toSend = [];
+        $toSend['utilisateur'] = $user;
+
+        // succès
+        $successQueryResult = $this->em->getRepository(Success::class)->findBy(['user' => $user]);
+        $successArray = [];
+        foreach ($successQueryResult as $success){
+            $successArray[] = $success;
+        }
+        if(count($successArray)> 0) {
+            $toSend['succès'] = $successArray;
+        }
+
+        return $toSend;
+
+
+
+    }
+
+
 
 }

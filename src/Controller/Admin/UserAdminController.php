@@ -10,19 +10,29 @@ namespace App\Controller\Admin;
 
 
 use App\Entity\User\User;
+use App\Managers\User\UserManager;
 use DateTime;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\EasyAdminController;
+use EasyCorp\Bundle\EasyAdminBundle\Event\EasyAdminEvents;
+use EasyCorp\Bundle\EasyAdminBundle\Exception\EntityRemoveException;
 use Exception;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Http\Firewall\ContextListener;
 
 class UserAdminController  extends EasyAdminController
 {
 
     private $passwordEncoder;
+    private $userManager;
+    private $security;
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder, UserManager $userManager, Security $security)
     {
         $this->passwordEncoder = $passwordEncoder;
+        $this->userManager = $userManager;
+        $this->security = $security;
     }
 
     // It persists and flushes the given Doctrine entity. It allows to modify the entity
@@ -75,5 +85,24 @@ class UserAdminController  extends EasyAdminController
         }
 
         parent::persistEntity($entity);
+    }
+
+    /**
+     * Allows applications to modify the entity associated with the item being
+     * deleted before removing it.
+     *
+     * @param User $entity
+     * @throws \App\Exception\InvalidArgumentException
+     */
+    protected function removeEntity($entity)
+    {
+        //$connectedUser = $this->get('security.context')->getToken()->getUser();
+        $user = $this->security->getUser();
+        /*if($connectedUser->getId()=== $entity->getId() ){
+            return;
+        }*/
+        $editedUser = $this->userManager->deleteUserData($entity);
+
+        //parent::removeEntity($editedUser);
     }
 }
