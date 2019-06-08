@@ -26,13 +26,23 @@
 
                     <div v-if="props.column.field == 'after'">
                         <div class="w3-bar">
-                            <button  class="w3-button w3-green w3-small answer-btn" :disabled="activityInvitationAnswerLoading" @click="answerToInvitation(props.row.id, true)">
-                                <i class="fa fa-check" aria-hidden="true"></i>
-                                <span class="w3-hide-small w3-hide-medium"> Accepter</span>
+                            <button  class="w3-button w3-green w3-small answer-btn" :disabled="areActionBtnDisabled" @click="answerToInvitation(props.row.id, true)">
+                                <span v-show="!isActivityInvitationAnswerLoading(props.row.id)" >
+                                    <i class="fa fa-check" aria-hidden="true"></i>
+                                    <span class="w3-hide-small w3-hide-medium"> Accepter</span>
+                                </span>
+                                <span v-show="isActivityInvitationAnswerLoading(props.row.id)"  class="w3-block w3-center">
+                                    <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+                                </span>
                             </button>
-                            <button class="w3-button w3-red w3-small answer-btn" :disabled="activityInvitationAnswerLoading" @click="answerToInvitation(props.row.id, false)">
-                                <i class="fa fa-times" aria-hidden="true"></i>
-                                <span class="w3-hide-small w3-hide-medium"> Décliner</span>
+                            <button class="w3-button w3-red w3-small answer-btn" :disabled="areActionBtnDisabled" @click="answerToInvitation(props.row.id, false)">
+                                <span v-show="!isActivityInvitationAnswerLoading(props.row.id)" >
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                    <span class="w3-hide-small w3-hide-medium"> Décliner</span>
+                                </span>
+                                <span v-show="isActivityInvitationAnswerLoading(props.row.id)" class="w3-block w3-center">
+                                    <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+                                </span>
                             </button>
                         </div>
                         <!--<button v-if="(props.row.relatedRequest)" class="w3-button w3-grey w3-small"  disabled>En attente d'admission</button>-->
@@ -83,6 +93,9 @@
         name: 'activity-invitation',
         data() {
             return {
+
+                activityInvitationId : null,
+
                 header: [
                     {
                         label: 'Auteur',
@@ -134,6 +147,10 @@
         },
         computed: {
 
+            areActionBtnDisabled(){
+                return (this.activityInvitationAnswerLoading);
+            },
+
             ...mapGetters({
                 activityInvitations : 'activity/activityInvitations',
                 activityInvitationAnswerLoading : 'activity/activityInvitationAnswerLoading'
@@ -141,10 +158,16 @@
 
         },
         methods: {
+
+            isActivityInvitationAnswerLoading(activityInvitationId){
+                return (this.activityInvitationAnswerLoading && (activityInvitationId === this.activityInvitationId))
+            },
+
             getActivityInvitationsData() {
                 this.$store.dispatch('activity/getActivityInvitations')
             },
             answerToInvitation (invitationId, isAccepted) {
+                this.activityInvitationId = invitationId;
                 let payload = {
                     'id' : invitationId,
                     'isAccepted' : isAccepted

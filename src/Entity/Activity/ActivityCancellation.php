@@ -65,7 +65,7 @@ class ActivityCancellation
      * @Assert\NotNull(groups={"Default,postCancellationValidation"})
      * @Assert\NotBlank(groups={"Default,postCancellationValidation"})
      * @Assert\Type(type="string")
-     * @ORM\Column(type="string", length=2056)
+     * @ORM\Column(type="string", length=1024)
      */
     private $cancellationMotivation;
 

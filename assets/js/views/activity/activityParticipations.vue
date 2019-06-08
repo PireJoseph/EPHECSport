@@ -34,10 +34,16 @@
                                     v-if="( (!props.row.cancellation) && (!props.row.participation.isConfirmed) )"
                                     class="w3-button w3-green w3-small answer-btn"
                                     @click="confirmParticipation(props.row.participation)"
-                                    :disabled="activityParticipationConfirmationLoading"
+                                    :disabled="areActionBtnDisabled"
                             >
-                                <i class="fa fa-check" aria-hidden="true"></i>
-                                <span class="w3-hide-small w3-hide-medium"> Confirmer</span>
+                                <span v-show="!isActivityParticipationConfirmationLoading(props.row.participation.activity.id)">
+                                    <i class="fa fa-check" aria-hidden="true"></i>
+                                    <span class="w3-hide-small w3-hide-medium"> Confirmer</span>
+                                </span>
+                                <span v-show="isActivityParticipationConfirmationLoading(props.row.participation.activity.id)"  class="w3-block w3-center">
+                                    <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+                                </span>
+
                             </button>
                             <button
                                     v-else-if="( (!props.row.cancellation) && (props.row.participation.isConfirmed) )"
@@ -54,10 +60,16 @@
                                     v-if="( (!props.row.cancellation) )"
                                     class="w3-button w3-red w3-small answer-btn"
                                     @click="openActivityCancellationModal(props.row.participation.activity)"
-                                    :disabled="activityCancellationLoading"
+                                    :disabled="areActionBtnDisabled"
                             >
-                                <i class="fa fa-times" aria-hidden="true"></i>
-                                <span class="w3-hide-small w3-hide-medium"> Annuler</span>
+                                <span v-show="!isActivityParticipationConfirmationLoading(props.row.participation.activity.id)">
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                    <span class="w3-hide-small w3-hide-medium"> Annuler</span>
+                                </span>
+                                <span v-show="isActivityParticipationConfirmationLoading(props.row.participation.activity.id)"  class="w3-block w3-center">
+                                    <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+                                </span>
+
                             </button>
                             <button
                                     v-else
@@ -120,12 +132,14 @@
                                     id="cancellationMotivationInput"
                                     name="cancellationMotivationInput"
                                     v-model="cancellation.cancellationMotivation"
-                                    v-validate="'max:2048|min:1|required'"
-                                    maxlength="2048"
+                                    v-validate="'max:1024|min:8|required'"
+                                    maxlength="1024"
+                                    minlength="8"
                                     data-vv-validate-on=""
                                     rows="5"
+                                    required
                             >
-                        </textarea>
+                            </textarea>
                         <span v-show="!!errors.first('cancellationMotivationInput')" class="w3-tag w3-tiny w3-padding w3-red formInputErrors" >{{ errors.first('cancellationMotivationInput') }}</span>
 
                         </div>
@@ -134,8 +148,8 @@
                 </div>
 
                 <footer class="w3-container w3-theme-d1 w3-padding">
-                    <button type="button" class="w3-button w3-red" @click="closeActivityCancellationModal" :disabled="activityCancellationLoading">Fermer</button>
-                    <button type="button" class="w3-button w3-green" @click="postActivityCancellation" >Poster Annulation</button>
+                    <button type="button" class="w3-button w3-red" @click="closeActivityCancellationModal">Fermer</button>
+                    <button type="submit" class="w3-button w3-green" @click="postActivityCancellation" :disabled="isPostingCancellationBtnDisabled" >Poster Annulation</button>
                 </footer>
 
             </div>
@@ -156,6 +170,7 @@
         name: 'activity-participations',
         data() {
             return {
+                selectedActivityId : null,
                 isActivityCancellationModalOpen: false,
                 cancellation: {
                     'activity': '',
@@ -203,19 +218,15 @@
                     },
 
                 ],
-                dictionary: {
-                    custom: {
-                        cancellationMotivationInput: {
-                            max: 'Motif trop long',
-                            min: 'Veuillez fournir un motif',
-                            required: 'Veuillez fournir un motif'
-                        },
-                    }
-                }
             }
         },
         computed: {
-
+            areActionBtnDisabled(){
+              return (this.activityParticipationConfirmationLoading || this.activityCancellationLoading || this.isActivityCancellationModalOpen)
+            },
+            isPostingCancellationBtnDisabled(){
+              return (this.activityCancellationLoading)
+            },
             ...mapGetters({
                 activityParticipations : 'activity/activityParticipations',
                 activityParticipationConfirmationLoading : 'activity/activityParticipationConfirmationLoading',
@@ -224,10 +235,14 @@
 
         },
         methods: {
+            isActivityParticipationConfirmationLoading(activityId) {
+                return  ( (this.activityParticipationConfirmationLoading || this.activityCancellationLoading) && (this.selectedActivityId === activityId))
+            },
             getActivityParticipationsData() {
                 this.$store.dispatch('activity/getActivityParticipations')
             },
             confirmParticipation(activityParticipation) {
+                    this.selectedActivityId = activityParticipation.activity.id;
                     let now = new Date();
                     let payload = {
                         'id' : activityParticipation.id,
@@ -240,6 +255,7 @@
                         )
             },
             openActivityCancellationModal(activity) {
+                this.selectedActivityId = activity.id;
                 let now = new Date();
                 this.cancellation = {
                     'activity' : activity['@id'],
@@ -292,7 +308,6 @@
 
         },
         mounted() {
-            this.$validator.localize('fr', this.dictionary);
             this.getActivityParticipationsData();
         },
     }

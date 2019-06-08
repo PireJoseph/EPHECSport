@@ -71,7 +71,7 @@ class ShoutOut
 
     /**
      * @Assert\Length(
-     *      max = 2048,
+     *      max = 1024,
      *      min = 3,
      *      minMessage = "Your shout out cannot be shirter than {{ limit }} characters",
      *      maxMessage = "Your shout out cannot be longer than {{ limit }} characters",
@@ -81,7 +81,7 @@ class ShoutOut
      * @Assert\NotBlank(groups={"Default,postShoutOutValidation"})
      * @Assert\Type(type="string", groups={"Default,postShoutOutValidation"})
      * @Groups({"get-shoutout","get-shoutouts", "post-shoutout"})
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=1024, nullable=true)
      */
     private $content;
 

@@ -1,6 +1,8 @@
 <style scoped>
 
-
+    .profile-form-btn{
+        width: 120px;
+    }
 
 </style>
 
@@ -14,6 +16,9 @@
         </div>
 
         <form
+            @submit.prevent
+            name="profileForm"
+            method="post"
             action="#"
         >
 
@@ -97,11 +102,12 @@
                            name="descriptionInput"
                            v-model="formDescription"
                            v-validate="'max:1024'"
+                           maxlength="1024"
                            rows="5"
                            data-vv-validate-on=""
                     >
                     </textarea>
-                    <span v-show="!!errors.first('descriptionInput')" class="w3-tag w3-tiny w3-padding w3-red formInputErrors" >{{ errors.first('emailInput') }}</span>
+                    <span v-show="!!errors.first('descriptionInput')" class="w3-tag w3-tiny w3-padding w3-red formInputErrors" >{{ errors.first('descriptionInput') }}</span>
                 </div>
 
                 <div class="formInputContainer w3-center w3-margin ">
@@ -202,10 +208,12 @@
 
             <br />
 
-
             <div class="w3-container w3-card w3-round w3-white w3-padding-32 w3-margin-top">
-                <button type="button" class="w3-button w3-red" @click="clear" >Réinitialiser</button>
-                <button type="button" class="w3-button w3-green"  @click="submit" :disabled="profileLoading" >Soumettre</button>
+                <button type="button" class="w3-button w3-red profile-form-btn" @click="clear()" :disabled="profileLoading" >Réinitialiser</button>
+                <button type="submit" class="w3-button w3-green profile-form-btn" @click="submit()" :disabled="isSubmitBtnDisabled" >
+                    <span v-show="!profileLoading">Soumettre</span>
+                    <span v-show="profileLoading"><i class="fas fa-spinner fa-spin"></i></span>
+                </button>
             </div>
 
         </form>
@@ -281,34 +289,6 @@
                     }
                 ],
                 translationDatePickerFr: fr,
-                // dictionary : Object
-                dictionary: {
-                    attributes: {
-                    },
-                    custom: {
-                        usernameInput: {
-                            required: 'Nom d\'utilisateur requis',
-                            max: 'Nom d\'utilisateur trop long',
-                            min: 'Nom d\'utilisateur trop petit',
-                        },
-                        newPasswordInput : {
-                            max: 'Nouveau mot de passe trop long',
-                            min: 'Nouveau mot de passe trop petit',
-                        },
-                        descriptionInput : {
-                            max: 'Descirption trop longue'
-                        },
-                        emailInput : {
-                            email: 'Email non valide',
-                            required : 'Email requis'
-                        },
-                        activityCostLimitInput : {
-                            required : 'veuillez indiquer une valeur',
-                            min: 'Nombre négatifs non autorisés'
-                        }
-
-                    }
-                },
 
                 dropzoneProfilePictureOptions: {
                     url: 'https://httpbin.org/post',
@@ -331,6 +311,12 @@
             ...mapGetters({
                 profileLoading : 'user/profileLoading',
             }),
+            isFormValid() {
+                return (!this.errors.first('newPasswordInput') && !this.errors.first('descriptionInput') && !this.errors.first('emailInput') && !this.errors.first('activityCostLimitInput'));
+            },
+            isSubmitBtnDisabled () {
+                return (!this.isFormValid || this.profileLoading)
+            }
         },
         methods: {
 
@@ -366,9 +352,7 @@
             },
             submit() {
 
-                let validation;
-
-                validation = this.$validator.validateAll();
+                let validation = this.$validator.validateAll();
 
                     validation.then(
                         (isValid) =>{
@@ -421,7 +405,6 @@
 
         },
         mounted() {
-            this.$validator.localize('fr', this.dictionary);
             this.initProfileData()
         },
     }

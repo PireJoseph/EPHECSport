@@ -30,13 +30,17 @@ import Datepicker from 'vuejs-datepicker';
 
 import moment from 'moment';
 
+import dictionary from './dictionary/all';
+import fr from 'vee-validate/dist/locale/fr';
 
-import VeeValidate from 'vee-validate';
+import VeeValidate, {Validator} from 'vee-validate';
+Validator.localize('fr', fr);
 
 const veeValidateConfig = {
     errorBagName: 'errors', // change if property conflicts
+    events: 'change',
     locale: 'fr',
-    events: 'change'
+    dictionary
 };
 
 moment.locale("fr");

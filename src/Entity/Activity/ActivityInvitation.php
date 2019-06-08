@@ -46,7 +46,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class ActivityInvitation
 {
     /**
-     * @Groups({"get-invitation","get-invitations"})
+     * @Groups({"get-invitation","get-invitations", "put-invitation"})
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -60,7 +60,7 @@ class ActivityInvitation
     private $createdAt;
 
     /**
-     * @Groups({"get-invitation","get-invitations"})
+     * @Groups({"get-invitation","get-invitations", "put-invitation"})
      * @Assert\Type(type="bool",groups={"Default, putInvitationValidation"})
      * @ORM\Column(type="boolean")
      */

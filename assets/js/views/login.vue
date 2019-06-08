@@ -7,17 +7,9 @@
         align-items: center;
     }
 
-    #loadingScreen{
-        display: flex;
-        flex-direction: row;
-        flex-grow: 1;
-        align-items: center;
-        justify-content: center;
-        font-size: 100px;
-        color: lightslategray;
+    .login-form-btn{
+        width: 120px;
     }
-
-
 
     h1.form-title {
         display: flex;
@@ -70,7 +62,11 @@
             <div class="row col">
                 <h1 class="form-title">Connexion</h1>
             </div>
-            <form  @submit.prevent name="formLogin" method="post" action="#">
+            <form  @submit.prevent
+                   name="loginForm"
+                   method="post"
+                   action="#"
+            >
                 <div class="form-content w3-container w3-card w3-padding-32 w3-white">
                     <div >
                         <div v-if="hasError" class="w3-red form-alert">
@@ -103,7 +99,7 @@
                             <span v-show="!!errors.first('inputPassword')" class="w3-tag w3-tiny w3-padding w3-red formInputErrors" >{{ errors.first('inputPassword') }}</span>
                         </div>
                         <div >
-                            <button @click="performLogin()" :disabled="isLoading" type="submit" class="w3-button w3-green form-btn w3-margin-top">
+                            <button @click="performLogin()" :disabled="isSubmitBtnDisabled" type="submit" class="w3-button w3-green form-btn w3-margin-top login-form-btn">
                                 <span v-show="!isLoading">Se connecter</span>
                                 <span v-show="isLoading"><i class="fas fa-spinner fa-spin"></i></span>
                             </button>
@@ -133,20 +129,6 @@
             return {
                 username: '',
                 password: '',
-                dictionary: {
-                    custom: {
-                        inputPassword: {
-                            max: 'Mot de passe trop long',
-                            min: 'Mot de passe trop court',
-                            required: 'Veuillez fournir un mot de passe'
-                        },
-                        inputUsername: {
-                            max: "Nom d'utilisateur trop long",
-                            min: "Nom d'utilisateur trop court",
-                            required: "Veuillez fournir un nom d'utilisateur"
-                        },
-                    }
-                }
             };
         },
         created () {
@@ -158,9 +140,6 @@
                     this.$router.push({path: '/user/home'});
                 }
             }
-        },
-        mounted () {
-            this.$validator.localize('fr', this.dictionary);
         },
         computed: {
 
@@ -174,6 +153,15 @@
                 error : (state) => state.security.error,
 
             }),
+            isFormValid(){
+              return (!this.errors.first('inputPassword') && !this.errors.first('inputUsername'))
+            },
+            areFieldsFilled(){
+              return (!!this.username.length && !!this.password.length);
+            },
+            isSubmitBtnDisabled(){
+              return (!this.areFieldsFilled || !this.isFormValid || this.isLoading);
+            },
             getErrorMessageTranslated() {
                 switch(this.error){
                     case 'Request failed with status code 401':

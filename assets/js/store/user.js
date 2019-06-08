@@ -35,8 +35,10 @@ export default {
         nextActivityParticipation : Array,
         nextCrucialMeeting : Array,
         profileData : null,
+        sportProfileDTOs: [],
         otherProfiles: [],
-        sportProfileDTOs: []
+        preferredPartnerLoading : false,
+        preferredPartnerError : null,
 },
     getters: {
         isLoading (state) {
@@ -135,6 +137,12 @@ export default {
         otherProfiles (state) {
             return state.otherProfiles
         },
+        preferredPartnerLoading (state) {
+            return state.preferredPartnerLoading
+        },
+        preferredPartnerError (state) {
+            return state.preferredPartnerError
+        },
         sportProfileDTOs (state) {
             return state.sportProfileDTOs
         }
@@ -202,27 +210,39 @@ export default {
         },
         ['ADDING_PREFERRED_PARTNER'](state){
             state.isLoading = true;
+            state.preferredPartnerLoading = true;
             state.error = null;
+            state.preferredPartnerError = null;
         },
         ['ADD_PREFERRED_PARTNER_SUCCESS'](state){
             state.isLoading = false;
             state.error = null;
+            state.preferredPartnerLoading = false;
+            state.preferredPartnerError = null;
         },
         ['ADD_PREFERRED_PARTNER_ERROR'](state, error){
             state.isLoading = false;
             state.error = error.message;
+            state.preferredPartnerLoading = false;
+            state.preferredPartnerError = error.message;
         },
         ['REMOVING_PREFERRED_PARTNER'](state){
             state.isLoading = true;
+            state.preferredPartnerLoading = true;
             state.error = null;
+            state.preferredPartnerError = true;
         },
-        ['REMOVE_PREFERRED_PARTNER'](state){
+        ['REMOVE_PREFERRED_PARTNER_SUCCESS'](state){
             state.isLoading = false;
             state.error = null;
+            state.preferredPartnerLoading = false;
+            state.preferredPartnerError = null;
         },
-        ['REMOVE_PREFERRED_PARTNER'](state, error){
+        ['REMOVE_PREFERRED_PARTNER_ERROR'](state, error){
             state.isLoading = false;
             state.error = error.message;
+            state.preferredPartnerLoading = false;
+            state.preferredPartnerError = error.message;
         },
         ['REFRESHING_OTHER_PROFILE_DATA'](state){
             state.isLoading = true;
@@ -338,10 +358,10 @@ export default {
             return ProfileAPI.removePreferredPartner(payload, data)
                 .then(
                     function(){
-                        commit('REMOVE_PREFERRED_PARTNER')
+                        commit('REMOVE_PREFERRED_PARTNER_SUCCESS')
                     }
                 )
-                .catch(err => commit('REMOVE_PREFERRED_PARTNER', err))
+                .catch(err => commit('REMOVE_PREFERRED_PARTNER_ERROR', err))
         },
 
 

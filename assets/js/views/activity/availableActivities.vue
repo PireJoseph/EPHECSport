@@ -26,17 +26,27 @@
                 <template slot="table-row" slot-scope="props">
 
                     <span v-if="props.column.field == 'after'">
-                        <button v-if="((!props.row.relatedRequest) && (!props.row.isJoinableByAnyone))" class="w3-button w3-black w3-small" :disabled="activityJoiningRequestLoading" @click="makeJoiningRequest(props.row['@id'])">
-                            <i class="fa fa-unlock-alt" aria-hidden="true"></i>
+                        <button v-if="((!props.row.relatedRequest) && (!props.row.isJoinableByAnyone))" class="w3-button w3-black w3-small" :disabled="areActionBtnDisabled" @click="makeJoiningRequest(props.row['@id'])">
+                            <span v-show="!isActivityJoiningRequestLoading(props.row['@id'])" >
+                                <i class="fa fa-unlock-alt" aria-hidden="true"></i>
                             <span class="w3-hide-small w3-hide-medium"> Demander</span>
+                            </span>
+                            <span v-show="isActivityJoiningRequestLoading(props.row['@id'])" class="w3-block w3-center">
+                                <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+                            </span>
                         </button>
 
-                        <button v-if="((!props.row.relatedRequest) && (props.row.isJoinableByAnyone))" class="w3-button w3-green w3-small" :disabled="activityJoiningRequestLoading" @click="makeJoiningRequest(props.row['@id'])">
-                            <i class="fas fa-sign-in-alt"></i>
-                            <span class="w3-hide-small w3-hide-medium"> Rejoindre</span>
+                        <button v-if="((!props.row.relatedRequest) && (props.row.isJoinableByAnyone))" class="w3-button w3-green w3-small" :disabled="areActionBtnDisabled" @click="makeJoiningRequest(props.row['@id'])">
+                            <span v-show="!isActivityJoiningRequestLoading(props.row['@id'])" >
+                                <i class="fas fa-sign-in-alt"></i>
+                                <span class="w3-hide-small w3-hide-medium"> Rejoindre</span>
+                            </span>
+                            <span v-show="isActivityJoiningRequestLoading(props.row['@id'])" class="w3-block w3-center">
+                                <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+                            </span>
                         </button>
 
-                        <button v-if="(props.row.relatedRequest)" class="w3-button w3-grey w3-small"  disabled>
+                        <button v-if="(props.row.relatedRequest)" class="w3-button w3-grey w3-small"  title="En attente d'admission" disabled>
                             <i class="far fa-clock"></i>
                             <span class="w3-hide-small w3-hide-medium"> Attente d'admission</span>
                         </button>
@@ -86,6 +96,9 @@
         name: 'available-activities',
         data() {
             return {
+
+                selectedActivityId : null,
+
                 header: [
                     {
                         label: 'Libellé',
@@ -134,10 +147,9 @@
         },
         computed: {
 
-            ...mapGetters({
-                availableActivities : 'activity/availableActivities',
-                activityJoiningRequestLoading : 'activity/activityJoiningRequestLoading'
-            }),
+            areActionBtnDisabled(){
+                return (this.activityJoiningRequestLoading);
+            },
 
             transformedAvailableActivities() {
                 let arrayTransformed;
@@ -146,15 +158,27 @@
                     return e.activity;
                 })
                 return arrayTransformed;
-            }
+            },
+
+            ...mapGetters({
+                availableActivities : 'activity/availableActivities',
+                activityJoiningRequestLoading : 'activity/activityJoiningRequestLoading'
+            }),
+
 
         },
         methods: {
+
+            isActivityJoiningRequestLoading(activityIdentifier){
+                return (this.activityJoiningRequestLoading && (activityIdentifier === this.selectedActivityId))
+            },
+
             getAvailableActivitiesData() {
                 this.$store.dispatch('activity/getAvailableActivities')
             },
 
             makeJoiningRequest (activityId) {
+                this.selectedActivityId = activityId;
                 let payload = {};
                 payload.activity = activityId;
                 this.$store.dispatch('activity/makeActivityJoiningRequest', payload)

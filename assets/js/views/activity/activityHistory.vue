@@ -27,17 +27,25 @@
 
                     <span v-if="props.column.field == 'after'">
 
-                        <button v-show="!isActivityFeedbackLoading" class="w3-button w3-grey w3-small w3-block" @click="loadActivityFeedback(props.row)" >
-                            <i class="fa fa-bolt" aria-hidden="true"></i>
-                            <span class="w3-hide-small w3-hide-medium"> Activité</span>
+                        <button  class="w3-button w3-grey w3-small w3-block" @click="loadActivityFeedback(props.row)" :disabled="areFeedbackActionDisabled">
+                            <span v-show="!isActivityFeedbackLoadingForThisActivity(props.row)">
+                                <i class="fa fa-bolt" aria-hidden="true"></i>
+                                <span class="w3-hide-small w3-hide-medium"> Activité</span>
+                            </span>
+                            <span  class="w3-block w3-center w3-small" v-show="isActivityFeedbackLoadingForThisActivity(props.row)">
+                                <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+                            </span>
                         </button>
-                        <span v-show="isActivityFeedbackLoading" class="w3-block w3-center w3-small" ><i class="fa fa-spinner fa-spin" aria-hidden="true"></i></span>
 
-                        <button v-show="!userRelatedFeedbackModalLoading" class="w3-button w3-black w3-small w3-margin-top w3-block" @click="loadActivityUsers(props.row)">
-                            <i class="fa fa-users" aria-hidden="true"></i>
-                            <span class="w3-hide-small w3-hide-medium"> Participations</span>
+                        <button  class="w3-button w3-black w3-small w3-margin-top w3-block" @click="loadActivityUsers(props.row)" :disabled="areFeedbackActionDisabled">
+                            <span v-show="!areActivityParticipationLoadingForThisActivity(props.row)">
+                                 <i class="fa fa-users" aria-hidden="true"></i>
+                                 <span class="w3-hide-small w3-hide-medium"> Participations</span>
+                            </span>
+                            <span v-show="areActivityParticipationLoadingForThisActivity(props.row)" class="w3-block w3-center w3-small" >
+                                 <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+                            </span>
                         </button>
-                        <span v-show="userRelatedFeedbackModalLoading" class="w3-block w3-center w3-small w3-margin-top" ><i class="fa fa-spinner fa-spin" aria-hidden="true"></i></span>
 
                     </span>
 
@@ -75,18 +83,26 @@
                 </header>
 
                 <div class="w3-container">
-                    <form action="#">
+                    <form
+                        action="#"
+                        @submit.prevent
+                        name="activityRelatedFeedbackForm"
+                        method="post"
+                    >
 
                         <div class="formInputContainer w3-center w3-margin ">
                             <label class="formInputLabel" for="ratingInput">Notation :</label>
                             <input type="number"
                                    id="ratingInput"
                                    name="ratingInput"
+                                   data-vv-as="notation"
                                    v-model="activityFeedbackForm.activityRatingOutOfFive"
+                                   v-validate="'required|min:0|max:5'"
                                    min="0"
                                    max="5"
                                    required
                             />
+                            <span v-show="!!errors.first('ratingInput')" class="w3-tag w3-tiny w3-padding w3-red formInputErrors" >{{ errors.first('ratingInput') }}</span>
                         </div>
 
                         <div class="formInputContainer w3-center w3-margin ">
@@ -107,9 +123,14 @@
                                     id="commentInput"
                                     name="commentInput"
                                     v-model="activityFeedbackForm.comment"
+                                    data-vv-as="commentaire"
+                                    v-validate="'max:1024'"
+                                    maxlength="1024"
+                                    data-vv-validate-on=""
                                     rows="5"
                             >
                             </textarea>
+                            <span v-show="!!errors.first('commentInput')" class="w3-tag w3-tiny w3-padding w3-red formInputErrors" >{{ errors.first('commentInput') }}</span>
                         </div>
 
 
@@ -118,7 +139,7 @@
 
                 <footer class="w3-container w3-theme-d1 w3-padding">
                     <button type="button" class="w3-button w3-red" @click="closeModal" >Fermer</button>
-                    <button type="button" class="w3-button w3-green" @click="submit" >Poster feedback</button>
+                    <button type="submit" class="w3-button w3-green" @click="submit" :disabled="isActivityRelatedFeedbackSubmitBtnDisabled" >Poster feedback</button>
                 </footer>
 
             </div>
@@ -135,7 +156,13 @@
                 </header>
 
                 <div class="w3-container">
-                    <form action="#" v-show="(userFeedbackUserSelectArray.length > 1)">
+                    <form
+                            action="#"
+                            v-show="(userFeedbackUserSelectArray.length > 1)"
+                            @submit.prevent
+                            name="userRelatedFeedbackForm"
+                            method="post"
+                    >
 
                         <div class="formInputContainer w3-center w3-margin ">
                             <label class="formInputLabel">Participant :</label>
@@ -179,7 +206,7 @@
 
                 <footer class="w3-container w3-theme-d1 w3-padding">
                     <button type="button" class="w3-button w3-red" @click="closeUserFeedbackModal" >Fermer</button>
-                    <button v-show="((!this.postUserRelatedFeedbackLoading) && (this.userFeedbackUserSelectArray.length > 1) && ((!this.existingUserFeedback && !!this.selectedUserForUserFeedback && !!this.selectedActivityForUserFeedback && !!this.userFeedbackForm.label.length)))" type="button" class="w3-button w3-green" @click="submitUserFeedback" >Poster feedback</button>
+                    <button v-show="((!this.postUserRelatedFeedbackLoading) && (this.userFeedbackUserSelectArray.length > 1) && ((!this.existingUserFeedback && !!this.selectedUserForUserFeedback && !!this.selectedActivityForUserFeedback && !!this.userFeedbackForm.label.length)))" type="submit" class="w3-button w3-green" @click="submitUserFeedback" >Poster feedback</button>
                     <span v-show="this.postUserRelatedFeedbackLoading" class="w3-center w3-small w3-margin-left" ><i class="fa fa-spinner fa-spin" aria-hidden="true"></i></span>
                 </footer>
 
@@ -317,6 +344,13 @@
             }
         },
         computed: {
+            areFeedbackActionDisabled() {
+                return (this.isActivityFeedbackLoading || this.activityParticipationsForAnActivityLoading || this.modalOpen || this.userFeedbackModalOpen);
+            },
+            isActivityRelatedFeedbackSubmitBtnDisabled(){
+                return (this.isActivityFeedbackLoading)
+            },
+
             activitySelectedLabel() {
               if (this.selectedActivity){
                   return this.selectedActivity.label
@@ -340,9 +374,7 @@
                 }
                 return labelToReturn;
             },
-            userRelatedFeedbackModalLoading(){
-                return (this.activityParticipationsForAnActivityLoading || this.userRelatedFeedbacksForAnActivityLoading)
-            },
+
             userFeedbackLabelSelectValue () {
                 let labelToReturn = this.userFeedbackLabelSelectArray[0].label;
                 if(this.selectedLabelForUserFeedback.length > 0)
@@ -355,7 +387,6 @@
             ...mapGetters({
                 activityHistory: 'activity/activityHistory',
                 isActivityFeedbackLoading: 'activity/isActivityHistoryFeedbackLoading',
-                activityFeedbackLoadingError: 'activity/activityHistoryFeedbackLoadingError',
                 activityFeedback: 'activity/activityHistoryFeedback',
                 userId: 'user/userId',
                 activityParticipationsForAnActivity: 'activity/activityParticipationsForAnActivity',
@@ -371,6 +402,13 @@
 
             getActivityHistoryData() {
                 this.$store.dispatch('activity/getActivityHistory')
+            },
+
+            isActivityFeedbackLoadingForThisActivity(activity){
+              return (this.isActivityFeedbackLoading && (this.selectedActivity.id === activity.id))
+            },
+            areActivityParticipationLoadingForThisActivity(activity){
+                return ( (this.activityParticipationsForAnActivityLoading || this.userRelatedFeedbacksForAnActivityLoading) && (this.selectedActivityForUserFeedback.id === activity.id))
             },
 
             loadActivityFeedback (activity) {
@@ -479,11 +517,18 @@
             },
 
             submit() {
-              if (!!this.activityFeedback){
-                  this.putActivityRelatedFeedback(this.activityFeedback['@id'].split('/').pop())
-              } else {
-                  this.postActivityRelatedFeedback();
-              }
+                let validation = this.$validator.validateAll();
+                validation.then(
+                    (isValid) =>{
+                        if(isValid) {
+                            if (!!this.activityFeedback){
+                                this.putActivityRelatedFeedback(this.activityFeedback['@id'].split('/').pop())
+                            } else {
+                                this.postActivityRelatedFeedback();
+                            }
+                        }
+                    });
+
             },
 
             submitUserFeedback() {

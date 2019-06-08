@@ -1,9 +1,28 @@
 <style scoped >
 
-
     strong {
         font-weight: bolder;
     }
+    .sport-profile-form-button{
+        width: 250px;
+        margin: 5px;
+    }
+    .sport-profile-header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        padding: 8px;
+
+    }
+    .sport-profile-title {
+        margin: 0;
+        position: absolute;
+    }
+    .sport-profile-expand-btn{
+        margin-left: auto;
+    }
+
 </style>
 
 <template>
@@ -13,7 +32,12 @@
         </div>
 
         <div>
-            <form action="#">
+            <form
+                @submit.prevent
+                name="sportProfileForm"
+                method="post"
+                action="#"
+            >
 
                 <div class="w3-container w3-card w3-round w3-white w3-padding-32 w3-margin-top">
 
@@ -37,7 +61,8 @@
                                id="roleInput"
                                name="roleInput"
                                v-model="formRole"
-                               v-validate="'min:3|max:32'"
+                               maxlength="32"
+                               v-validate="'max:32'"
                         />
                         <span v-show="!!errors.first('roleInput')" class="w3-tag w3-tiny w3-padding w3-red formInputErrors" >{{ errors.first('roleInput') }}</span>
                     </div>
@@ -104,9 +129,15 @@
                 </div>
 
                 <div class="w3-container w3-card w3-round w3-white w3-padding-32 w3-margin-top">
-                    <button type="button" class="w3-button w3-red" @click="setFormDataFromSport(formSport)" >Réinitialiser</button>
-                    <button v-show="correspondingSportProfileExisting" type="button" class="w3-button w3-green"  @click="dispatchRequest" :disabled="sportProfileLoading">Modifier profil pour ce sport</button>
-                    <button v-show="!correspondingSportProfileExisting" type="button" class="w3-button w3-green"  @click="dispatchRequest" :disabled="sportProfileLoading">Créer profil pour ce sport</button>
+                    <button type="button" class="w3-button w3-red sport-profile-form-button" :disabled=sportProfileLoading @click="setFormDataFromSport(formSport)" >Réinitialiser</button>
+                    <button v-if="correspondingSportProfileExisting" type="submit" class="w3-button w3-green sport-profile-form-button"  @click="dispatchRequest" :disabled="isSubmitBtnDisabled">
+                        <span v-show="!sportProfileLoading">Modifier profil pour ce sport</span>
+                        <span v-show="sportProfileLoading"><i class="fas fa-spinner fa-spin"></i></span>
+                    </button>
+                    <button v-if="!correspondingSportProfileExisting" type="submit" class="w3-button w3-green sport-profile-form-button"  @click="dispatchRequest" :disabled="isSubmitBtnDisabled">
+                        <span v-show="!sportProfileLoading">Créer profil pour ce sport</span>
+                        <span v-show="sportProfileLoading"><i class="fas fa-spinner fa-spin"></i></span>
+                    </button>
                 </div>
 
 
@@ -117,11 +148,16 @@
         <div>
             <div v-for="sportProfile in sportProfiles"  :key="sportProfile.id" class="w3-card-4 w3-margin-top w3-round">
 
-                <header class="w3-container w3-theme-d3">
-                    <h1>{{sportProfile.sportDTO.label}}</h1>
+                <header class="w3-theme-d3 sport-profile-header">
+                    <h4 class="sport-profile-title">
+                        {{sportProfile.sportDTO.label}}
+                    </h4>
+                    <span @click="toggleExpandSportProfile(sportProfile.id)" class="sport-profile-expand-btn w3-button">
+                        <i class="fas fa-caret-right " :class="{'fa-rotate-90' : isSportProfileExpanded(sportProfile.id)}"></i>
+                    </span>
                 </header>
 
-                <div class="w3-container w3-white w3-row">
+                <div v-show="isSportProfileExpanded(sportProfile.id)" class="w3-container w3-white w3-row">
 
                     <div class="w3-left w3-col w3-row s12 m6 ">
                         <p class="w3-col s12"><span class="w3-left"><strong>Niveau : </strong>{{getLevelLabelFromToken(sportProfile.level  || 'Non Spécifié')}}</span></p>
@@ -136,7 +172,7 @@
 
                 </div>
 
-                <footer class="w3-container w3-theme-d3">
+                <footer v-show="isSportProfileExpanded(sportProfile.id)" class="w3-container w3-theme-d3">
                     <h5>{{sportProfile.role || 'Rôle inconnu'}}</h5>
                     <p v-show="!!sportProfile.isVisible" class="w3-small  w3-theme-d2"><span class="w3-center">Profil public</span></p>
                 </footer>
@@ -156,8 +192,7 @@
         name: 'my-sport-profiles',
         data() {
             return {
-                formValid : false,
-
+                idOfSportProfilesExpanded: [],
                 correspondingSportProfileExisting : false,
 
                 formRole : '',
@@ -184,19 +219,6 @@
                         label : 'Professionnel',
                     },
                 ],
-
-                dictionary: {
-                    attributes: {},
-                    custom: {
-                        roleInput: {
-                            max: 'Role trop long',
-                            min: 'Role trop petit',
-                        },
-                        wantedTimesPerWeekInput: {
-                            min: 'Pas de valeur négative autorisée'
-                        }
-                    }
-                },
             }
         },
         computed: {
@@ -218,8 +240,14 @@
                 }
                 return sportSelectArray;
             },
+            isFormValid(){
+                return (!this.errors.first('roleInput') && !this.errors.first('wantedTimesPerWeekInput'))
+            },
+            isSubmitBtnDisabled(){
+                return (!this.isFormValid || this.sportProfileLoading);
+            },
+
             ...mapGetters({
-                // otherProfiles: 'user/otherProfiles',
                 sportProfileLoading : 'user/sportProfileLoading',
                 sportProfiles: 'user/sportProfileDTOs'
             })
@@ -227,7 +255,17 @@
 
         },
         methods: {
-
+            isSportProfileExpanded(sportProfileId){
+                return (this.idOfSportProfilesExpanded.indexOf(sportProfileId) > -1);
+            },
+            toggleExpandSportProfile(sportProfileId) {
+                let index = this.idOfSportProfilesExpanded.indexOf(sportProfileId);
+                if (index > -1){
+                    this.idOfSportProfilesExpanded.splice(index,1)
+                } else {
+                    this.idOfSportProfilesExpanded.push(sportProfileId)
+                }
+            },
             clear () {
                 this.formRole = '';
                 this.formLevel = 'AMATEUR';
@@ -289,15 +327,21 @@
                 payload.wantToBeNotifiedAboutThisSport = this.formWantToBeNotifiedAboutThisSport;
                 payload.isVisible = this.formIsVisible;
 
-                this.$validator.validateAll().then(()=> {
-                    this.$store.dispatch('user/postSportProfile', payload)
-                        .then(() => {
-                            let payload = {
-                                userId: this.$store.getters['user/userId'],
-                            };
-                            this.$store.dispatch('common/loadBaseData', payload)
-                        })
-                })
+                let validation = this.$validator.validateAll();
+
+                validation.then(
+                    (isValid) =>{
+                        if(isValid) {
+                            this.$store.dispatch('user/postSportProfile', payload)
+                                .then(() => {
+                                    let payload = {
+                                        userId: this.$store.getters['user/userId'],
+                                    };
+                                    this.$store.dispatch('common/loadBaseData', payload)
+                                })
+                        }
+                    });
+
             },
             putSportProfile(alreadyExistingSportProfileId){
                 let payload = {};
@@ -333,11 +377,6 @@
                         return '';
                 }
             }
-
-        },
-        mounted() {
-            this.$validator.localize('fr', this.dictionary);
-
         },
     }
 </script>

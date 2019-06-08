@@ -24,19 +24,29 @@
                         placeholder: 'Rechercher'
                     }"
             >
-           <template slot="table-row" slot-scope="props">
+            <template slot="table-row" slot-scope="props">
 
                 <span v-if="props.column.field == 'after'">
 
-                  <button v-if="!props.row.isMyPartner" class="w3-button w3-green w3-small" @click="addToPreferredPartners(props.row['@id'].split('/').pop())">
-                      <i class="fa fa-plus" aria-hidden="true"></i>
-                      <span class="w3-hide-small w3-hide-medium"> Ajouter aux partenaires</span>
-                  </button>
+                <button v-if="!props.row.isMyPartner" class="w3-button w3-green w3-small" @click="addToPreferredPartners(props.row['@id'].split('/').pop())" :disabled="ArePreferredPartnerBtnDisabled" >
+                    <span v-show="!isPreferredPartnerLoading(props.row['@id'].split('/').pop())">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                        <span class="w3-hide-small w3-hide-medium"> Ajouter aux partenaires</span>
+                    </span>
+                    <span v-show="isPreferredPartnerLoading(props.row['@id'].split('/').pop())" class="w3-block w3-center">
+                        <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+                    </span>
+                </button>
 
-                  <button v-if="props.row.isMyPartner" class="w3-button w3-red w3-small" @click="removeFromPreferredPartners(props.row['@id'].split('/').pop())">
-                      <i class="fa fa-minus" aria-hidden="true"></i>
-                      <span class="w3-hide-small w3-hide-medium"> Ajouter aux partenaires</span>
-                  </button>
+                <button v-if="props.row.isMyPartner" class="w3-button w3-red w3-small " @click="removeFromPreferredPartners(props.row['@id'].split('/').pop())" :disabled="ArePreferredPartnerBtnDisabled" >
+                    <span v-show="!isPreferredPartnerLoading(props.row['@id'].split('/').pop())">
+                        <i class="fa fa-minus" aria-hidden="true"></i>
+                        <span class="w3-hide-small w3-hide-medium"> Retirer des partenaires</span>
+                    </span>
+                    <span v-show="isPreferredPartnerLoading(props.row['@id'].split('/').pop())" class="w3-block w3-center">
+                        <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+                    </span>
+                </button>
 
                 </span>
 
@@ -66,6 +76,7 @@
 
         data() {
             return {
+                selectedUserId : null,
 
                 header: [
                     {
@@ -90,14 +101,22 @@
             }
         },
         computed: {
+            ArePreferredPartnerBtnDisabled(){
+                return (this.preferredPartnerLoading)
+            },
             ...mapGetters({
                 otherProfiles: 'user/otherProfiles',
+                preferredPartnerLoading : 'user/preferredPartnerLoading',
             })
 
         },
         methods: {
+            isPreferredPartnerLoading(userId){
+                return ( this.preferredPartnerLoading && (userId === this.selectedUserId)  )
+            },
 
             addToPreferredPartners(id) {
+                this.selectedUserId = id;
                 let payload = {};
                 let userId = {
                     userId: this.$store.getters['user/userId'],
@@ -113,6 +132,7 @@
 
             },
             removeFromPreferredPartners(id) {
+                this.selectedUserId = id;
                 let payload = {};
                 let userId = {
                     userId: this.$store.getters['user/userId'],

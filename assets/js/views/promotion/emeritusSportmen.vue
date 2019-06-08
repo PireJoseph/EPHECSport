@@ -1,11 +1,21 @@
 <style scoped>
 
     .sport-man-card-header {
-        padding: 12px;
+        padding: 8px;
     }
 
+    .sport-man-card-title-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+    }
+    .sport-man-card-expand-btn {
+        margin-left: auto;
+    }
     .sport-man-card-title {
         margin: 0;
+        position: absolute;
     }
 
     .sport-man-card-role{
@@ -90,19 +100,24 @@
         <div v-show="!!sportMen">
 
             <div v-for="sportMan in sportMen" :key="sportMan.id" class="w3-card w3-margin-top w3-white w3-center">
-                <div class="w3-theme-d3 sport-man-card-header">
-                    <h5 class="w3-padding sport-man-card-title">
-                        <span>{{sportMan.firstName}}</span><span v-show="!!sportMan.nickName">{{sportMan.nickName}} - </span><span>{{sportMan.lastName}}</span>
-                    </h5>
-                    <div v-show="areSportManDetailsShown(sportMan)">
+                <header class="w3-theme-d3 sport-man-card-header">
+                    <div class="sport-man-card-title-container">
+                        <h5 class="w3-padding sport-man-card-title">
+                            <span>{{sportMan.firstName}}</span><span v-show="!!sportMan.nickName">{{sportMan.nickName}} - </span><span>{{sportMan.lastName}}</span>
+                        </h5>
+                        <span @click="toggleExpandSportMan(sportMan.id)" class="sport-man-card-expand-btn w3-button">
+                            <i class="fas fa-caret-right " :class="{'fa-rotate-90' : isSportManExpanded(sportMan.id)}"></i>
+                        </span>
+                    </div>
+                    <div v-show="isSportManExpanded(sportMan.id) && areSportManDetailsShown(sportMan)">
                         <p class="sport-man-card-sport w3-margin" >{{sportMan.sport.label}}</p>
                         <p class="sport-man-card-role" v-show="!!sportMan.role"><span class="w3-opacity">{{sportMan.role}}</span></p>
                     </div>
-                </div>
-                <p class="w3-padding-16 sport-man-card-label" v-show="areSportManDetailsShown(sportMan)" >{{sportMan.label}}</p>
+                </header>
+                <p class="w3-padding-16 sport-man-card-label" v-show="isSportManExpanded(sportMan.id) && areSportManDetailsShown(sportMan)" >{{sportMan.label}}</p>
 
                 <!--pictures carousel-->
-                <div class="sport-man-card-photo"  v-if="isCarouselPicturesOpenForSportMan(sportMan)">
+                <div class="sport-man-card-photo"  v-if="isSportManExpanded(sportMan.id) && isCarouselPicturesOpenForSportMan(sportMan)">
                     <agile
                             :options="getAgileOptionsForSportMan(sportMan)"
                     >
@@ -128,7 +143,7 @@
                 </div>
 
                 <!--achievements list-->
-                <div class="sport-man-card-achievements w3-padding"  v-if="isAchievementsListOpenForSportMan(sportMan)">
+                <div class="sport-man-card-achievements w3-padding"  v-if="isSportManExpanded(sportMan.id) && isAchievementsListOpenForSportMan(sportMan)">
                     <ul class="w3-ul ">
                         <li  class="w3-border w3-theme-d1" v-for="sportManAchievement in sportMan.achievements" :key="sportManAchievement.id">
 
@@ -146,7 +161,7 @@
                 </div>
 
                 <!--shoutOuts list-->
-                <div class="sport-man-card-ShoutOuts w3-padding"  v-if="isShoutOutsListOpenForSportMan(sportMan)">
+                <div class="sport-man-card-ShoutOuts w3-padding"  v-if="isSportManExpanded(sportMan.id) && isShoutOutsListOpenForSportMan(sportMan)">
                     <div v-show="shoutOutsForSelectedSportManLoading" class="w3-opacity w3-center w3-padding">
                         <i class="fas fa-spinner fa-spin"></i>
                     </div>
@@ -169,15 +184,22 @@
                         <button
                                 class="w3-button w3-small w3-white w3-border"
                                 @click="openShoutOutFormModal(sportMan)"
+                                :disabled="isShoutOutBtnDisabled"
                         >
-                            Encourager !
+                            <span v-show="!areShoutOutsLoading">
+                                Encourager !
+                            </span>
+                            <span v-show="areShoutOutsLoading">
+                                <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+                            </span>
                         </button>
                     </div>
                 </div>
 
 
                 <!--btns bar-->
-                <div class="w3-padding sport-man-card-footer">
+                <footer class="w3-padding sport-man-card-footer" v-show="isSportManExpanded(sportMan.id)">
+
                     <button
                             class="w3-button  w3-theme-d1 "
                             @click="togglePicturesCarousel(sportMan)"
@@ -192,10 +214,10 @@
                             @click="toggleAchievementsList(sportMan)"
                             :disabled="!sportManHasAchievements(sportMan)"
                             v-bind:class="{ 'w3-theme-d3': isAchievementsListOpenForSportMan(sportMan), 'w3-theme-d1': !isAchievementsListOpenForSportMan(sportMan) }"
-
                     >
                         <i class="fa fa-trophy" aria-hidden="true"></i><span class="w3-hide-small"> Palmarès</span>
                     </button>
+
                     <button
                             class="w3-button  w3-theme-d1 "
                             @click="toggleShoutOutsList(sportMan)"
@@ -203,7 +225,8 @@
                     >
                         <i class="fa fa-bullhorn" aria-hidden="true"></i><span class="w3-hide-small"> Encouragements</span>
                     </button>
-                </div>
+
+                </footer>
             </div>
 
         </div>
@@ -239,8 +262,8 @@
                                     id="shoutOutContentInput"
                                     name="shoutOutContentInput"
                                     v-model="shoutOutForm.content"
-                                    v-validate="'max:2048|min:3|required'"
-                                    maxlength="2048"
+                                    v-validate="'max:1024|min:3|required'"
+                                    maxlength="1024"
                                     minlength="3"
                                     required
                                     data-vv-validate-on=""
@@ -282,6 +305,8 @@
         data() {
             return {
 
+                idOfSportMenExpanded : [],
+
                 idOfSportManWithPicturesCarouselOpen : null,
                 idOfSportManWithAchievementsListOpen: null,
 
@@ -298,15 +323,6 @@
                     content: ''
                 },
 
-                dictionary: {
-                    custom: {
-                        shoutOutContentInput: {
-                            required: 'Message requis',
-                            max: 'Message trop long',
-                            min: 'Message trop court',
-                        },
-                    }
-                },
 
             }
         },
@@ -314,6 +330,12 @@
 
             selectedSportManHasShoutOuts(){
                 return (this.shoutOutsForSelectedSportMan.length > 0)
+            },
+            areShoutOutsLoading(){
+                return (this.shoutOutsForSelectedSportManLoading || this.postShoutOutLoading);
+            },
+            isShoutOutBtnDisabled(){
+                return (this.areShoutOutsLoading || this.isShoutOutFormModalOpen);
             },
 
 
@@ -332,6 +354,19 @@
 
             getSportMenData() {
                 this.$store.dispatch('promotion/getSportMenData')
+            },
+
+            isSportManExpanded(sportManId) {
+                return (this.idOfSportMenExpanded.indexOf(sportManId) > -1);
+
+            },
+            toggleExpandSportMan(sportManId) {
+                let index = this.idOfSportMenExpanded.indexOf(sportManId);
+                if (index > -1){
+                    this.idOfSportMenExpanded.splice(index,1)
+                } else {
+                    this.idOfSportMenExpanded.push(sportManId)
+                }
             },
 
             areSportManDetailsShown(sportMan) {
@@ -354,7 +389,7 @@
             togglePicturesCarousel(sportMan){
                 this.idOfSportManWithAchievementsListOpen = null;
                 this.idOfSportManWithShoutOutsListOpen = null;
-                this.idOfSportManWithPicturesCarouselOpen = (this.idOfSportManWithPicturesCarouselOpen === null) ? sportMan.id : null;
+                this.idOfSportManWithPicturesCarouselOpen = (this.idOfSportManWithPicturesCarouselOpen !== sportMan.id) ? sportMan.id : null;
             },
             isCarouselPicturesOpenForSportMan(sportMan) {
                 return this.idOfSportManWithPicturesCarouselOpen === sportMan.id;
@@ -381,7 +416,7 @@
             toggleAchievementsList(sportMan){
                 this.idOfSportManWithPicturesCarouselOpen = null;
                 this.idOfSportManWithShoutOutsListOpen = null;
-                this.idOfSportManWithAchievementsListOpen = (this.idOfSportManWithAchievementsListOpen === null) ? sportMan.id : null;
+                this.idOfSportManWithAchievementsListOpen = (this.idOfSportManWithAchievementsListOpen !== sportMan.id) ? sportMan.id : null;
             },
             isAchievementsListOpenForSportMan(sportMan){
                 return this.idOfSportManWithAchievementsListOpen === sportMan.id;
@@ -390,7 +425,7 @@
             toggleShoutOutsList(sportMan){
                 this.idOfSportManWithPicturesCarouselOpen = null;
                 this.idOfSportManWithAchievementsListOpen = null;
-                if(this.idOfSportManWithShoutOutsListOpen === null) {
+                if(this.idOfSportManWithShoutOutsListOpen !== sportMan.id) {
                     this.idOfSportManWithShoutOutsListOpen = sportMan.id;
                     this.getShoutOutsForSelectedSportMan(sportMan);
                 } else {
@@ -481,7 +516,6 @@
 
         },
         mounted() {
-            this.$validator.localize('fr', this.dictionary);
             this.getSportMenData();
         },
     }

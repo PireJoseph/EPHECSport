@@ -1,11 +1,21 @@
 <style scoped>
 
     .team-card-header {
-        padding: 12px;
+        padding: 8px;
     }
 
+    .team-card-title-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+    }
+    .team-card-expand-btn {
+        margin-left: auto;
+    }
     .team-card-title {
         margin: 0;
+        position: absolute;
     }
 
     .team-card-nickname{
@@ -93,19 +103,24 @@
         <div v-show="!!officialTeams">
 
             <div v-for="team in officialTeams" :key="team.id" class="w3-card w3-margin-top w3-white w3-center">
-                <div class="w3-theme-d3 team-card-header">
-                    <h5 class="w3-padding team-card-title">
-                        <span v-show="!!team.shortName">{{team.shortName}} - </span><span>{{team.name}}</span>
-                    </h5>
-                    <div v-show="areTeamDetailsShown(team)">
+                <header class="w3-theme-d3 team-card-header">
+                    <div class="team-card-title-container">
+                        <h5 class="w3-padding team-card-title" >
+                            <span v-show="!!team.shortName">{{team.shortName}} - </span><span>{{team.name}}</span>
+                        </h5>
+                        <span @click="toggleExpandTeam(team.id)" class="team-card-expand-btn w3-button">
+                            <i class="fas fa-caret-right " :class="{'fa-rotate-90' : isTeamExpanded(team.id)}"></i>
+                        </span>
+                    </div>
+                    <div v-show="isTeamExpanded(team.id) && areTeamDetailsShown(team)">
                         <p class="team-card-nickname" v-show="!!team.nickName"><span class="w3-opacity">{{team.nickName}}</span></p>
                         <p class="team-card-sport w3-margin" >{{team.sport.label}}</p>
                     </div>
-                </div>
-                <p class="w3-padding-16 team-card-label" v-show="areTeamDetailsShown(team)" >{{team.label}}</p>
+                </header>
+                <p class="w3-padding-16 team-card-label" v-show="isTeamExpanded(team.id) && areTeamDetailsShown(team)" >{{team.label}}</p>
                 
                 <!--pictures carousel-->
-                <div class="team-card-photo"  v-if="isCarouselPicturesOpenForTeam(team)">
+                <div class="team-card-photo"  v-if="isTeamExpanded(team.id) &&  isCarouselPicturesOpenForTeam(team)">
                     <agile
                             :options="getAgileOptionsForTeam(team)"
                     >
@@ -131,7 +146,7 @@
                 </div>
                 
                 <!--achievements list-->
-                <div class="team-card-achievements w3-padding"  v-if="isAchievementsListOpenForTeam(team)">
+                <div class="team-card-achievements w3-padding"  v-if="isTeamExpanded(team.id) && isAchievementsListOpenForTeam(team)">
                     <ul class="w3-ul ">
                         <li  class="w3-border w3-theme-d1" v-for="teamAchievement in team.achievements" :key="teamAchievement.id">
 
@@ -149,7 +164,7 @@
                 </div>
 
                 <!--shoutOuts list-->
-                <div class="team-card-ShoutOuts w3-padding"  v-if="isShoutOutsListOpenForTeam(team)">
+                <div class="team-card-ShoutOuts w3-padding"  v-if="isTeamExpanded(team.id) && isShoutOutsListOpenForTeam(team)">
                     <div v-show="shoutOutsForSelectedTeamLoading" class="w3-opacity w3-center w3-padding">
                         <i class="fas fa-spinner fa-spin"></i>
                     </div>
@@ -172,15 +187,21 @@
                         <button
                                 class="w3-button w3-small w3-white w3-border"
                                 @click="openShoutOutFormModal(team)"
+                                :disabled="isShoutOutBtnDisabled"
                         >
-                            Encourager !
-                        </button>
+                            <span v-show="!areShoutOutsLoading">
+                                Encourager !
+                            </span>
+                            <span v-show="areShoutOutsLoading">
+                                <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+                            </span>                        </button>
                     </div>
                 </div>
                 
 
                 <!--btns bar-->
-                <div class="w3-padding team-card-footer">
+                <footer class="w3-padding team-card-footer" v-show="isTeamExpanded(team.id)">
+
                     <button
                             class="w3-button  w3-theme-d1 "
                             @click="togglePicturesCarousel(team)"
@@ -199,6 +220,7 @@
                     >
                         <i class="fa fa-trophy" aria-hidden="true"></i><span class="w3-hide-small"> Palmarès</span>
                     </button>
+
                     <button
                             class="w3-button  w3-theme-d1 "
                             @click="toggleShoutOutsList(team)"
@@ -206,7 +228,7 @@
                     >
                         <i class="fa fa-bullhorn" aria-hidden="true"></i><span class="w3-hide-small"> Encouragements</span>
                     </button>
-                </div>
+                </footer>
             </div>
 
         </div>
@@ -242,8 +264,8 @@
                                     id="shoutOutContentInput"
                                     name="shoutOutContentInput"
                                     v-model="shoutOutForm.content"
-                                    v-validate="'max:2048|min:3|required'"
-                                    maxlength="2048"
+                                    v-validate="'max:1024|min:3|required'"
+                                    maxlength="1024"
                                     minlength="3"
                                     required
                                     data-vv-validate-on=""
@@ -286,6 +308,8 @@
         },
         data() {
             return {
+
+                idOfTeamsExpanded : [],
                 
                 idOfTeamWithPicturesCarouselOpen : null,
                 idOfTeamWithAchievementsListOpen: null,
@@ -304,15 +328,6 @@
                 },
 
 
-                dictionary: {
-                    custom: {
-                        shoutOutContentInput: {
-                            required: 'Message requis',
-                            max: 'Message trop long',
-                            min: 'Message trop court',
-                        },
-                    }
-                },
 
             }
         },
@@ -320,6 +335,12 @@
 
             selectedTeamHasShoutOuts(){
                 return (this.shoutOutsForSelectedTeam.length > 0)
+            },
+            areShoutOutsLoading(){
+                return (this.shoutOutsForSelectedTeamLoading || this.postShoutOutLoading);
+            },
+            isShoutOutBtnDisabled(){
+                return (this.areShoutOutsLoading || this.isShoutOutFormModalOpen);
             },
 
 
@@ -338,6 +359,19 @@
 
             getOfficialTeamsData() {
                 this.$store.dispatch('promotion/getOfficialTeamsData')
+            },
+
+            isTeamExpanded(teamId) {
+                return (this.idOfTeamsExpanded.indexOf(teamId) > -1);
+
+            },
+            toggleExpandTeam(teamId) {
+                let index = this.idOfTeamsExpanded.indexOf(teamId);
+                if (index > -1){
+                    this.idOfTeamsExpanded.splice(index,1)
+                } else {
+                    this.idOfTeamsExpanded.push(teamId)
+                }
             },
 
             areTeamDetailsShown(team) { 
@@ -360,7 +394,7 @@
             togglePicturesCarousel(team){
                 this.idOfTeamWithAchievementsListOpen = null;
                 this.idOfTeamWithShoutOutsListOpen = null;
-                this.idOfTeamWithPicturesCarouselOpen = (this.idOfTeamWithPicturesCarouselOpen === null) ? team.id : null;
+                this.idOfTeamWithPicturesCarouselOpen = (this.idOfTeamWithPicturesCarouselOpen !== team.id) ? team.id : null;
             },
             isCarouselPicturesOpenForTeam(team) {
                 return this.idOfTeamWithPicturesCarouselOpen === team.id;
@@ -387,7 +421,7 @@
             toggleAchievementsList(team){
                 this.idOfTeamWithPicturesCarouselOpen = null;
                 this.idOfTeamWithShoutOutsListOpen = null;
-                this.idOfTeamWithAchievementsListOpen = (this.idOfTeamWithAchievementsListOpen === null) ? team.id : null;
+                this.idOfTeamWithAchievementsListOpen = (this.idOfTeamWithAchievementsListOpen !== team.id) ? team.id : null;
             },
             isAchievementsListOpenForTeam(team){
                 return this.idOfTeamWithAchievementsListOpen === team.id;
@@ -396,7 +430,7 @@
             toggleShoutOutsList(team){
                 this.idOfTeamWithPicturesCarouselOpen = null;
                 this.idOfTeamWithAchievementsListOpen = null;
-                if(this.idOfTeamWithShoutOutsListOpen === null) {
+                if(this.idOfTeamWithShoutOutsListOpen !== team.id) {
                     this.idOfTeamWithShoutOutsListOpen = team.id;
                     this.getShoutOutsForSelectedTeam(team);
                 } else {
@@ -487,7 +521,6 @@
 
         },
         mounted() {
-            this.$validator.localize('fr', this.dictionary);
             this.getOfficialTeamsData();
         },
     }
