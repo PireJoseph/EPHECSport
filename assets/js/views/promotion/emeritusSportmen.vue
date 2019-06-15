@@ -17,13 +17,17 @@
         margin: 0;
         position: absolute;
     }
-
-    .sport-man-card-role{
+    .sport-man-card-nickname{
         margin: 0;
         font-style: italic;
     }
 
+    .sport-man-card-role{
+        margin: 0;
+    }
+
     .sport-man-card-sport{
+        margin: 16px 0 0 0;
         text-transform: uppercase;
     }
 
@@ -103,14 +107,15 @@
                 <header class="w3-theme-d3 sport-man-card-header">
                     <div class="sport-man-card-title-container">
                         <h5 class="w3-padding sport-man-card-title">
-                            <span>{{sportMan.firstName}}</span><span v-show="!!sportMan.nickName">{{sportMan.nickName}} - </span><span>{{sportMan.lastName}}</span>
+                           <span>{{sportMan.firstName}} </span><span> {{sportMan.lastName}}</span>
                         </h5>
                         <span @click="toggleExpandSportMan(sportMan.id)" class="sport-man-card-expand-btn w3-button">
                             <i class="fas fa-caret-right " :class="{'fa-rotate-90' : isSportManExpanded(sportMan.id)}"></i>
                         </span>
                     </div>
                     <div v-show="isSportManExpanded(sportMan.id) && areSportManDetailsShown(sportMan)">
-                        <p class="sport-man-card-sport w3-margin" >{{sportMan.sport.label}}</p>
+                        <p v-show="!!sportMan.nickName" class="sport-man-card-nickname w3-opacity">" {{sportMan.nickName}} "</p>
+                        <p class="sport-man-card-sport" >{{sportMan.sport.label}}</p>
                         <p class="sport-man-card-role" v-show="!!sportMan.role"><span class="w3-opacity">{{sportMan.role}}</span></p>
                     </div>
                 </header>

@@ -96,6 +96,26 @@ class ProfilePicture implements Serializable
         return $this;
     }
 
+    /**
+     * @return \DateTime
+     */
+    public function getUpdatedAt(): \DateTime
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param \DateTime $updatedAt
+     * @return ProfilePicture
+     */
+    public function setUpdatedAt(\DateTime $updatedAt): ProfilePicture
+    {
+        $this->updatedAt = $updatedAt;
+        return $this;
+    }
+
+
+
 
     /**
      * String representation of object

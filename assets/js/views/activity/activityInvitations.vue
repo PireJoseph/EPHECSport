@@ -24,9 +24,9 @@
                 >
                 <template slot="table-row" slot-scope="props">
 
-                    <div v-if="props.column.field == 'after'">
-                        <div class="w3-bar">
-                            <button  class="w3-button w3-green w3-small answer-btn" :disabled="areActionBtnDisabled" @click="answerToInvitation(props.row.id, true)">
+                    <div v-if="props.column.field == 'after'" class="w3-bar" style="width: 100%">
+
+                            <button  class="w3-button w3-green w3-bar-item" :disabled="areActionBtnDisabled" @click="answerToInvitation(props.row.id, true)"  style="width: 50%">
                                 <span v-show="!isActivityInvitationAnswerLoading(props.row.id)" >
                                     <i class="fa fa-check" aria-hidden="true"></i>
                                     <span class="w3-hide-small w3-hide-medium"> Accepter</span>
@@ -35,7 +35,8 @@
                                     <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
                                 </span>
                             </button>
-                            <button class="w3-button w3-red w3-small answer-btn" :disabled="areActionBtnDisabled" @click="answerToInvitation(props.row.id, false)">
+
+                            <button class="w3-button w3-red w3-bar-item" :disabled="areActionBtnDisabled" @click="answerToInvitation(props.row.id, false)"  style="width: 50%">
                                 <span v-show="!isActivityInvitationAnswerLoading(props.row.id)" >
                                     <i class="fa fa-times" aria-hidden="true"></i>
                                     <span class="w3-hide-small w3-hide-medium"> Décliner</span>
@@ -44,13 +45,11 @@
                                     <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
                                 </span>
                             </button>
-                        </div>
-                        <!--<button v-if="(props.row.relatedRequest)" class="w3-button w3-grey w3-small"  disabled>En attente d'admission</button>-->
 
                     </div>
 
                     <div v-else-if="props.column.field == 'activity.material'">
-                        <ul v-if="(props.row.activity.material.length > 0)" class="w3-ul w3-small">
+                        <ul v-if="(props.row.activity.material.length > 0)" class="w3-ul">
                             <li v-for="material in props.row.activity.material" :key="material.id" >{{material.label}}</li>
                         </ul>
                     </div>

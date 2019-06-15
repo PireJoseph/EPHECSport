@@ -27,12 +27,13 @@
                 >
                 <template slot="table-row" slot-scope="props">
 
-                    <div v-if="props.column.field == 'after'" class="w3-bar">
+                    <div v-if="props.column.field == 'after'" class="w3-bar" style="width: 100%">
 
                             <!--Confirmation Btn-->
                             <button
                                     v-if="( (!props.row.cancellation) && (!props.row.participation.isConfirmed) )"
-                                    class="w3-button w3-green w3-small answer-btn"
+                                    class="w3-button w3-bar-item w3-green"
+                                    style="width: 50%"
                                     @click="confirmParticipation(props.row.participation)"
                                     :disabled="areActionBtnDisabled"
                             >
@@ -47,7 +48,8 @@
                             </button>
                             <button
                                     v-else-if="( (!props.row.cancellation) && (props.row.participation.isConfirmed) )"
-                                    class="w3-button w3-green w3-small answer-btn"
+                                    class="w3-button w3-bar-item w3-green"
+                                    style="width: 50%"
                                     disabled
                             >
                                 <i class="fa fa-check" aria-hidden="true"></i>
@@ -58,7 +60,8 @@
                             <!--Cancellation Btn-->
                             <button
                                     v-if="( (!props.row.cancellation) )"
-                                    class="w3-button w3-red w3-small answer-btn"
+                                    class="w3-button w3-red w3-bar-item"
+                                    style="width: 50%"
                                     @click="openActivityCancellationModal(props.row.participation.activity)"
                                     :disabled="areActionBtnDisabled"
                             >
@@ -73,7 +76,8 @@
                             </button>
                             <button
                                     v-else
-                                    class="w3-button w3-red w3-small answer-btn"
+                                    class="w3-button w3-red w3-bar-item"
+                                    style="width: 50%"
                                     disabled
                             >
                                 <i class="fa fa-times" aria-hidden="true"></i>
@@ -84,7 +88,7 @@
                     </div>
 
                     <div v-else-if="props.column.field == 'participation.activity.material'">
-                        <ul v-if="(props.row.participation.activity.material.length > 0)" class="w3-ul w3-small">
+                        <ul v-if="(props.row.participation.activity.material.length > 0)" class="w3-ul">
                             <li v-for="material in props.row.participation.activity.material" :key="material.id" >{{material.label}}</li>
                         </ul>
                     </div>

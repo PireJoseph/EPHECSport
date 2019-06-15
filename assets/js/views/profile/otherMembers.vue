@@ -6,7 +6,7 @@
 
     <div>
         <div class="w3-card w3-round w3-white w3-padding-32 w3-hide-small">
-            <h3>Autre membres</h3>
+            <h3>Autres membres</h3>
         </div>
 
 
@@ -26,9 +26,9 @@
             >
             <template slot="table-row" slot-scope="props">
 
-                <span v-if="props.column.field == 'after'">
+                <div v-if="props.column.field == 'after'">
 
-                <button v-if="!props.row.isMyPartner" class="w3-button w3-green w3-small" @click="addToPreferredPartners(props.row['@id'].split('/').pop())" :disabled="ArePreferredPartnerBtnDisabled" >
+                <button v-if="!props.row.isMyPartner" class="w3-button w3-green w3-block" @click="addToPreferredPartners(props.row['@id'].split('/').pop())" :disabled="ArePreferredPartnerBtnDisabled" >
                     <span v-show="!isPreferredPartnerLoading(props.row['@id'].split('/').pop())">
                         <i class="fa fa-plus" aria-hidden="true"></i>
                         <span class="w3-hide-small w3-hide-medium"> Ajouter aux partenaires</span>
@@ -38,7 +38,7 @@
                     </span>
                 </button>
 
-                <button v-if="props.row.isMyPartner" class="w3-button w3-red w3-small " @click="removeFromPreferredPartners(props.row['@id'].split('/').pop())" :disabled="ArePreferredPartnerBtnDisabled" >
+                <button v-if="props.row.isMyPartner" class="w3-button w3-red w3-block" @click="removeFromPreferredPartners(props.row['@id'].split('/').pop())" :disabled="ArePreferredPartnerBtnDisabled" >
                     <span v-show="!isPreferredPartnerLoading(props.row['@id'].split('/').pop())">
                         <i class="fa fa-minus" aria-hidden="true"></i>
                         <span class="w3-hide-small w3-hide-medium"> Retirer des partenaires</span>
@@ -48,7 +48,7 @@
                     </span>
                 </button>
 
-                </span>
+                </div>
 
                 <span v-else>
                   {{props.formattedRow[props.column.field]}}

@@ -113,7 +113,7 @@
                         </span>
                     </div>
                     <div v-show="isTeamExpanded(team.id) && areTeamDetailsShown(team)">
-                        <p class="team-card-nickname" v-show="!!team.nickName"><span class="w3-opacity">{{team.nickName}}</span></p>
+                        <p class="team-card-nickname" v-show="!!team.nickName"><span class="w3-opacity">" {{team.nickName}}" </span></p>
                         <p class="team-card-sport w3-margin" >{{team.sport.label}}</p>
                     </div>
                 </header>

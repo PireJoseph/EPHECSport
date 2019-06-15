@@ -124,6 +124,26 @@ class Picture implements Serializable
     }
 
     /**
+     * @return \DateTime
+     */
+    public function getUpdatedAt(): \DateTime
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param \DateTime $updatedAt
+     * @return Picture
+     */
+    public function setUpdatedAt(\DateTime $updatedAt): Picture
+    {
+        $this->updatedAt = $updatedAt;
+        return $this;
+    }
+
+
+
+    /**
      * String representation of object
      * @link https://php.net/manual/en/serializable.serialize.php
      * @return string the string representation of the object or null

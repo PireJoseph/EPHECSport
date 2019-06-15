@@ -429,7 +429,8 @@ easy_admin:
                     - 'phoneNumber'
                     - 'title'
                     - { property: 'presentation', type: 'textarea' }
-                    - { property: 'picture', type: 'App\Form\PictureType' }
+                    - { property: 'picture', type: 'App\Form\PictureType', help: 'Veuillez fournir une image carrée de minimum 100px de diamètre'  }
+
             list:
                 fields:
                     - 'firstName'

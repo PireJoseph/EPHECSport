@@ -6,7 +6,7 @@
 parameters:
     locale: 'fr'
     profile_picture.uri_prefix: '/images/profilePictures'
-    picture.uri_prefix: '/images/pictures/'
+    picture.uri_prefix: '/images/pictures'
     authentication.refreshToken.expiration: 2592000
 
 services:

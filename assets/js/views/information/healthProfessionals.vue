@@ -1,15 +1,33 @@
 <style scoped>
     .pro-header {
-        display: flex;
+/*        display: flex;
         flex-direction: row;
+        justify-content: center;
+        align-items: center;*/
+    }
+    .pro-details {
+        display: flex;
         justify-content: space-between;
+        align-items: center;
     }
     .pro-info {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         align-items: flex-start;
+        flex: 1 1 50%;
     }
+    .pro-image {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        flex: 1 0 50%;
+    }
+    .pro-image img{
+        width: 100px;
+        height: 100px;
+    }
+
 </style>
 
 <template>
@@ -21,27 +39,40 @@
         </div>
 
         <div v-show="!!healthProfessionals">
-            <div v-for="pro in healthProfessionals" :key="pro.id" class="w3-container w3-card w3-white w3-round w3-margin-top"><br>
-                <div class="pro-header">
-                    <div class="w3-opacity pro-info">
-                        <p >{{pro.title}}</p>
-                        <p>  <i class="fas fa-phone"></i> {{pro.phoneNumber}}</p>
-                        <p> <i class="fas fa-envelope"></i> {{pro.email}}</p>
-                    </div>
+
+            <article v-for="pro in healthProfessionals" :key="pro.id" class="w3-container w3-card w3-white w3-round w3-margin-top"><br>
+                <header class="pro-header">
                     <span>{{pro.firstName}} {{pro.lastName}}</span><br>
-                    <img class=" w3-circle w-image" style="width:60px"
-                         v-if="!!pro.picture"
-                         v-bind:src="(getPicturePath()  + pro.picture.image)"
-                         v-bind:title="pro.picture.label"
-                         v-bind:alt="pro.picture.label"
-                    >
+                </header>
+                <div class="pro-details">
+                    <div class="pro-image">
+                        <img class="w3-circle w3-image"
+                             v-if="!!pro.picture"
+                             v-bind:src="(getPicturePath()  + pro.picture.image)"
+                             v-bind:title="pro.picture.label"
+                             v-bind:alt="pro.picture.label"
+                        >
+                    </div>
+                    <div class="w3-opacity pro-info">
+                        <div>
+                            <span><i class="fas fa-user-tie"></i></span>
+                            <span>{{pro.title}}</span>
+                        </div>
+                        <div>
+                            <span><i class="fas fa-phone"></i></span>
+                            <span>{{pro.phoneNumber}}</span>
+                        </div>
+                        <div>
+                            <span><i class="fas fa-envelope"></i></span>
+                            <span>{{pro.email}}</span>
+                        </div>
+                    </div>
                 </div>
+                <footer class="pro-footer">
+                    <p>{{pro.presentation}}</p>
+                </footer>
+            </article>
 
-
-
-                <hr class="w3-clear">
-                <p>{{pro.presentation}}</p>
-            </div>
         </div>
 
     </div>
@@ -59,7 +90,7 @@
         },
         data() {
             return {
-
+                idsOfProfessionalExpanded : []
             }
         },
         computed: {

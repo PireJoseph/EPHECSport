@@ -313,9 +313,8 @@ class UserManager
         }
 
         $gender = $profileDTO->gender;
-        if(!is_null($gender)){
-            $alreadyExistingUser->setGender($gender);
-        }
+        $alreadyExistingUser->setGender($gender);
+
 
         $birthDate = $profileDTO->birthDate;
         if(!is_null($birthDate)){
@@ -702,18 +701,19 @@ class UserManager
             throw new InvalidArgumentException('you need to provide a user in order to delete his account');
         }
 
-        // suppression des photo utilisateurs
-        $pictures = $user->getPictures();
-        foreach($pictures as $picture){
-            $this->em->remove($picture);
-        }
-        $user->setPictures(new ArrayCollection());
-
-
-        $profilePicture  = $user->getProfilePicture();
-        if(!is_null($profilePicture)){
-            $this->em->remove($profilePicture);
-        }
+//        // suppression des photo utilisateurs
+//        $pictures = $user->getPictures();
+//        foreach($pictures as $picture){
+//            $user->removePicture($picture);
+//            $this->em->persist($user);
+//            $this->em->flush();
+//            $this->em->remove($picture);
+//        }
+//
+//        $profilePicture  = $user->getProfilePicture();
+//        if(!is_null($profilePicture)){
+//            $this->em->remove($profilePicture);
+//        }
 
         // sport profiles
         $sportProfilesQuerySelect = $this->em->getRepository(SportProfile::class)->findBy(['user'=>$user]);
@@ -722,12 +722,6 @@ class UserManager
             $this->em->remove($sportProfile);
         }
 
-        // success
-        $successQueryResult = $this->em->getRepository(Success::class)->findBy(['user'=>$user]);
-        foreach ($successQueryResult as $success)
-        {
-            $this->em->remove($success);
-        }
 
         // success
         $successQueryResult = $this->em->getRepository(Success::class)->findBy(['user'=>$user]);
@@ -738,9 +732,9 @@ class UserManager
 
         // activity invitation
         $invitationsQueryResult = $this->em->getRepository(ActivityInvitation::class)->findBy(['recipitent'=>$user]);
-        foreach ($invitationsQueryResult as $success)
+        foreach ($invitationsQueryResult as $invitation)
         {
-            $this->em->remove($success);
+            $this->em->remove($invitation);
         }
 
         // activity participation
@@ -817,21 +811,103 @@ class UserManager
 
 
         $toSend = [];
-        $toSend['utilisateur'] = $user;
+        $toSend['user'] = $user;
 
-        // succès
+
+        // sport profiles
+        $sportProfilesQuerySelect = $this->em->getRepository(SportProfile::class)->findBy(['user'=>$user]);
+        $sportProfileArray = [];
+        foreach ($sportProfilesQuerySelect as $sportProfile)
+        {
+            $sportProfileArray[] = $sportProfile;
+        }
+        $toSend['sportProfile'] = $sportProfileArray;
+
+
+
+        // success
         $successQueryResult = $this->em->getRepository(Success::class)->findBy(['user' => $user]);
         $successArray = [];
         foreach ($successQueryResult as $success){
             $successArray[] = $success;
         }
-        if(count($successArray)> 0) {
-            $toSend['succès'] = $successArray;
+        $toSend['success'] = $successArray;
+
+
+
+        // activity invitation
+        $invitationsQueryResult = $this->em->getRepository(ActivityInvitation::class)->findBy(['recipitent'=>$user]);
+        $invitationArray = [];
+        foreach ($invitationsQueryResult as $invitation)
+        {
+            $invitationArray[] = $invitation;
         }
+        $toSend['activityInvitations'] = $invitationArray;
+
+
+
+        // activity participation
+        $participationQueryResult = $this->em->getRepository(ActivityParticipation::class)->findBy(['user'=>$user]);
+        $participationArray = [];
+        foreach ($participationQueryResult as $participation)
+        {
+            $participationArray[] = $participation;
+        }
+        $toSend['activityParticipations'] = $participationArray;
+
+
+
+        //userRelatedFeedback
+        $userFeedBackMadeQueryResult = $this->em->getRepository(UserRelatedFeedback::class)->findBy(['createdBy'=>$user]);
+        $feedbackMadeArray = [];
+        foreach ($userFeedBackMadeQueryResult as $feedbackMade)
+        {
+            $feedbackMadeArray[] = $feedbackMade;
+        }
+        $toSend['userRelatedFeedbackMade'] = $feedbackMadeArray;
+
+        $feedbackAddressedArray = [];
+        $userFeedBackAddressedQueryResult = $this->em->getRepository(UserRelatedFeedback::class)->findBy(['user'=>$user]);
+        foreach ($userFeedBackAddressedQueryResult as $feedbackAddressed)
+        {
+            $feedbackAddressedArray[] = $feedbackAddressed;
+        }
+        $toSend['userRelatedFeedbackAddressed'] = $feedbackAddressedArray;
+
+
+
+        //activity cancellation
+        $activityCancellationQueryResult = $this->em->getRepository(ActivityCancellation::class)->findBy(['createdBy'=>$user]);
+        $cancellationArray = [];
+        foreach ($activityCancellationQueryResult as $cancellation)
+        {
+            $cancellationArray[] = $cancellation;
+        }
+        $toSend['activityCancellations'] = $cancellationArray;
+
+
+
+        //activity related feedback
+        $activityRelatedFeedbackMadeQueryResult = $this->em->getRepository(ActivityRelatedFeedback::class)->findBy(['author'=>$user]);
+        $activityRelatedFeedbackMadeArray = [];
+        foreach ($activityRelatedFeedbackMadeQueryResult as $activityRelatedFeedbackMade)
+        {
+            $activityRelatedFeedbackMadeArray[] = $activityRelatedFeedbackMade;
+        }
+        $toSend['userRelatedFeedBacks'] = $activityRelatedFeedbackMadeArray;
+
+
+        // shoutouts
+        $shoutOutsQueryResult = $this->em->getRepository(ShoutOut::class)->findBy(['createdBy'=>$user]);
+        $shoutOutArray = [];
+        foreach ($shoutOutsQueryResult as $shoutOut)
+        {
+            $shoutOutArray[] = $shoutOut;
+        }
+        $toSend['shoutOuts'] = $shoutOutArray;
+
 
         return $toSend;
-
-
 
     }
 

@@ -3,6 +3,7 @@
 {% block title %}Accueil{% endblock %}
 
 {% block stylesheets %}
+
     {{ parent() }}
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
@@ -11,7 +12,6 @@
 {% endblock %}
 
 {% block body %}
-    {{ encore_entry_script_tags('defaultPage') }}
 
     <!------------>
     <!-- Navbar -->
@@ -19,26 +19,33 @@
 
     <!-- Navbar (sit on top) -->
     <div class="w3-top" id="navbarContainer">
+
         <div class="w3-bar" id="myNavbar">
-            <a class="w3-bar-item w3-button w3-hover-black w3-hide-medium w3-hide-large w3-right" href="javascript:void(0);" onclick="toggleFunction()" title="Toggle Navigation Menu">
-                <i class="fa fa-bars"></i>
-            </a>
+
             <a href="#home" class="w3-bar-item w3-button" onclick="hideNavBar()"><i class="fa fa-home"></i><span class="link-title"> HOME</span></a>
             <a href="#about" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-info"></i><span class="link-title"></span> A PROPOS</a>
             <a href="#contact" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-envelope"></i><span class="link-title  "></span> CONTACT</a>
             <a href="{{ path('user', {}) }}" class="w3-bar-item w3-button w3-hide-small"><i class="fas fa-sign-in-alt"></i><span> APP</span></a>
-            <div class=" w3-right">
-                {% if app.user %}
-                    {% if is_granted('ROLE_ADMIN') %}
-                        <a href="{{ path('easyadmin', {}) }}" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-lock"></i><span class="link-title  "> ZONE ADMIN</span></a>
-                    {% endif %}
-                    <a href="{{ path('app_logout', {}) }}" class="w3-bar-item w3-button w3-hide-small "><i class="fa fa-user-times"></i><span class="link-title "> SE DECONNECTER</span></a>
 
+            <div class=" w3-right w3-hide-small">
+                {% if app.user %}
+
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('easyadmin', {}) }}" class="w3-bar-item w3-button"><i class="fa fa-lock"></i><span class="link-title  "> ZONE ADMIN</span></a>
+                    {% else %}
+                        <a href="{{ path('app_account', {}) }}" class="w3-bar-item w3-button "><i class="fas fa-users-cog"></i><span class="link-title  "> MON COMPTE</span></a>
+                    {% endif %}
+                        <a href="{{ path('app_logout', {}) }}" class="w3-bar-item w3-button "><i class="fa fa-user-times"></i><span class="link-title "> SE DECONNECTER</span></a>
                 {% else %}
-                    <a href="{{ path('app_login',{}) }}" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-user"></i><span class="link-title  "> SE CONNECTER</span></a>
+
+                    <a href="{{ path('app_login',{}) }}" class="w3-bar-item w3-button "><i class="fa fa-user"></i><span class="link-title  "> SE CONNECTER</span></a>
+
                 {% endif %}
             </div>
 
+            <a class="w3-bar-item w3-button w3-hover-black w3-hide-medium w3-hide-large w3-right" href="javascript:void(0);" onclick="toggleFunction()" title="Toggle Navigation Menu">
+                <i class="fa fa-bars"></i>
+            </a>
 
         </div>
 
@@ -49,12 +56,18 @@
             <a href="{{ path('user', {}) }}" class="w3-bar-item w3-button">APP</a>
 
             {% if app.user %}
+
                 {% if is_granted('ROLE_ADMIN') %}
                     <a href="{{ path('easyadmin', {}) }}" class="w3-bar-item w3-button">ZONE ADMIN</a>
+                {% else %}
+                    <a href="{{ path('app_account', {}) }}" class="w3-bar-item w3-button">MON COMPTE</a>
                 {% endif %}
-                <a href="{{ path('app_logout', {}) }}" class="w3-bar-item w3-button">SE DECONNECTER</a>
+                    <a href="{{ path('app_logout', {}) }}" class="w3-bar-item w3-button">SE DECONNECTER</a>
+
             {% else %}
+
                 <a href="{{  path('app_login',{}) }}" class="w3-bar-item w3-button">SE CONNECTER</a>
+
             {% endif %}
         </div>
 
@@ -67,7 +80,7 @@
     <!-- First Parallax Image with Logo Text -->
     <div class="bgimg-1 w3-display-container w3-opacity-min" id="home">
         <div class="w3-display-middle" style="white-space:nowrap;">
-           <img src="{{ asset('build/images/logoEPHECSport.gif') }}" style="width: 100%;" class="w3-opacity" alt="EPHEC Sport"/>
+           <img src="/images/logoEPHECSport.gif" style="width: 100%;" class="w3-opacity" alt="EPHEC Sport"/>
         </div>
     </div>
 
@@ -123,15 +136,15 @@
         </div>
         <div class="w3-quarter w3-section">
             <span class="w3-xlarge">{{ activityNumber|default('0') }}</span><br>
-            Activité{% if activityNumber > 1 %}s{% endif %} créée{% if activityNumber> 1 %}s{% endif %}
+            Activité{% if activityNumber > 1 %}s{% endif %}<span class="w3-hide-medium"> créée{% if activityNumber> 1 %}s</span>{% endif %}
         </div>
         <div class="w3-quarter w3-section">
             <span class="w3-xlarge">{{ teamNumber|default('0') }}</span><br>
-            Equipe{% if teamNumber > 1 %}s{% endif %} EPHEC
+            Equipe{% if teamNumber > 1 %}s{% endif %}<span class="w3-hide-medium"> EPHEC</span>
         </div>
         <div class="w3-quarter w3-section">
             <span class="w3-xlarge">{{ highLevelSportManNumber|default('0') }}</span><br>
-            Sportif{% if highLevelSportManNumber > 1 %}s{% endif %} de haut niveau
+            Sportif{% if highLevelSportManNumber > 1 %}s{% endif %}<span class="w3-hide-medium"> de haut niveau</span>
         </div>
     </div>
 
@@ -142,14 +155,14 @@
     <!------------------------->
 
     <!-- Second Parallax Image with Portfolio Text -->
-    <div class="bgimg-2 w3-display-container w3-opacity-min">
+    <div class="bgimg-2 w3-display-container w3-opacity" id="activities">
         <div class="w3-display-middle">
-            <span class="w3-xxlarge w3-text-white w3-wide" style="text-transform: uppercase">activités</span>
+            <span class="w3-text-white section-title" style="text-transform: uppercase">ORGANISATION</span>
         </div>
     </div>
 
     <!-- Container (Portfolio Section) -->
-    <div class="w3-content w3-container w3-padding-64" id="activities">
+    <div class="w3-content w3-container w3-padding-64" >
         <h3 class="w3-center">Que faire ?</h3>
         <p class="w3-center"><em>Des dizaines d'activités ouvertes aux étudiants.<br> Mises à disposition par les mebres et gestionnaires de la plateforme de la plateforme.</em></p>
 
@@ -157,6 +170,7 @@
 
         <!-- Responsive Grid. Four columns on tablets, laptops and desktops. Will stack on mobile devices/small screens (100% width) -->
         <div class="w3-row-padding w3-center w3-hide-small w3-grayscale">
+
             <div class="w3-col m3 activity-img-container" >
                 <div id="activityImage1" class="activity-img w3-image">
                 </div>
@@ -172,15 +186,17 @@
                 </div>
             </div>
 
-            <div class="w3-col m3 activity-img-container ">
+            <div class="w3-col m3 activity-img-container" >
                 <div  id="activityImage4" class="activity-img w3-image">
                 </div>
             </div>
+
         </div>
 
         <div class="w3-row-padding w3-center w3-section">
             <a href="{{ path('user', {'section' : 'activity'}) }}" class="w3-btn w3-button w3-bar-item w3-button  w3-padding-large w3-light-grey w3-margin">Participer</a>
         </div>
+
     </div>
 
 
@@ -191,14 +207,14 @@
     <!------------------------->
 
     <!-- Third Parallax Image Promotion -->
-    <div class="bgimg-3 w3-display-container w3-opacity-min">
+    <div class="bgimg-3 w3-display-container w3-opacity" id="promotion">
         <div class="w3-display-middle">
-            <span class="w3-xxlarge w3-text-white w3-wide" >PROMOTION</span>
+            <span class="w3-text-white section-title" >PROMOTION</span>
         </div>
     </div>
 
     <!-- Container (Promotion Section) -->
-    <div class="w3-content w3-container w3-padding-64" id="promotion">
+    <div class="w3-content w3-container w3-padding-64" >
         <h3 class="w3-center">Qui suivre ?</h3>
         <p class="w3-center"><em>Suivez et supportez nos équipes et sportifs de haut niveau.</em></p>
         <p class="w3-center"><em>Soyez au courant de leurs plus grands exploits et venez les soutenir lors de leur prochaine rencontre.</em></p>
@@ -215,14 +231,14 @@
     <!------------------------->
 
     <!-- Fourth Parallax Image Information -->
-    <div class="bgimg-4 w3-display-container w3-opacity-min">
+    <div class="bgimg-4 w3-display-container w3-opacity" id="information">
         <div class="w3-display-middle">
-            <span class="w3-xxlarge w3-text-white w3-wide" >INFORMATION</span>
+            <span class="w3-text-white section-title" >INFORMATION</span>
         </div>
     </div>
 
     <!-- Container (Information Section) -->
-    <div class="w3-content w3-container w3-padding-64" id="information">
+    <div class="w3-content w3-container w3-padding-64" >
         <h3 class="w3-center">Que retenir?</h3>
         <p class="w3-center"><em>Découvrer notre sélection de documentation.</em></p>
         <p class="w3-center"><em>Interrogez nos professionels de la santé partenaires.</em></p>
@@ -239,14 +255,14 @@
     <!------------------------->
 
     <!-- Fifth Parallax Image with Portfolio Text -->
-    <div class="bgimg-5 w3-display-container w3-opacity-min">
+    <div class="bgimg-5 w3-display-container w3-opacity" id="contact">
         <div class="w3-display-middle">
-            <span class="w3-xxlarge w3-text-white w3-wide">CONTACT</span>
+            <span class="w3-text-white section-title">CONTACT</span>
         </div>
     </div>
 
     <!-- Container (Contact Section) -->
-    <div class="w3-content w3-container w3-padding-64" id="contact">
+    <div class="w3-content w3-container w3-padding-64" >
         <h3 class="w3-center">Comment nous joindre?</h3>
 
         <div class="w3-row w3-padding-32 w3-section">
@@ -314,5 +330,6 @@
 
     </script>
 
+    {{ encore_entry_script_tags('defaultPage') }}
 
 {% endblock %}

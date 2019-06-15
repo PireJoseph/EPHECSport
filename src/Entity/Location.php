@@ -51,6 +51,7 @@ class Location
      * @Assert\NotNull()
      * @Assert\Type(type="integer")
      * @ORM\Column(type="integer")
+     * @Groups({"activity-history","activity-available", "get-invitation","get-invitations","get-participation","get-participations", "get-meeting","get-meetings",  "get-participations-for-an-activity"})
      */
     private $postCode;
 
@@ -59,6 +60,7 @@ class Location
      * @Assert\NotNull()
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=255)
+     * @Groups({"activity-history","activity-available", "get-invitation","get-invitations","get-participation","get-participations", "get-meeting","get-meetings",  "get-participations-for-an-activity"})
      */
     private $streetOrPlace;
 
@@ -66,8 +68,23 @@ class Location
      * @Assert\NotNull()
      * @Assert\Type(type="integer")
      * @ORM\Column(type="integer")
+     * @Groups({"activity-history","activity-available", "get-invitation","get-invitations","get-participation","get-participations", "get-meeting","get-meetings",  "get-participations-for-an-activity"})
      */
     private $number;
+
+    /**
+     * @Assert\Type(type="float")
+     * @ORM\Column(type="float", nullable=true, scale=6)
+     * @Groups({"activity-history","activity-available", "get-invitation","get-invitations","get-participation","get-participations", "get-meeting","get-meetings",  "get-participations-for-an-activity"})
+     */
+    private $latitude;
+
+    /**
+     * @Assert\Type(type="float")
+     * @ORM\Column(type="float", nullable=true, scale=6)
+     * @Groups({"activity-history","activity-available", "get-invitation","get-invitations","get-participation","get-participations", "get-meeting","get-meetings",  "get-participations-for-an-activity"})
+     */
+    private $longitude;
 
     public function __toString()
     {
@@ -142,6 +159,30 @@ class Location
     public function getString()
     {
         return $this->label . ', ' . $this->city;
+    }
+
+    public function getLatitude(): ?float
+    {
+        return $this->latitude;
+    }
+
+    public function setLatitude(?float $latitude): self
+    {
+        $this->latitude = $latitude;
+
+        return $this;
+    }
+
+    public function getLongitude(): ?float
+    {
+        return $this->longitude;
+    }
+
+    public function setLongitude(?float $longitude): self
+    {
+        $this->longitude = $longitude;
+
+        return $this;
     }
 
 }

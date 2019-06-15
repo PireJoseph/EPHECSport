@@ -57,7 +57,7 @@ class ExternalLink
      * @Assert\NotNull()
      * @Assert\Type(type="string")
      * @Assert\Length(
-     *      min = 8,
+     *      min = 4,
      *      max = 25,
      *      minMessage = "La description doit faire au moins {{ limit }} charactères",
      *      maxMessage = "La descirption doit faire maximum {{ limit }} charactères"
@@ -72,7 +72,7 @@ class ExternalLink
      * @Assert\NotNull()
      * @Assert\Type(type="string")
      * @Assert\Length(
-     *      min = 4,
+     *      min = 8,
      *      max = 60,
      *      minMessage = "La description doit faire au moins {{ limit }} charactères",
      *      maxMessage = "La descirption doit faire maximum {{ limit }} charactères"

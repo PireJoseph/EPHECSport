@@ -8,7 +8,7 @@
     <div>
 
         <div class="w3-card w3-round w3-white w3-padding-32 w3-hide-small">
-            <h3>Activité disponibles</h3>
+            <h3>Activités disponibles</h3>
         </div>
 
         <div class="w3-card w3-round w3-white w3-padding-32 w3-margin-top w3-container">
@@ -25,8 +25,8 @@
                 >
                 <template slot="table-row" slot-scope="props">
 
-                    <span v-if="props.column.field == 'after'">
-                        <button v-if="((!props.row.relatedRequest) && (!props.row.isJoinableByAnyone))" class="w3-button w3-black w3-small" :disabled="areActionBtnDisabled" @click="makeJoiningRequest(props.row['@id'])">
+                    <div v-if="props.column.field == 'after'" class="w3-bar" style="width: 100%">
+                        <button v-if="((!props.row.relatedRequest) && (!props.row.isJoinableByAnyone))" class="w3-button w3-black w3-bar-item" :disabled="areActionBtnDisabled" @click="makeJoiningRequest(props.row['@id'])"  style="width: 50%">
                             <span v-show="!isActivityJoiningRequestLoading(props.row['@id'])" >
                                 <i class="fa fa-unlock-alt" aria-hidden="true"></i>
                             <span class="w3-hide-small w3-hide-medium"> Demander</span>
@@ -36,7 +36,7 @@
                             </span>
                         </button>
 
-                        <button v-if="((!props.row.relatedRequest) && (props.row.isJoinableByAnyone))" class="w3-button w3-green w3-small" :disabled="areActionBtnDisabled" @click="makeJoiningRequest(props.row['@id'])">
+                        <button v-if="((!props.row.relatedRequest) && (props.row.isJoinableByAnyone))" class="w3-button w3-green w3-bar-item" :disabled="areActionBtnDisabled" @click="makeJoiningRequest(props.row['@id'])"  style="width: 50%">
                             <span v-show="!isActivityJoiningRequestLoading(props.row['@id'])" >
                                 <i class="fas fa-sign-in-alt"></i>
                                 <span class="w3-hide-small w3-hide-medium"> Rejoindre</span>
@@ -46,12 +46,12 @@
                             </span>
                         </button>
 
-                        <button v-if="(props.row.relatedRequest)" class="w3-button w3-grey w3-small"  title="En attente d'admission" disabled>
+                        <button v-if="(props.row.relatedRequest)" class="w3-button w3-grey w3-bar-item"  title="En attente d'admission" disabled  style="width: 100%">
                             <i class="far fa-clock"></i>
                             <span class="w3-hide-small w3-hide-medium"> Attente d'admission</span>
                         </button>
 
-                    </span>
+                    </div>
 
                     <span v-else-if="props.column.field == 'location'">
                         <span v-if="!!props.row.location">
@@ -60,7 +60,7 @@
                     </span>
 
                     <div v-else-if="props.column.field == 'material'">
-                        <ul v-if="(props.row.material.length > 0)" class="w3-ul w3-small">
+                        <ul v-if="(props.row.material.length > 0)" class="w3-ul">
                             <li v-for="material in props.row.material" :key="material.id" >{{material.label}}</li>
                         </ul>
                     </div>
@@ -130,9 +130,6 @@
                         label: 'Début',
                         field: 'startAt',
                         filterable: true,
-                        type: 'date',
-                        dateInputFormat: 'YYYY-MM-DD', // expects 2018-03-16
-                        dateOutputFormat:  'DD/MM/YYYY hh:mm',
                     },
                     {
                         label: 'Accession',

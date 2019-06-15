@@ -19,6 +19,11 @@ body, html {
     margin-top: 0;
 }
 
+.section-title{
+    font-size: 36px!important;
+    letter-spacing: 10px;
+}
+
 
 #activities {
     width:  100%;
@@ -35,33 +40,33 @@ body, html {
     background-size: cover;
 }
 
-/* First image (Logo. Full height) */
+/* First image (Full height) */
 .bgimg-1 {
-    background-image: url('../img/BGImgDefault.jpg');
+    background-image: linear-gradient( rgba(255, 255, 255, 0.5), rgba(0, 0, 0, 0.5) ), url('../img/BGImgDefault.jpg');
     min-height: 100%;
 }
 
 /* Second image (activité) */
 .bgimg-2 {
-    background-image: url('../img/BGImgActivity.jpg');
+    background-image: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url('../img/BGImgActivity.jpg');
     min-height: 400px;
 }
 
 /* Third image (promotion) */
 .bgimg-3 {
-    background-image: url("../img/BGImgPromotion.jpg");
+    background-image: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url('../img/BGImgPromotion.jpg');
     min-height: 400px;
 }
 
 /* Third image (information) */
 .bgimg-4 {
-    background-image: url("../img/BGImgInformation.jpg");
+    background-image: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url('../img/BGImgInformation.jpg');
     min-height: 400px;
 }
 
 /* Third image (Contact) */
 .bgimg-5 {
-    background-image: url("../img/BGImgContact.jpg");
+    background-image: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url('../img/BGImgContact.jpg');
     min-height: 400px;
 }
 
@@ -83,11 +88,6 @@ body, html {
 }
 
 
-.img-about {
-    /*max-width: 25%;*/
-    /*height: 200px;*/
-}
-.w3-wide {letter-spacing: 10px;}
 .w3-hover-opacity {cursor: pointer;}
 
 /* Turn off parallax scrolling for tablets and phones */
@@ -106,8 +106,17 @@ body, html {
     #navDemo {
         box-shadow: 0 8px 10px 0 rgba(0,0,0,0.16);
     }
-    .bgimg-1, .bgimg-2, .bgimg-3, .bgimg-4, .bgimg-5{
-        background-image: linear-gradient(180deg, rgba(255,0,0,0), #607d8b);
+    .bgimg-1{
+        background-image: linear-gradient(180deg, rgba(255,255,255,0.7), #9c9c9c);
+
+    }
+    .bgimg-2, .bgimg-3, .bgimg-4, .bgimg-5 {
+        background-image: linear-gradient(0deg, rgba(255,255,255,0.8), #616161);
+
+    }
+    .section-title {
+        font-size: 24px!important;
+        letter-spacing: 4px;
     }
 
 }

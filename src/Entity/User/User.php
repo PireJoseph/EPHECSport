@@ -97,6 +97,14 @@ class User implements UserInterface, iHasRole
      */
     private $password;
 
+    /**
+     * @Assert\Length(
+     *      min = 8,
+     *      max = 128,
+     *      minMessage = "Votre mot de passe doit contenir au minimum {{ limit }} caractères",
+     *      maxMessage = "Votre mot de passe ne doit pas excéder {{ limit }} caractères"
+     * )
+     */
     private $plainTextPassword;
 
     /**
@@ -179,7 +187,7 @@ class User implements UserInterface, iHasRole
      *
      * @ORM\ManyToMany(targetEntity="App\Entity\Picture", cascade={"persist"})
      * @ORM\JoinTable(name="user_pictures",
-     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="picture_id", referencedColumnName="id", unique=true)}
      * )
      */
@@ -188,7 +196,7 @@ class User implements UserInterface, iHasRole
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Profile\ProfilePicture", cascade={"persist", "remove"})
      * @ORM\JoinTable(name="user_profile_pictures",
-     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="profile_picture_id", referencedColumnName="id", unique=true)}
      * )
      */
@@ -468,6 +476,25 @@ class User implements UserInterface, iHasRole
         return $this->pictures;
     }
 
+    public function addPicture(Picture $picture): self
+    {
+        if (!$this->pictures->contains($picture)) {
+            $this->pictures[] = $picture;
+        }
+
+        return $this;
+    }
+
+    public function removePicture(Picture $picture): self
+    {
+        if ($this->pictures->contains($picture)) {
+            $this->pictures->removeElement($picture);
+        }
+
+        return $this;
+    }
+
+
     public function getProfilePicture(): ?ProfilePicture
     {
         return $this->profilePicture;
@@ -536,6 +563,11 @@ class User implements UserInterface, iHasRole
         return $this;
     }
 
+    public function getDisponibilityPatternTokenFromValue($value)
+    {
+        return  array_search($value, self::getDisponibilityPatternTokenArray(), true);
+    }
+
     public function getSchoolClass(): ?SchoolClass
     {
         return $this->schoolClass;
@@ -570,7 +602,6 @@ class User implements UserInterface, iHasRole
         return [
             iHasRole::USER_ROLE_TOKEN_USER => iHasRole::USER_ROLE_VALUE_USER,
             iHasRole::USER_ROLE_TOKEN_ADMIN => iHasRole::USER_ROLE_VALUE_ADMIN,
-//            iHasRole::USER_ROLE_TOKEN_ALLOWED_TO_SWITCH => iHasRole::USER_ROLE_VALUE_ALLOWED_TO_SWITCH,
         ];
     }
 

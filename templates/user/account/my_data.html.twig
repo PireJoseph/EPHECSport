@@ -1,0 +1,260 @@
+{% extends 'base.html.twig' %}
+
+{% set missingInfo = '<span class="w3-text-gray" >Non spécifié</span>' %}
+{% set pageTitle =  'Données personnelles' %}
+{% trans_default_domain 'messages' %}
+
+{% block title %}
+    {{ pageTitle }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-blue-grey.css" >
+
+    {{ encore_entry_link_tags('personalData') }}
+
+
+{% endblock %}
+
+{% block body %}
+
+    <div id="personalDataContainer" >
+
+        <header class="w3-container w3-theme-d2" >
+            <h1 >Données personnelles </h1>
+            <p>{{ data.user.username }} - {{ "now"|date("d/m/Y, à H:m:s") }}</p>
+        </header>
+
+        <main class="w3-container w3-small" >
+
+            {#module profile #}
+            <section class="w3-container" >
+                <h2>Module Profil</h2>
+
+                {#user#}
+                <div class="w3-container w3-border w3-margin" >
+                    <h3>Utilisateur</h3>
+                    {#{{ dump(data) }}#}
+                    <ul class="w3-ul" >
+                        <li>
+                            <span class="personal-data-label" >Id</span> : {{ data.user.id }}
+                        </li>
+                        <li>
+                            <span class="personal-data-label" >Nom d'utilisateur</span> : {{ data.user.username }}
+                        </li>
+                        <li>
+                            <span class="personal-data-label" >Role</span> : utilisateur{% if is_granted('ROLE_ADMIN') %}, administrateur {% endif %}
+                        </li>
+                        <li>
+                            <span class="personal-data-label" > Hash mot de passe</span> : {{ data.user.password }}
+                        </li>
+                        <li>
+                            <span class="personal-data-label" >Email</span> : {{ data.user.email }}
+                        </li>
+                        <li>
+                            <span class="personal-data-label" >Date d'anniversaire</span> : {{ data.user.birthDate|date("d/m/Y") }}
+                        </li>
+                        <li>
+                            <span class="personal-data-label" >Créé le</span> : {{ data.user.createdAt|date("d/m/Y, à H:m:s") }}
+                        </li>
+                        <li>
+                            <span class="personal-data-label" >Genre</span> : {% if ('M' ==  data.user.gender) %}Homme{% elseif ('F' ==  data.user.gender) %}Femme{% else %}{{ missingInfo | raw }}{% endif %}
+                        </li>
+                        <li>
+                            <span class="personal-data-label" >Numéro de téléphone</span> : {% if data.user.phoneNumber is null %}{{ missingInfo | raw }}{% else %}{{  data.user.phoneNumber }}{% endif %}
+                        </li>
+                        <li>
+                            <span class="personal-data-label" >Description</span> : {% if data.user.description is null %}{{ missingInfo | raw }}{% else %}{{  data.user.description }}{% endif %}
+                        </li>
+                        <li>
+                            <span class="personal-data-label" >Peut se déplacer</span> :  {% if data.user.canGoAway is null %}{{ missingInfo | raw }}{% else %}{{  data.user.canGoAway ? 'oui' : 'non' }}{% endif %}
+                        </li>
+                        <li>
+                            <span class="personal-data-label" >Limite de coût par activité</span> : {% if data.user.activityCostLimit is null %}{{ missingInfo | raw }}{% else %}{{  data.user.activityCostLimit }}{% endif %}
+                        </li>
+                        <li>
+                            <span class="personal-data-label" >Est blessés</span> : {% if data.user.isInjured is null %}{{ missingInfo | raw }}{% else %}{{  data.user.isInjured ? 'oui' : 'non' }}{% endif %}
+                        </li>
+                        <li>
+                            <span class="personal-data-label" >Profil visible</span> : {% if data.user.isPersonalProfileVisible is null %}{{ missingInfo | raw }}{% else %}{{  data.user.isPersonalProfileVisible ? 'oui' : 'non' }}{% endif %}
+                        </li>
+                        <li>
+                            <span class="personal-data-label" >Participations visibles</span> : {% if data.user.areActivityParticipationVisible is null %}{{ missingInfo | raw }}{% else %}{{  data.user.areActivityParticipationVisible ? 'oui' : 'non' }}{% endif %}
+                        </li>
+                        <li>
+                            <span class="personal-data-label" >Succès visibles</span> : {% if data.user.areSuccessUnlockedVisible is null %}{{ missingInfo | raw }}{% else %}{{  data.user.areSuccessUnlockedVisible ? 'oui' : 'non' }}{% endif %}
+                        </li>
+                        <li>
+                            <span class="personal-data-label" >Disponibilités</span> :
+                        {% if data.user.disponibilityPatterns is empty  %}
+                            <span class="w3-text-gray" >Aucune</span>
+                        {% else %}
+                            <ul class="w3-ul w3-tiny" >
+                                {% for pattern in  data.user.disponibilityPatterns %}<li>{{ data.user.getDisponibilityPatternTokenFromValue(pattern)|trans }}</li>{% endfor %}
+                            </ul>
+                        {% endif %}
+                        </li>
+                        <li>
+                            <span class="personal-data-label" >Classe </span> :
+                            {% if data.user.schoolClass is null %}
+                                {{ missingInfo | raw }}
+                            {% else %}
+                                {{ data.user.schoolClass }} {% if data.user.schoolClass.schoolsection is not null %} ({{ data.user.schoolClass.schoolsection.label }}) {% endif %}
+                            {% endif %}
+                        </li>
+                        <li>
+                            <span class="personal-data-label" >Partenaires préférés </span> :
+                            {% if data.user.preferredPartners is empty  %}
+                                <span class="w3-text-gray" >Aucun</span>
+                            {% else %}
+                                <ul class="w3-ul w3-tiny" >
+                                    {% for partner in  data.user.preferredPartners %}<li>{{ partner.username }}</li>{% endfor %}
+                                </ul>
+                            {% endif %}
+                        </li>
+                        <li>
+                            <span class="personal-data-label" >Photo de profil </span> :
+                            {% if data.user.profilePicture is null  %}
+                                {{ missingInfo | raw }}
+                            {% else %}
+                                <div class="personal-data-image-container w3-tiny" >
+                                    <img class="w3-image" src="{{ profile_picture_uri_prefix }}/{{ data.user.profilePicture.picture }}" alt="photo de profil" style="height: 100px;" >
+                                    <div class="personal-data-image-details" >
+                                        <p> <span class="personal-data-label" >Mise à jour le</span> : {{ data.user.profilePicture.updatedAt|date("d/m/Y, à H:m:s") }}</p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </li>
+                        <li>
+                            <span class="personal-data-label" >Photos </span> :
+                            {% if data.user.pictures is empty  %}
+                                <span class="w3-text-gray" >Aucune</span>
+                            {% else %}
+                                <ul class="w3-ul w3-tiny" >
+                                    {% for picture in  data.user.pictures  %}
+                                        <li>
+                                            <div class="personal-data-image-container" >
+                                                <img class="w3-image" src="{{ picture_uri_prefix }}/{{ picture.image }}" alt="{{ picture.label }}" style="height: 100px;" >
+                                                <div class="personal-data-image-details" >
+                                                    <p><span class="personal-data-label" >Libellé</span> : {{ picture.label }}</p>
+                                                    <p><span class="personal-data-label" >Mise à jour le</span> : {{ picture.updatedAt|date("d/m/Y, à H:m:s") }}</p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </li>
+                    </ul>
+                </div>
+
+                {#sport profile#}
+                <div class="w3-container w3-border w3-margin" >
+
+                    <h3>Profils sportifs</h3>
+
+                    {% if data.sportProfile is empty %}
+
+                        <span class="w3-text-gray" >Aucun</span>
+
+                    {% else %}
+
+                        <ul class="w3-ul" >
+
+                            {% for profile in data.sportProfile %}
+
+                                <li>
+                                    <span class="personal-data-label" >{{ profile.sport.label }} </span> :
+                                    <ul class="w3-ul w3-tiny" >
+                                        <li>
+                                            <span class="personal-data-label" >Id</span> : {{ profile.id }}
+                                        </li>
+                                        <li>
+                                            <span class="personal-data-label" >Role</span> : {% if (profile.role is null) or (profile.role is same as('')) %}{{ missingInfo | raw }}{% else %}{{profile.role }}{% endif %}
+                                        </li>
+                                        <li>
+                                            <span class="personal-data-label" >Niveau</span> : {% if (profile.level is null) or (profile.level is same as('')) %}{{ missingInfo | raw }}{% else %}{{ profile.getLevelTokenFromValue(profile.level)|trans }}{% endif %}
+                                        </li>
+                                        <li>
+                                            <span class="personal-data-label" >Vise le fun</span> : {% if profile.isAimingFun is null %}{{ missingInfo | raw }}{% else %}{{  profile.isAimingFun ? 'oui' : 'non' }}{% endif %}
+                                        </li>
+                                        <li>
+                                            <span class="personal-data-label" >Vise les performances</span> : {% if profile.isAimingPerf is null %}{{ missingInfo | raw }}{% else %}{{  profile.isAimingPerf ? 'oui' : 'non' }}{% endif %}
+                                        </li>
+                                        <li>
+                                            <span class="personal-data-label" >Fréquence désirée (par semaine)</span> : {% if profile.wantedTimesPerWeek is null %}{{ missingInfo | raw }}{% else %}{{  profile.wantedTimesPerWeek ? 'oui' : 'non' }}{% endif %}
+                                        </li>
+                                        <li>
+                                            <span class="personal-data-label" >Désire être notifié à propos de ce sport</span> : {% if profile.wantToBeNotifiedAboutThisSport is null %}{{ missingInfo | raw }}{% else %}{{  profile.wantToBeNotifiedAboutThisSport ? 'oui' : 'non' }}{% endif %}
+                                        </li>
+                                        <li>
+                                            <span class="personal-data-label" >Est visible</span> : {% if profile.isVisible is null %}{{ missingInfo | raw }}{% else %}{{  profile.isVisible ? 'oui' : 'non' }}{% endif %}
+                                        </li>
+                                    </ul>
+                                </li>
+
+                            {% endfor %}
+
+                        </ul>
+
+                    {% endif %}
+
+                </div>
+
+            </section>
+
+
+            {#module activité #}
+            <section class="w3-container" >
+
+                {#activity invitation#}
+                <div class="w3-container" >
+
+                </div>
+
+                {#activity participation#}
+                <div class="w3-container" >
+
+                </div>
+
+                {#activity cancellation#}
+                <div class="w3-container" >
+
+                </div>
+
+                {#user related feedback made#}
+                <div class="w3-container" >
+
+                </div>
+
+                {#user related feedback addressed#}
+                <div class="w3-container" >
+
+                </div>
+
+            </section>
+
+            {#module promotion #}
+            <section class="w3-container" >
+
+                {#Shout out#}
+                <div class="w3-container" >
+
+                </div>
+
+            </section>
+
+        </main>
+
+        <footer class="w3-theme-d3 w3-small w3-padding" >
+            <h6><img src="/images/favicon.png" style="width: 18px; height: 18px;" > EPHEC Sport </h6>
+        </footer>
+
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+
+{% endblock %}

@@ -3,6 +3,7 @@
 namespace App\Entity\Information;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Entity\Location;
 use App\Entity\picture;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -109,6 +110,17 @@ class HealthProfessional
      */
     private $presentation;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $webSiteAddress;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $addressAsText;
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -194,6 +206,30 @@ class HealthProfessional
     public function setPresentation(string $presentation): self
     {
         $this->presentation = $presentation;
+
+        return $this;
+    }
+
+    public function getWebSiteAddress(): ?string
+    {
+        return $this->webSiteAddress;
+    }
+
+    public function setWebSiteAddress(?string $webSiteAddress): self
+    {
+        $this->webSiteAddress = $webSiteAddress;
+
+        return $this;
+    }
+
+    public function getAddressAsText(): ?string
+    {
+        return $this->addressAsText;
+    }
+
+    public function setAddressAsText(?string $addressAsText): self
+    {
+        $this->addressAsText = $addressAsText;
 
         return $this;
     }

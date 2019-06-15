@@ -18,6 +18,7 @@ export default {
         )
     },
     putActivityHistoryFeedback(id, payload) {
+        console.log(id);
         return ApiService.put(
             '/api/activities/feedbacks/' + id,
             payload

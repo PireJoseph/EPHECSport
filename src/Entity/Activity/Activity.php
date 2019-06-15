@@ -27,13 +27,13 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *     collectionOperations={
  *         "getActivityHistory" = {
  *              "method"="GET",
- *              "path"="/activities/history/" ,
+ *              "path"="/activities/history" ,
  *              "denormalization_context"={"groups"={"activity-history"} },
  *              "normalization_context"={"groups"={"activity-history"} }
  *          },
  *         "getAvailableActivities" = {
  *              "method"="GET",
- *              "path"="/activities/available/" ,
+ *              "path"="/activities/available" ,
  *              "denormalization_context"={"groups"={"activity-available"} },
  *              "normalization_context"={"groups"={"activity-available"} },
  *          },

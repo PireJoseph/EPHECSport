@@ -8,10 +8,6 @@ body {
 }
 
 
-.answer-btn {
-    width: 80px;
-}
-
 .formInputContainer {
     display: flex;
     flex-direction: column;
@@ -120,14 +116,44 @@ textarea {
 .vgt-table {
     font-size: small!important;
 }
-.vgt-table th, .vgt-table td{
-    padding: 5px!important;
+
+/* Cells */
+th.vgt-left-align, td.vgt-left-align {
+    /*padding: 10px 5px!important;
     text-align: right;
+    vertical-align: middle!important;*/
 }
+
+/* Cells content */
+th.vgt-left-align span, td.vgt-left-align span, th.vgt-left-align div, td.vgt-left-align div{
+/*    display: flex;
+    height: 100%;
+    justify-content: flex-end;
+    align-items: center;*/
+}
+
+/*all li including first*/
+td.vgt-left-align div ul > li {
+    padding: 0 16px 8px 16px;
+}
+/*all li after the first li*/
+td.vgt-left-align div ul > li ~ li {
+    padding-top: 8px;
+}
+
+/* small screens */
 @media only screen and (max-width: 600px) {
 
-    .vgt-table th, .vgt-table td{
-        text-align: center;
+    /* Cells */
+    th.vgt-left-align, td.vgt-left-align {
+        padding: 5px!important;
+ /*       text-align: right;
+        vertical-align: middle!important;*/
+    }
+
+    /* Cells content */
+    th.vgt-left-align span, td.vgt-left-align span, th.vgt-left-align div, td.vgt-left-align div{
+        /*text-align: center;*/
     }
 
 }

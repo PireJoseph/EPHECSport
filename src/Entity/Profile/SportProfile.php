@@ -121,6 +121,11 @@ class SportProfile
         return $this->level;
     }
 
+    public function getLevelTokenFromValue($value)
+    {
+        return  array_search($value, self::getLevelTokenArray(), true);
+    }
+
     public function setLevel(?string $level): self
     {
         $this->level = $level;

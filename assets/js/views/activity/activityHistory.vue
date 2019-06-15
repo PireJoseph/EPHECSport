@@ -25,29 +25,29 @@
                 >
                 <template slot="table-row" slot-scope="props">
 
-                    <span v-if="props.column.field == 'after'">
+                    <div v-if="props.column.field == 'after'" class="w3-bar" style="width: 100%">
 
-                        <button  class="w3-button w3-grey w3-small w3-block" @click="loadActivityFeedback(props.row)" :disabled="areFeedbackActionDisabled">
+                        <button  class="w3-button w3-grey w3-bar-item" @click="loadActivityFeedback(props.row)" :disabled="areFeedbackActionDisabled" style="width: 50%">
                             <span v-show="!isActivityFeedbackLoadingForThisActivity(props.row)">
                                 <i class="fa fa-bolt" aria-hidden="true"></i>
                                 <span class="w3-hide-small w3-hide-medium"> Activité</span>
                             </span>
-                            <span  class="w3-block w3-center w3-small" v-show="isActivityFeedbackLoadingForThisActivity(props.row)">
+                            <span v-show="isActivityFeedbackLoadingForThisActivity(props.row)">
                                 <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
                             </span>
                         </button>
 
-                        <button  class="w3-button w3-black w3-small w3-margin-top w3-block" @click="loadActivityUsers(props.row)" :disabled="areFeedbackActionDisabled">
+                        <button  class="w3-button w3-black w3-bar-item" @click="loadActivityUsers(props.row)" :disabled="areFeedbackActionDisabled" style="width: 50%">
                             <span v-show="!areActivityParticipationLoadingForThisActivity(props.row)">
                                  <i class="fa fa-users" aria-hidden="true"></i>
                                  <span class="w3-hide-small w3-hide-medium"> Participations</span>
                             </span>
-                            <span v-show="areActivityParticipationLoadingForThisActivity(props.row)" class="w3-block w3-center w3-small" >
+                            <span v-show="areActivityParticipationLoadingForThisActivity(props.row)" >
                                  <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
                             </span>
                         </button>
 
-                    </span>
+                    </div>
 
                     <span v-else-if="props.column.field == 'location'">
                         <span v-if="!!props.row.location">

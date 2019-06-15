@@ -11,7 +11,7 @@ namespace App\Form\Profile;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Vich\UploaderBundle\Form\Type\VichFileType;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class ProfilePictureType extends AbstractType
 {
@@ -22,7 +22,7 @@ class ProfilePictureType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('pictureFile', VichFileType::class)
+            ->add('pictureFile', VichImageType::class)
         ;
     }
 

@@ -61,8 +61,7 @@ input {
     border-bottom: 1px solid #ccc!important;
 }
 
-button {
-    background-color: #4CAF50;
+button.w3-button, a.w3-button  {
     color: white;
     padding: 14px 20px;
     border: none;
@@ -78,9 +77,4 @@ button:hover {
     /*opacity: 0.8;*/
     background-color: rgb(204,204,204);
     color: black;
-}
-
-.form-btn {
-    padding: 14px 20px;
-    width: 100%;
 }

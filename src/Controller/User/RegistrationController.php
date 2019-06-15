@@ -62,7 +62,7 @@ class RegistrationController extends AbstractController
                         break;
                 }
 
-                return $this->render('registration/register.html.twig', [
+                return $this->render('user/registration/index.html.twig', [
                     'customError' => $customError,
                     'registrationForm' => $form->createView(),
                 ]);
@@ -78,7 +78,7 @@ class RegistrationController extends AbstractController
             );
         }
 
-        return $this->render('registration/register.html.twig', [
+        return $this->render('user/registration/index.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
     }
