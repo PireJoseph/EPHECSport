@@ -156,7 +156,7 @@
 
                     {% if data.sportProfile is empty %}
 
-                        <span class="w3-text-gray" >Aucun</span>
+                        <p class="w3-text-gray" >Aucun</p>
 
                     {% else %}
 
@@ -202,45 +202,315 @@
 
                 </div>
 
+                {# success#}
+                <div class="w3-container  w3-border w3-margin" >
+
+                    <h3>Succès</h3>
+
+                    {% if data.success is empty %}
+
+                        <p class="w3-text-gray" >Aucun</p>
+
+                    {% else %}
+
+                        <ul class="w3-ul" >
+                            {% for success in data.success %}
+                                <li>
+                                    <span class="personal-data-label" >Libellé</span> : {{ success.getLabelTokenFromValue(success.label)|trans }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+
+                    {% endif %}
+
+                </div>
+
             </section>
 
 
             {#module activité #}
             <section class="w3-container" >
+                <h2>Module Activity</h2>
 
                 {#activity invitation#}
-                <div class="w3-container" >
+                <div class="w3-container  w3-border w3-margin" >
+
+                    <h3>Invitations reçues</h3>
+
+                    {% if data.activityInvitations is empty %}
+
+                        <p class="w3-text-gray" >Aucun</p>
+
+                    {% else %}
+
+                        <ul class="w3-ul" >
+                            {% for invitation in data.activityInvitations %}
+                                <li>
+                                    <ul class="w3-ul w3-tiny">
+                                        <li>
+                                            <span class="personal-data-label" >Id</span> : {{ invitation.id }}
+                                        </li>
+                                        <li>
+                                            <span class="personal-data-label" >Créée le</span> : {{ invitation.createdAt|date("d/m/Y, à H:m:s") }}
+                                        </li>
+                                        <li>
+                                            <span class="personal-data-label" >Activité</span> : {{ invitation.activity }}
+                                        </li>
+                                        <li>
+                                            <span class="personal-data-label" >Créée par</span> : {{ invitation.createdBy }}
+                                        </li>
+                                        <li>
+                                            <span class="personal-data-label" >Est acceptée</span> : {% if invitation.isAccepted is null %}{{ missingInfo | raw }}{% else %}{{  invitation.isAccepted ? 'oui' : 'non' }}{% endif %}
+                                        </li>
+                                        <li>
+                                            <span class="personal-data-label" >Réponse donnée le</span> : {% if invitation.answeredAt is null %}{{ missingInfo | raw }}{% else %}{{  invitation.answeredAt|date("d/m/Y, à H:m:s")}}{% endif %}
+                                        </li>
+                                    </ul>
+                                </li>
+                            {% endfor %}
+                        </ul>
+
+                    {% endif %}
 
                 </div>
 
                 {#activity participation#}
-                <div class="w3-container" >
+                <div class="w3-container  w3-border w3-margin" >
+
+                    <h3>Participations à une activité</h3>
+
+                    {% if data.activityParticipations is empty %}
+
+                        <p class="w3-text-gray" >Aucune</p>
+
+                    {% else %}
+
+                        <ul class="w3-ul" >
+                            {% for participation in data.activityParticipations %}
+                                <li>
+                                    <ul class="w3-ul w3-tiny">
+                                        <li>
+                                            <span class="personal-data-label" >Id</span> : {{ participation.id }}
+                                        </li>
+                                        <li>
+                                            <span class="personal-data-label" >Activité</span> : {{ participation.activity }}
+                                        </li>
+                                        <li>
+                                            <span class="personal-data-label" >Est confirmée</span> : {% if participation.isConfirmed is null %}{{ missingInfo | raw }}{% else %}{{  participation.isConfirmed ? 'oui' : 'non' }}{% endif %}
+                                        </li>
+                                        <li>
+                                            <span class="personal-data-label" >Réponse donnée le</span> : {% if participation.answeredAt is null %}{{ missingInfo | raw }}{% else %}{{  participation.answeredAt|date("d/m/Y, à H:m:s")}}{% endif %}
+                                        </li>
+                                    </ul>
+                                </li>
+                            {% endfor %}
+                        </ul>
+
+                    {% endif %}
 
                 </div>
 
                 {#activity cancellation#}
-                <div class="w3-container" >
+                <div class="w3-container  w3-border w3-margin" >
+
+                    <h3>Annulation de participation</h3>
+
+                    {% if data.activityCancellations is empty %}
+
+                        <p class="w3-text-gray" >Aucune</p>
+
+                    {% else %}
+
+                        <ul class="w3-ul" >
+                            {% for cancellation in data.activityCancellations %}
+                                <li>
+                                    <ul class="w3-ul w3-tiny">
+                                        <li>
+                                            <span class="personal-data-label" >Id</span> : {{ cancellation.id }}
+                                        </li>
+                                        <li>
+                                            <span class="personal-data-label" >Créée le</span> : {{ cancellation.createdAt|date("d/m/Y, à H:m:s") }}
+                                        </li>
+                                        <li>
+                                            <span class="personal-data-label" >Activité</span> : {{ cancellation.activity }}
+                                        </li>
+                                        <li>
+                                            <span class="personal-data-label" >Créée par</span> : {{ cancellation.createdBy }}
+                                        </li>
+                                        <li>
+                                            <span class="personal-data-label" >Motif d'annulation</span> :
+                                            <p>{{ cancellation.cancellationMotivation }}</p>
+                                        </li>
+                                    </ul>
+                                </li>
+                            {% endfor %}
+                        </ul>
+
+                    {% endif %}
 
                 </div>
 
                 {#user related feedback made#}
-                <div class="w3-container" >
+                <div class="w3-container  w3-border w3-margin" >
+
+                    <h3>Feedback créés sur la participation d'un utilisateur </h3>
+
+                    {% if data.userRelatedFeedbackMade is empty %}
+
+                        <p class="w3-text-gray" >Aucun</p>
+
+                    {% else %}
+
+                        <ul class="w3-ul" >
+
+                            {% for feedback in data.userRelatedFeedbackMade %}
+                                <li>
+                                    <ul class="w3-ul w3-tiny">
+                                        <li>
+                                            <span class="personal-data-label" >Id</span> : {{ feedback.id }}
+                                        </li>
+                                        <li>
+                                            <span class="personal-data-label" >Activité</span> : {{ feedback.activity }}
+                                        </li>
+                                        <li>
+                                            <span class="personal-data-label" >Libellé</span> : {{ feedback.getLabelTokenFromValue(feedback.label)|trans }}
+                                        </li>
+                                        <li>
+                                            <span class="personal-data-label" >Addressé à</span> : {{ feedback.user }}
+                                        </li>
+                                    </ul>
+                                </li>
+                            {% endfor %}
+
+                        </ul>
+
+                    {% endif %}
 
                 </div>
 
                 {#user related feedback addressed#}
-                <div class="w3-container" >
+                <div class="w3-container  w3-border w3-margin" >
 
+                    <h3>Feedback sur la participation évaluée par un autre utilisateur</h3>
+
+                    {% if data.userRelatedFeedbackAddressed is empty %}
+
+                        <p class="w3-text-gray" >Aucun</p>
+
+                    {% else %}
+
+                        <ul class="w3-ul" >
+
+                            {% for feedback in data.userRelatedFeedbackAddressed %}
+                                <li>
+                                    <ul class="w3-ul w3-tiny">
+                                        <li>
+                                            <span class="personal-data-label" >Id</span> : {{ feedback.id }}
+                                        </li>
+                                        <li>
+                                            <span class="personal-data-label" >Activité</span> : {{ feedback.activity }}
+                                        </li>
+                                        <li>
+                                            <span class="personal-data-label" >Libellé</span> : {{ feedback.getLabelTokenFromValue(feedback.label)|trans }}
+                                        </li>
+                                    </ul>
+                                </li>
+                            {% endfor %}
+
+                        </ul>
+
+                    {% endif %}
+
+                </div>
+
+                {#activity related feedback #}
+                <div class="w3-container  w3-border w3-margin" >
+
+                    <h3>Feedback sur une activité</h3>
+
+                    {% if data.activityRelatedFeedBacks is empty %}
+
+                        <p class="w3-text-gray" >Aucun</p>
+
+                    {% else %}
+
+                        <ul class="w3-ul" >
+
+                            {% for feedback in data.activityRelatedFeedBacks %}
+                                <li>
+                                    <ul class="w3-ul w3-tiny">
+                                        <li>
+                                            <span class="personal-data-label" >Id</span> : {{ feedback.id }}
+                                        </li>
+                                        <li>
+                                            <span class="personal-data-label" >Activité</span> : {{ feedback.activity }}
+                                        </li>
+                                        <li>
+                                            <span class="personal-data-label" >Notation</span> : {{ feedback.activityRatingOutOfFive }}
+                                        </li>
+                                        <li>
+                                            <span class="personal-data-label" >Libellé</span> : {{ feedback.getLabelTokenFromValue(feedback.label)|trans }}
+                                        </li>
+                                        <li>
+                                            <span class="personal-data-label" >Commentaire</span> :  {% if (feedback.comment is null) or (feedback.comment is same as('')) %}{{ missingInfo | raw }}
+                                            {% else %}
+                                                <p>{{  feedback.comment }}</p>
+                                            {% endif %}
+                                        </li>
+                                    </ul>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                 </div>
 
             </section>
 
             {#module promotion #}
             <section class="w3-container" >
+                <h2>Module Promotion</h2>
 
                 {#Shout out#}
-                <div class="w3-container" >
+                <div class="w3-container  w3-border w3-margin" >
 
+
+                    <h3>Encouragements</h3>
+
+                    {% if data.shoutOuts is empty %}
+
+                        <p class="w3-text-gray" >Aucun</p>
+
+                    {% else %}
+
+                        <ul class="w3-ul" >
+
+                            {% for shoutOut in data.shoutOuts %}
+                                <li>
+                                    <ul class="w3-ul w3-tiny">
+                                        <li>
+                                            <span class="personal-data-label" >Id</span> : {{ shoutOut.id }}
+                                        </li>
+                                        <li>
+                                            <span class="personal-data-label" >Créée le</span> : {{ shoutOut.createdAt|date("d/m/Y, à H:m:s") }}
+                                        </li>
+                                        <li>
+                                            {% if shoutOut.emeritusSportManTarget is not  null %}
+                                                <span class="personal-data-label" >Destinataire (sportif)</span> : {{ shoutOut.emeritusSportManTarget }}
+                                            {% elseif shoutOut.officialTeamTarget is not  null  %}
+                                                <span class="personal-data-label" >Destinataire (équipe)</span> : {{ shoutOut.officialTeamTarget }}
+                                            {% endif %}
+                                        </li>
+                                        <li>
+                                            <span class="personal-data-label" >Contenu</span> :  {% if (shoutOut.content is null) or (shoutOut.content is same as('')) %}{{ missingInfo | raw }}
+                                            {% else %}
+                                                <p>{{ shoutOut.content }}</p>
+                                            {% endif %}
+                                        </li>
+                                    </ul>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                 </div>
 
             </section>

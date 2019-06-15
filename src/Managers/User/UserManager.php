@@ -894,7 +894,7 @@ class UserManager
         {
             $activityRelatedFeedbackMadeArray[] = $activityRelatedFeedbackMade;
         }
-        $toSend['userRelatedFeedBacks'] = $activityRelatedFeedbackMadeArray;
+        $toSend['activityRelatedFeedBacks'] = $activityRelatedFeedbackMadeArray;
 
 
         // shoutouts

@@ -139,6 +139,11 @@ class UserRelatedFeedback
         return $this->label;
     }
 
+    public function getLabelTokenFromValue($value)
+    {
+        return  array_search($value, self::getLabelValueTokenArray(), true);
+    }
+
     public function setLabel(string $label): self
     {
         $this->label = $label;
@@ -197,9 +202,7 @@ class UserRelatedFeedback
 
     public static function getLabelToken($labelValue)
     {
-        $labelValueTokenArray = self::getLabelValueTokenArray();
-        $labelToken = array_search($labelValue, $labelValueTokenArray);
-        return $labelToken;
+        return array_search($labelValue, self::getLabelValueTokenArray());
     }
 
 }

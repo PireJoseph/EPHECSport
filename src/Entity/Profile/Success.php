@@ -65,6 +65,11 @@ class Success
         return $this->label;
     }
 
+    public function getLabelTokenFromValue($value)
+    {
+        return self::getLabelTokenFromValue($value);
+    }
+
     public function setLabel(string $label): self
     {
         $this->label = $label;

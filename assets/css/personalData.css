@@ -25,3 +25,7 @@ body {
     flex-direction: column;
     align-items: flex-end;
 }
+
+#personalDataContainer li {
+    overflow: hidden;
+}

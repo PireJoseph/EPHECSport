@@ -148,6 +148,11 @@ class ActivityRelatedFeedback
         return $this->label;
     }
 
+    public function getLabelTokenFromValue($value)
+    {
+        return  array_search($value, self::getLabelValueTokenArray(), true);
+    }
+
     public function setLabel(string $label): self
     {
         $this->label = $label;
