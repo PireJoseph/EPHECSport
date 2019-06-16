@@ -196,9 +196,8 @@
                            id="activityCostLimitInput"
                            name="activityCostLimitInput"
                            v-model="formActivityCostLimit"
-                           v-validate="'required|min:0'"
+                           v-validate="'min:0'"
                            min="0"
-                           required
                     />
                     <span v-show="!!errors.first('activityCostLimitInput')" class="w3-tag w3-tiny w3-padding w3-red formInputErrors" >{{ errors.first('activityCostLimitInput') }}</span>
                 </div>

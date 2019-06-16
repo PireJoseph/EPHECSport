@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'base.pdf.html.twig' %}
 
 {% set missingInfo = '<span class="w3-text-gray" >Non spécifié</span>' %}
 {% set pageTitle =  'Données personnelles' %}
@@ -10,9 +10,11 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-blue-grey.css" >
+    {#<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-blue-grey.css" >#}
 
-    {{ encore_entry_link_tags('personalData') }}
+    <link rel="stylesheet" type="text/css" href="/var/www/es-api/public/build/personalData.css" >
+
+    {#{{ encore_entry_link_tags('personalData') }}#}
 
 
 {% endblock %}
@@ -53,7 +55,7 @@
                             <span class="personal-data-label" >Email</span> : {{ data.user.email }}
                         </li>
                         <li>
-                            <span class="personal-data-label" >Date d'anniversaire</span> : {% if data.user.birthDate is null %}{{ missingInfo | raw }}{% else %}{{ data.user.birthDate|date("d/m/Y") }}{% endif %}
+                            <span class="personal-data-label" >Date d'anniversaire</span> : {{ data.user.birthDate|date("d/m/Y") }}
                         </li>
                         <li>
                             <span class="personal-data-label" >Créé le</span> : {{ data.user.createdAt|date("d/m/Y, à H:m:s") }}

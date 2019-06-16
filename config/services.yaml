@@ -7,6 +7,7 @@ parameters:
     locale: 'fr'
     profile_picture.uri_prefix: '/images/profilePictures'
     picture.uri_prefix: '/images/pictures'
+    root_dir: '/var/www/es-api'
     authentication.refreshToken.expiration: 2592000
 
 services:

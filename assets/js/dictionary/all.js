@@ -52,7 +52,6 @@ const dictionary = {
                 required : 'Email requis'
             },
             activityCostLimitInput : {
-                required : 'veuillez indiquer une valeur',
                 min: 'Nombre négatifs non autorisés'
             }
 

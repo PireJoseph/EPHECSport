@@ -6,6 +6,7 @@ use App\Managers\User\UserManager;
 use Exception;
 use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use App\Security\iHasRole;
@@ -74,13 +75,13 @@ class UserAccountController extends AbstractController
 
         $connectedUser = $this->get('security.token_storage')->getToken()->getUser();
 
-        $persnnalData = $this->userManager->getAllPersonalData($connectedUser);
+        $personalData = $this->userManager->getAllPersonalData($connectedUser);
 
         $test= '';
         return $this->render(
             'user/account/my_data.html.twig',
             [
-                'data' => $persnnalData,
+                'data' => $personalData,
             ]
         );
 
@@ -93,15 +94,18 @@ class UserAccountController extends AbstractController
 
     /**
      * @Route("my_data_pdf", name="app_get_personnal_data_as_pdf")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function getPersonalDataAsPDF()
+    public function getPersonalDataAsPDF(Request $request)
     {
         $connectedUser = $this->get('security.token_storage')->getToken()->getUser();
 
         $personalData = $this->userManager->getAllPersonalData($connectedUser);
-
+        $rootDir = $this->get('parameter_bag')->get('root_dir');
+        $publicFolder = $rootDir . '/public/';
         $html = $this->renderView(
-            'user/account/my_data.html.twig',
+            'user/account/my_data.pdf.html.twig',
             [
                 'data' => $personalData,
             ]
@@ -111,6 +115,7 @@ class UserAccountController extends AbstractController
             $this->knpSnappyPDF->getOutputFromHtml($html),
             'file.pdf'
         );
+
 
     }
 

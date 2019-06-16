@@ -26,7 +26,7 @@
                 <template slot="table-row" slot-scope="props">
 
                     <div v-if="props.column.field == 'after'" class="w3-bar" style="width: 100%">
-                        <button v-if="((!props.row.relatedRequest) && (!props.row.isJoinableByAnyone))" class="w3-button w3-black w3-bar-item" :disabled="areActionBtnDisabled" @click="makeJoiningRequest(props.row['@id'])"  style="width: 50%">
+                        <button v-if="((!props.row.relatedRequest) && (!props.row.isJoinableByAnyone))" class="w3-button w3-black w3-bar-item" :disabled="areActionBtnDisabled" @click="makeJoiningRequest(props.row['@id'])"  style="width: 100%">
                             <span v-show="!isActivityJoiningRequestLoading(props.row['@id'])" >
                                 <i class="fa fa-unlock-alt" aria-hidden="true"></i>
                             <span class="w3-hide-small w3-hide-medium"> Demander</span>
@@ -36,7 +36,7 @@
                             </span>
                         </button>
 
-                        <button v-if="((!props.row.relatedRequest) && (props.row.isJoinableByAnyone))" class="w3-button w3-green w3-bar-item" :disabled="areActionBtnDisabled" @click="makeJoiningRequest(props.row['@id'])"  style="width: 50%">
+                        <button v-if="((!props.row.relatedRequest) && (props.row.isJoinableByAnyone))" class="w3-button w3-green w3-bar-item" :disabled="areActionBtnDisabled" @click="makeJoiningRequest(props.row['@id'])"  style="width: 100%">
                             <span v-show="!isActivityJoiningRequestLoading(props.row['@id'])" >
                                 <i class="fas fa-sign-in-alt"></i>
                                 <span class="w3-hide-small w3-hide-medium"> Rejoindre</span>

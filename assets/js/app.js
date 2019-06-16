@@ -9,8 +9,11 @@
 
 // import the styles
 
-require('../css/w3.css');
 
+require('@fortawesome/fontawesome-free/js/all.js');
+require ('../css/w3-theme-blue-grey.css');
+
+require ('w3-css/w3.css');
 require('../css/app.css');
 
 // Need jQuery? Install it with "yarn add jquery", then uncomment to require it.

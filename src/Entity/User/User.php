@@ -116,10 +116,9 @@ class User implements UserInterface, iHasRole
     private $email;
 
     /**
-     * @Assert\NotNull()
      * @Assert\Type(type="DateTime")
      * @var DateTime $birthDate
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $birthDate;
 

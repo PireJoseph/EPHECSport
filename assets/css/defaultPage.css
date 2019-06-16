@@ -2,6 +2,19 @@
     height: 100%;
     min-height: 100%;
 }
+/* lato-regular - latin */
+@font-face {
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../fonts/lato-v15-latin-regular.eot'); /* IE9 Compat Modes */
+    src: local('Lato Regular'), local('Lato-Regular'),
+    url('../fonts/lato-v15-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('../fonts/lato-v15-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */
+    url('../fonts/lato-v15-latin-regular.woff') format('woff'), /* Modern Browsers */
+    url('../fonts/lato-v15-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
+    url('../fonts/lato-v15-latin-regular.svg#Lato') format('svg'); /* Legacy iOS */
+}
 
 body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif;}
 body, html {
@@ -34,40 +47,58 @@ body, html {
 
 /* Create a Parallax Effect */
 .bgimg-1, .bgimg-2, .bgimg-3, .bgimg-4, .bgimg-5  {
-    background-attachment: fixed;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+    /*background-attachment: fixed;*/
+    /*background-position: center;*/
+    /*background-repeat: no-repeat;*/
+    /*background-size: cover;*/
 }
 
 /* First image (Full height) */
 .bgimg-1 {
-    background-image: linear-gradient( rgba(255, 255, 255, 0.5), rgba(0, 0, 0, 0.5) ), url('../img/BGImgDefault.jpg');
+    /*background-image: linear-gradient( rgba(255, 255, 255, 0.5), rgba(0, 0, 0, 0.5) ), url('../img/BGImgDefault.jpg');*/
     min-height: 100%;
+    /*-webkit-backface-visibility: hidden;*/
+    /*-webkit-transform: translate3d(0,0,0);*/
+    background-color: gainsboro;
 }
 
 /* Second image (activité) */
 .bgimg-2 {
-    background-image: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url('../img/BGImgActivity.jpg');
+    /*background-image: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url('../img/BGImgActivity.jpg');*/
     min-height: 400px;
+    /*-webkit-backface-visibility: hidden;*/
+    /*-webkit-transform: translate3d(0,0,0);*/
+    background-color: gainsboro;
+
 }
 
 /* Third image (promotion) */
 .bgimg-3 {
-    background-image: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url('../img/BGImgPromotion.jpg');
+    /*background-image: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url('../img/BGImgPromotion.jpg');*/
     min-height: 400px;
+    /*-webkit-backface-visibility: hidden;*/
+    /*-webkit-transform: translate3d(0,0,0);*/
+    background-color: gainsboro;
 }
 
 /* Third image (information) */
 .bgimg-4 {
-    background-image: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url('../img/BGImgInformation.jpg');
+    /*background-image: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url('../img/BGImgInformation.jpg');*/
     min-height: 400px;
+    /*-webkit-backface-visibility: hidden;*/
+    /*-webkit-transform: translate3d(0,0,0);*/
+    background-color: gainsboro;
+
 }
 
 /* Third image (Contact) */
 .bgimg-5 {
-    background-image: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url('../img/BGImgContact.jpg');
+    /*background-image: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url('../img/BGImgContact.jpg');*/
     min-height: 400px;
+    /*-webkit-backface-visibility: hidden;*/
+    /*-webkit-transform: translate3d(0,0,0);*/
+    background-color: gainsboro;
+
 }
 
 #activityImage1, #activityImage2, #activityImage3, #activityImage4{
@@ -87,13 +118,31 @@ body, html {
     background-image: url("../img/activityPic6.jpg");
 }
 
-
 .w3-hover-opacity {cursor: pointer;}
+
+.contact-info-container {
+    display: flex;
+    align-items: center;
+}
+.contact-info-icon-container {
+    flex: 0 1 50%;
+    text-align: right;
+    padding-right: 5px;
+}
+.contact-info-text-container {
+    flex: 1 0 50%;
+    text-align: left;
+    min-width: 200px;
+
+}
+.contact-info-icon-container p {
+    margin: 0;
+}
 
 /* Turn off parallax scrolling for tablets and phones */
 @media only screen and (max-device-width: 1600px) {
     .bgimg-1, .bgimg-2, .bgimg-3, .bgimg-4, .bgimg-5 {
-        background-attachment: scroll;
+        /*background-attachment: scroll;*/
         min-height: 400px;
     }
 }
@@ -107,17 +156,21 @@ body, html {
         box-shadow: 0 8px 10px 0 rgba(0,0,0,0.16);
     }
     .bgimg-1{
-        background-image: linear-gradient(180deg, rgba(255,255,255,0.7), #9c9c9c);
+        /*background-image: linear-gradient(180deg, rgba(255,255,255,0.7), #9c9c9c);*/
+        background-color: gainsboro;
 
     }
     .bgimg-2, .bgimg-3, .bgimg-4, .bgimg-5 {
-        background-image: linear-gradient(0deg, rgba(255,255,255,0.8), #616161);
+        /*background-image: linear-gradient(0deg, rgba(255,255,255,0.8), #616161);*/
+        background-color: gainsboro;
+
 
     }
     .section-title {
         font-size: 24px!important;
         letter-spacing: 4px;
     }
+
 
 }
 @media screen and (max-width: 850px) {

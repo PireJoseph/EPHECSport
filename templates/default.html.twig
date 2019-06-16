@@ -5,8 +5,6 @@
 {% block stylesheets %}
 
     {{ parent() }}
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
     {{ encore_entry_link_tags('defaultPage') }}
 
 {% endblock %}
@@ -262,19 +260,20 @@
     </div>
 
     <!-- Container (Contact Section) -->
-    <div class="w3-content w3-container w3-padding-64" >
+    <div class="w3-padding-64" >
         <h3 class="w3-center">Comment nous joindre?</h3>
-
-        <div class="w3-row w3-padding-32 w3-section">
-            <div class="w3-col m4 w3-container">
+        <div class="contact-info-container ">
+            <div class="contact-info-icon-container w3-xlarge">
+                <p><i class="fa fa-map-marker fa-fw w3-hover-text-black"></i></p>
+                <p><i class="fa fa-map-marker fa-fw w3-hover-text-black"></i></p>
+                <p><i class="fa fa-phone fa-fw w3-hover-text-black"></i></p>
+                <p><i class="fa fa-envelope fa-fw w3-hover-text-black"></i></p>
             </div>
-            <div class="w3-col m8 w3-panel">
-                <div class="w3-large w3-margin-bottom">
-                    <i class="fa fa-map-marker fa-fw w3-hover-text-black w3-xlarge w3-margin-right"></i> Louvain-la-Neuve, BE<br>
-                    <i class="fa fa-map-marker fa-fw w3-hover-text-black w3-xlarge w3-margin-right"></i> Woluwe, BE<br>
-                    <i class="fa fa-phone fa-fw w3-hover-text-black w3-xlarge w3-margin-right"></i> Téléphone: 02/899.02.76<br>
-                    <i class="fa fa-envelope fa-fw w3-hover-text-black w3-xlarge w3-margin-right"></i> Email: e.clement@ephec.be<br>
-                </div>
+            <div class="contact-info-text-container">
+                <p>Louvain-la-Neuve, BE</p>
+                <p>Woluwe, BE</p>
+                <p>02/899.02.76</p>
+                <p>e.clement@ephec.be</p>
             </div>
         </div>
     </div>

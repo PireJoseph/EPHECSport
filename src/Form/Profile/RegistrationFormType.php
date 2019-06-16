@@ -66,20 +66,6 @@ class RegistrationFormType extends AbstractType
                 ],
                 'mapped' => false,
             ])
-            ->add('birthDate', DateType::class,[
-                'label' => 'Date de naissance',
-                'format' => 'dd/mm/yyyy',
-                'widget' => 'single_text',
-                'html5' => false,
-                'attr' => ['class' => 'js-datepicker'],
-                'constraints'=> [
-                    new Date([
-                        'message' => "Votre date de naissance ne semble pas valide",
-                        'groups' => ['register_form']
-                    ])
-                ],
-                'mapped' => false,
-            ])
         ;
     }
 

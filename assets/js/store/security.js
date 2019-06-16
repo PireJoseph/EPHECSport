@@ -2,6 +2,7 @@ import SecurityAPI from '../api/security';
 
 import TokenService from '../services/token'
 import ApiService from '../services/api'
+import Router from '../router/index'
 
 export default {
     namespaced: true,
@@ -84,6 +85,7 @@ export default {
             TokenService.removeToken();
             TokenService.removeRefreshToken();
             TokenService.removeRefreshTokenExpiration();
+            Router.push({path: '/user/login'});
 
             state.isLoading = false;
             state.error = null;

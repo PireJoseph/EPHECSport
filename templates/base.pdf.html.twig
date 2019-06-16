@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{% block title %}Ephec Sport{% endblock %}</title>
+
+    {% block stylesheets %}
+        {#<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">#}
+        <link rel="stylesheet" type="text/css" href="/var/www/es-api/public/build/app.css" >
+        <link rel="icon" href="/images/favicon.png" />
+        <style rel="stylesheet" type="text/css">
+            html {
+                height: 100%;
+                margin: 0;
+            }
+
+            body {
+                min-height: 100%;
+                margin: 0;
+                display: flex;
+                flex-flow: column;
+            }
+
+        </style>
+    {% endblock %}
+
+
+</head>
+
+<body class="{% block bodyClass %}{% endblock %}">
+
+{% block body %}
+{% endblock %}
+
+{% block javascripts %}
+
+    {#{{ encore_entry_script_tags('app') }}#}
+
+{% endblock %}
+
+
+</body>
+</html>

@@ -183,13 +183,13 @@ class UserManager
      * @param $userName
      * @param $plainPassword
      * @param $email
-     * @param DateTime $birthDate
      * @return User
      * @throws ValidationException
      * @throws itemAlreadyExistsException
      * @throws EmailAddressAlreadyExistsException
+     * @throws Exception
      */
-    public function createUser($userName, $plainPassword, $email, $birthDate)
+    public function createUser($userName, $plainPassword, $email)
     {
 
         // vérifier si un utilisateur existe déja
@@ -210,8 +210,7 @@ class UserManager
         $newUser = new User();
         $newUser->setUsername($userName);
         $newUser->setEmail($email);
-        // 'Age'
-        $newUser->setBirthDate($birthDate);
+
         //  rôles
         $newUserRoles = array(iHasRole::ROLE_USER);
         $newUser->setRoles($newUserRoles);

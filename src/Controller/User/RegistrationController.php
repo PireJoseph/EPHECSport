@@ -40,11 +40,11 @@ class RegistrationController extends AbstractController
             $username =  $form->get('username')->getData();
             $plainTextPassword =  $form->get('plainPassword')->getData();
             $email =  $form->get('email')->getData();
-            $birthDate =  $form->get('birthDate')->getData();
+//            $birthDate =  $form->get('birthDate')->getData();
 
             try
             {
-                $newUser = $userManager->createUser($username, $plainTextPassword, $email, $birthDate );
+                $newUser = $userManager->createUser($username, $plainTextPassword, $email);
             }
             catch (Exception $exception)
             {
