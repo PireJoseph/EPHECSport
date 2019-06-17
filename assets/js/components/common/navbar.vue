@@ -26,7 +26,7 @@
         color: #ee7102!important;
     }
 
-    .dropdown .dropbtn.moduleactive i:nth-child(2),button.w3-bar-item.moduleactive i {
+    .dropdown .dropbtn.moduleactive i:nth-child(2), .dropdown .dropbtn.moduleactive svg:nth-child(2), button.w3-bar-item.moduleactive i, button.w3-bar-item.moduleactive svg{
         color: #ee7102!important;
     }
 
@@ -61,7 +61,6 @@
 
     /* Style the dropdown content (hidden by default) */
     .dropdown-content {
-        /*display: none;*/
         position: absolute;
         background-color: #f9f9f9;
         min-width: 160px;
@@ -113,9 +112,6 @@
         display: block;
     }
 
-    button.moduleactive.w3-button.w3-btn {
-        background-color: rgb(58, 75, 83)!important;
-    }
 
 </style>
 
@@ -160,7 +156,7 @@
                     <button v-bind:class="{ moduleactive: moduleInformationActive }" class="dropbtn" @mouseenter="activeDropdown('information')" ><i class="fa fa-search"></i> <i v-bind:class="{ 'fa-rotate-90': isInformationDropDownActive }" class="fa fa-caret-right"></i></button>
                     <div class="dropdown-content w3-theme-d4" v-show="isInformationDropDownActive" @click="clickDropdownItem">
                         <router-link to="/user/information/links" class="w3-bar-item w3-button w3-padding-large w3-hover-white" >Liens externes</router-link>
-                        <router-link to="/user/information/pros" class="w3-bar-item w3-button w3-padding-large w3-hover-white" >Professionnel de la santé</router-link>
+                        <router-link to="/user/information/pros" class="w3-bar-item w3-button w3-padding-large w3-hover-white" >Professionnels de la santé</router-link>
                     </div>
                 </div>
             </div>

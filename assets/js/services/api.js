@@ -73,11 +73,9 @@ const ApiService = {
 
                 // check if we got 401 response from the server (typically a bad JSON web token)
                 if (error.request.status == 401) {
-                    console.log(error.response.statusText);
                     // "Unauthorized"
                     //account deleted
                     if (error.response.data.message.includes('Unable to load an user with property "username" =')){
-                        console.log('deleted account');
                         store.commit('security/LOGOUT');
                         throw error
                     }

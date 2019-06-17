@@ -20,13 +20,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *              "method"="GET",
  *              "path"="/activities/{id}/feedbacks/" ,
  *              "denormalization_context"={"groups"={"activity-history-feedback"} },
- *              "normalization_context"={"groups"={"activity-history-feedback"} }
+ *              "normalization_context"={"groups"={"activity-history-feedback"} },
+ *              "requirements"={"id"="\d+"}
  *          },
  *          "put" ={
  *              "method"="PUT",
  *              "path"="/activities/feedbacks/{id}" ,
  *              "denormalization_context"={"groups"={"activity-history-feedback"} },
- *              "normalization_context"={"groups"={"activity-history-feedback"} }
+ *              "normalization_context"={"groups"={"activity-history-feedback"} },
+*               "requirements"={"id"="\d+"}
  *           }
  *     },
  *     collectionOperations = {

@@ -143,6 +143,8 @@ class PromotionManager
         $shoutOuts = $this->em->getRepository(ShoutOut::class)->findBy([
             'author' => $connectedUser,
             'emeritusSportManTarget' => $emeritusSportManTarget
+        ],[
+            'createdAt'=>'DESC'
         ]);
 
         return $shoutOuts;

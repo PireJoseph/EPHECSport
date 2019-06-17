@@ -541,7 +541,7 @@
             postActivityRelatedFeedback () {
                 this.activityFeedbackForm.activityRatingOutOfFive = parseInt( this.activityFeedbackForm.activityRatingOutOfFive)
                 let payload = this.activityFeedbackForm;
-                payload.activity = this.selectedActivity['@id']
+                payload.activity = this.selectedActivity['@id'];
                 payload.author = this.userId
                 this.$store.dispatch('activity/postActivityHistoryFeedback', payload)
                 .then(() => {

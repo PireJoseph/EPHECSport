@@ -163,7 +163,6 @@
               return (!this.areFieldsFilled || !this.isFormValid || this.isLoading);
             },
             getErrorMessageTranslated() {
-                console.log(this.error);
                 switch(this.error){
                     case 'Request failed with status code 401':
                         return 'identifiants invalides';
@@ -192,7 +191,6 @@
                                         if (typeof redirect !== 'undefined') {
                                             this.$router.push({path: redirect});
                                         } else {
-                                            console.log('pas de redirect');
                                             this.$router.push({path: '/user/home'});
                                         }
                                     }

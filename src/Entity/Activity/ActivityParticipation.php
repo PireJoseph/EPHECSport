@@ -43,6 +43,7 @@ use App\Controller\Actions\Activity\GetActivityParticipationsForAnActivity;
  *              "denormalization_context"={"groups"={"get-participations-for-an-activity"} },
  *              "normalization_context"={"groups"={"get-participations-for-an-activity"} },
  *              "controller"=GetActivityParticipationsForAnActivity::class,
+ *              "requirements"={"id"="\d+"}
  *          }
  *     }
  * )

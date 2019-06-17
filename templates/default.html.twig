@@ -41,7 +41,7 @@
                 {% endif %}
             </div>
 
-            <a class="w3-bar-item w3-button w3-hover-black w3-hide-medium w3-hide-large w3-right" href="javascript:void(0);" onclick="toggleFunction()" title="Toggle Navigation Menu">
+            <a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right" href="javascript:void(0);" onclick="toggleFunction()" title="Toggle Navigation Menu">
                 <i class="fa fa-bars"></i>
             </a>
 
@@ -63,7 +63,7 @@
                     <a href="{{ path('app_logout', {}) }}" class="w3-bar-item w3-button">SE DECONNECTER</a>
 
             {% else %}
-
+                <a href="javascript:void(0);" class="w3-bar-item w3-button" onclick="toggleFunction()">FERMER</a>
                 <a href="{{  path('app_login',{}) }}" class="w3-bar-item w3-button">SE CONNECTER</a>
 
             {% endif %}
@@ -76,9 +76,9 @@
     <!------------>
 
     <!-- First Parallax Image with Logo Text -->
-    <div class="bgimg-1 w3-display-container w3-opacity-min" id="home">
+    <div class="bgimg-1 w3-display-container w3-opacity" id="home">
         <div class="w3-display-middle" style="white-space:nowrap;">
-           <img src="/images/logoEPHECSport.gif" style="width: 100%;" class="w3-opacity" alt="EPHEC Sport"/>
+           <img src="/images/logoEPHECSport.gif" style="width: 100%;"  alt="EPHEC Sport"/>
         </div>
     </div>
 
@@ -160,11 +160,11 @@
     </div>
 
     <!-- Container (Portfolio Section) -->
-    <div class="w3-content w3-container w3-padding-64" >
-        <h3 class="w3-center">Que faire ?</h3>
-        <p class="w3-center"><em>Des dizaines d'activités ouvertes aux étudiants.<br> Mises à disposition par les mebres et gestionnaires de la plateforme de la plateforme.</em></p>
+    <div class="w3-content w3-container w3-padding-64 w3-center" >
+        <h3>Que faire ?</h3>
+        <p><em>Des dizaines d'activités ouvertes aux étudiants.<br> Mises à disposition par les mebres et gestionnaires de la plateforme de la plateforme.</em></p>
 
-        <br>
+ {#       <br>
 
         <!-- Responsive Grid. Four columns on tablets, laptops and desktops. Will stack on mobile devices/small screens (100% width) -->
         <div class="w3-row-padding w3-center w3-hide-small w3-grayscale">
@@ -187,15 +187,18 @@
             <div class="w3-col m3 activity-img-container" >
                 <div  id="activityImage4" class="activity-img w3-image">
                 </div>
-            </div>
+            </div>#}
 
-        </div>
-
-        <div class="w3-row-padding w3-center w3-section">
-            <a href="{{ path('user', {'section' : 'activity'}) }}" class="w3-btn w3-button w3-bar-item w3-button  w3-padding-large w3-light-grey w3-margin">Participer</a>
         </div>
 
     </div>
+    <div class="w3-content w3-container" >
+        <div class="w3-padding w3-section">
+            <a href="{{ path('user', {'section' : 'activity'}) }}" class="w3-btn w3-button w3-bar-item w3-button  w3-padding-large w3-light-grey w3-margin">Participer</a>
+        </div>
+    </div>
+
+
 
 
 
@@ -212,14 +215,14 @@
     </div>
 
     <!-- Container (Promotion Section) -->
-    <div class="w3-content w3-container w3-padding-64" >
-        <h3 class="w3-center">Qui suivre ?</h3>
-        <p class="w3-center"><em>Suivez et supportez nos équipes et sportifs de haut niveau.</em></p>
-        <p class="w3-center"><em>Soyez au courant de leurs plus grands exploits et venez les soutenir lors de leur prochaine rencontre.</em></p>
+    <div class="w3-content w3-container w3-padding-64 w3-center"  >
+        <h3>Qui suivre ?</h3>
+        <p><em>Suivez et supportez nos équipes et sportifs de haut niveau.</em></p>
+        <p><em>Soyez au courant de leurs plus grands exploits et venez les soutenir lors de leur prochaine rencontre.</em></p>
     </div>
 
     <div class="w3-content w3-container" >
-        <div class="w3-row-padding w3-center w3-section">
+        <div class="w3-padding w3-section">
             <a href="{{ path('user', {'section' : 'promotion'}) }}" class="w3-btn w3-button w3-bar-item w3-button  w3-padding-large w3-light-grey w3-margin">Soutenir</a>
         </div>
     </div>
@@ -242,7 +245,7 @@
         <p class="w3-center"><em>Interrogez nos professionels de la santé partenaires.</em></p>
     </div>
 
-    <div class="w3-row-padding w3-center w3-section">
+    <div class="w3-padding w3-center w3-section">
         <a href="{{ path('user', {'section' : 'information'}) }}" class="w3-btn w3-button w3-bar-item w3-button  w3-padding-large w3-light-grey w3-margin">En savoir plus</a>
     </div>
 
@@ -279,8 +282,8 @@
     </div>
 
     <!-- Footer -->
-    <footer class="w3-center w3-black w3-padding-64 w3-opacity w3-hover-opacity-off">
-        <a href="#home" class="w3-button w3-light-grey"><i class="fa fa-arrow-up w3-margin-right"></i>Remonter</a>
+    <footer id="footer" class="w3-center w3-text-white w3-padding-64 w3-opacity w3-hover-opacity-off">
+        <a href="#home" class="w3-button w3-btn w3-white"><i class="fas fa-arrow-up w3-margin-right"></i></i>Remonter</a>
         <div class="w3-xlarge w3-section">
             <a href="https://www.facebook.com/EphecSports/"><i class="fab fa-facebook-square"></i></a>
         </div>
@@ -313,11 +316,11 @@
         function toggleFunction() {
             // var navbar = document.getElementById("myNavbar");
 
-            if (navDemo.className.indexOf("w3-show") == -1) {
+            if (navDemo.className.indexOf("w3-show") == -1) { //si le menu est fermé
                 navDemo.className += " w3-show";
                 navbar.className += " mobile-menu-open";
 
-            } else {
+            } else { // si le menu est ouvert
                 navDemo.className = navDemo.className.replace(" w3-show", "");
                 navbar.className = navbar.className.replace("mobile-menu-open", "");
             }
@@ -325,6 +328,7 @@
 
         function hideNavBar() {
             navDemo.className = navDemo.className.replace(" w3-show", "");
+            navbar.className = navbar.className.replace("mobile-menu-open", "");
         }
 
     </script>

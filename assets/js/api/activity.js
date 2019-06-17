@@ -8,17 +8,16 @@ export default {
     },
     getActivityHistoryFeedback(id) {
         return ApiService.get(
-            '/api/activities/'+ id + '/feedbacks'
+            '/api/activities/'+ id + '/feedbacks/'
         )
     },
     postActivityHistoryFeedback(payload) {
         return ApiService.post(
-            '/api/activities/feedbacks',
+            '/api/activities/feedbacks/',
             payload
         )
     },
     putActivityHistoryFeedback(id, payload) {
-        console.log(id);
         return ApiService.put(
             '/api/activities/feedbacks/' + id,
             payload

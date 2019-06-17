@@ -393,7 +393,6 @@
                     disponibilityPatternArray.push(e.value)
                 })
                 payload.disponibilityPatterns = disponibilityPatternArray
-                console.log(payload);
                 this.$store.dispatch('user/updateProfileData', payload)
                     .then(() => {
                         let payload = {
