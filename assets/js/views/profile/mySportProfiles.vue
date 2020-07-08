@@ -233,7 +233,7 @@
                         }
                     )
                 })
-                if(0 ===this.formSport) {
+                if(sportSelectArray.length && 0 === this.formSport) {
                     let sportId = sportSelectArray[0].value
                     this.formSport = sportId;
                     this.setFormDataFromSport(sportId);
