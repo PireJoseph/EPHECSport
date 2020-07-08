@@ -13,7 +13,7 @@ easy_admin:
             - label: 'Module Activité'
               icon: 'soccer-ball-o'
               children:
-                 - 'Activity'
+                 - { entity: 'Activity', default: true }
                  - 'Sport'
                  - 'Material'
                  - 'ActivityInvitation'
