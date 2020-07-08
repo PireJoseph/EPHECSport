@@ -8,10 +8,7 @@ parameters:
 doctrine:
     dbal:
         # configure these for your database server
-        dbname:               apiephecsport
-        user:                 root
-        password:             'zryt2465'
-        port:                 3306
+        url: '%env(DATABASE_URL)%'
         driver: pdo_mysql
         server_version: '5.7'
         charset: utf8mb4
